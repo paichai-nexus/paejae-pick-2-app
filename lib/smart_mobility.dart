@@ -740,7 +740,7 @@ class _ShuttlePickupScreenState extends State<ShuttlePickupScreen> {
                               vertical: 8,
                             ),
                             decoration: BoxDecoration(
-                              color: Colors.white.withOpacity(0.94),
+                              color: Colors.white.withValues(alpha: 0.94),
                               borderRadius: BorderRadius.circular(999),
                             ),
                             child: const Row(
@@ -971,7 +971,7 @@ class _StopDropdown extends StatelessWidget {
           width: 42,
           height: 42,
           decoration: BoxDecoration(
-            color: color.withOpacity(0.12),
+            color: color.withValues(alpha: 0.12),
             shape: BoxShape.circle,
           ),
           child: Icon(icon, color: color),
@@ -1293,7 +1293,7 @@ class _DeliveryRobotScreenState extends State<DeliveryRobotScreen> {
                               vertical: 8,
                             ),
                             decoration: BoxDecoration(
-                              color: Colors.white.withOpacity(0.94),
+                              color: Colors.white.withValues(alpha: 0.94),
                               borderRadius: BorderRadius.circular(999),
                             ),
                             child: const Row(
@@ -1409,7 +1409,7 @@ class _DeliveryRouteDropdown extends StatelessWidget {
           width: 42,
           height: 42,
           decoration: BoxDecoration(
-            color: color.withOpacity(0.12),
+            color: color.withValues(alpha: 0.12),
             shape: BoxShape.circle,
           ),
           child: Icon(icon, color: color),
@@ -1606,7 +1606,7 @@ class _MobilityHero extends StatelessWidget {
               height: 190,
               decoration: BoxDecoration(
                 shape: BoxShape.circle,
-                color: Colors.white.withOpacity(0.10),
+                color: Colors.white.withValues(alpha: 0.10),
               ),
             ),
           ),
@@ -1641,7 +1641,7 @@ class _MobilityHero extends StatelessWidget {
               Container(
                 padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
                 decoration: BoxDecoration(
-                  color: Colors.white.withOpacity(0.18),
+                  color: Colors.white.withValues(alpha: 0.18),
                   borderRadius: BorderRadius.circular(999),
                 ),
                 child: const Row(
@@ -1700,7 +1700,7 @@ class _MobilityFeatureCard extends StatelessWidget {
                   width: 46,
                   height: 46,
                   decoration: BoxDecoration(
-                    color: color.withOpacity(0.11),
+                    color: color.withValues(alpha: 0.11),
                     borderRadius: BorderRadius.circular(15),
                   ),
                   child: Icon(icon, color: color, size: 27),
@@ -1787,74 +1787,6 @@ class _MobilityWideCard extends StatelessWidget {
               ],
             ),
           ),
-        ],
-      ),
-    );
-  }
-}
-
-class _FeatureEntry extends StatelessWidget {
-  const _FeatureEntry({
-    required this.icon,
-    required this.color,
-    required this.title,
-    required this.subtitle,
-    required this.badge,
-    required this.onTap,
-  });
-
-  final IconData icon;
-  final Color color;
-  final String title;
-  final String subtitle;
-  final String badge;
-  final VoidCallback onTap;
-
-  @override
-  Widget build(BuildContext context) {
-    return _PickCard(
-      onTap: onTap,
-      child: Row(
-        children: [
-          Container(
-            width: 54,
-            height: 54,
-            decoration: BoxDecoration(
-              color: color.withOpacity(0.12),
-              borderRadius: BorderRadius.circular(18),
-            ),
-            child: Icon(icon, color: color, size: 28),
-          ),
-          const SizedBox(width: 14),
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Row(
-                  children: [
-                    Expanded(
-                      child: Text(
-                        title,
-                        style: const TextStyle(fontSize: 18, fontWeight: FontWeight.w900),
-                      ),
-                    ),
-                    _smallBadge(badge, color),
-                  ],
-                ),
-                const SizedBox(height: 6),
-                Text(
-                  subtitle,
-                  style: const TextStyle(
-                    color: _PickColors.sub,
-                    fontWeight: FontWeight.w700,
-                    height: 1.45,
-                  ),
-                ),
-              ],
-            ),
-          ),
-          const SizedBox(width: 6),
-          const Icon(Icons.chevron_right, color: _PickColors.sub),
         ],
       ),
     );
@@ -2607,7 +2539,7 @@ class _CampusRoutePainter extends CustomPainter {
     }
 
     final routeHalo = Paint()
-      ..color = Colors.white.withOpacity(0.92)
+      ..color = Colors.white.withValues(alpha: 0.92)
       ..style = PaintingStyle.stroke
       ..strokeWidth = 11
       ..strokeCap = StrokeCap.round
@@ -2639,7 +2571,6 @@ class _TigerMascotPainter extends CustomPainter {
     final dark = Paint()..color = const Color(0xFF3A2418);
     final white = Paint()..color = Colors.white;
     final navy = Paint()..color = _PickColors.darkBlue;
-    final blue = Paint()..color = _PickColors.blue;
 
     canvas.drawCircle(
       Offset(scale * 0.27, scale * 0.24),
@@ -2852,7 +2783,7 @@ Widget _statusPill(String label) {
   return Container(
     padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
     decoration: BoxDecoration(
-      color: Colors.white.withOpacity(0.18),
+      color: Colors.white.withValues(alpha: 0.18),
       borderRadius: BorderRadius.circular(999),
     ),
     child: Text(
@@ -2870,7 +2801,7 @@ Widget _smallBadge(String label, Color color) {
   return Container(
     padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 5),
     decoration: BoxDecoration(
-      color: color.withOpacity(0.10),
+      color: color.withValues(alpha: 0.10),
       borderRadius: BorderRadius.circular(999),
     ),
     child: Text(

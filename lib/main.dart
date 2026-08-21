@@ -394,7 +394,7 @@ class AppCard extends StatelessWidget {
         border: Border.all(color: const Color(0xFFE5E7EB)),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.05),
+            color: Colors.black.withValues(alpha: 0.05),
             blurRadius: 20,
             offset: const Offset(0, 8),
           ),
@@ -426,7 +426,7 @@ class Nasumi extends StatelessWidget {
         border: Border.all(color: Colors.white, width: 4),
         boxShadow: [
           BoxShadow(
-            color: AppColors.yellow.withOpacity(0.35),
+            color: AppColors.yellow.withValues(alpha: 0.35),
             blurRadius: 20,
             offset: const Offset(0, 8),
           ),
@@ -726,7 +726,7 @@ class CafeteriaMiniCard extends StatelessWidget {
             Container(
               padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
               decoration: BoxDecoration(
-                color: AppColors.green.withOpacity(0.12),
+                color: AppColors.green.withValues(alpha: 0.12),
                 borderRadius: BorderRadius.circular(999),
               ),
               child: const Text('혼잡도 보통', style: TextStyle(color: AppColors.green, fontWeight: FontWeight.w900)),
@@ -919,7 +919,7 @@ class _CafeteriaDetailScreenState extends State<CafeteriaDetailScreen> {
                         Container(
                           padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
                           decoration: BoxDecoration(
-                            color: color.withOpacity(0.12),
+                            color: color.withValues(alpha: 0.12),
                             borderRadius: BorderRadius.circular(999),
                           ),
                           child: Text(
@@ -947,7 +947,7 @@ class _CafeteriaDetailScreenState extends State<CafeteriaDetailScreen> {
                       width: double.infinity,
                       padding: const EdgeInsets.all(16),
                       decoration: BoxDecoration(
-                        color: AppColors.green.withOpacity(0.08),
+                        color: AppColors.green.withValues(alpha: 0.08),
                         borderRadius: BorderRadius.circular(18),
                       ),
                       child: Text(
@@ -1033,7 +1033,7 @@ class _CafeteriaDetailScreenState extends State<CafeteriaDetailScreen> {
                         width: double.infinity,
                         padding: const EdgeInsets.all(14),
                         decoration: BoxDecoration(
-                          color: AppColors.blue.withOpacity(0.08),
+                          color: AppColors.blue.withValues(alpha: 0.08),
                           borderRadius: BorderRadius.circular(16),
                         ),
                         child: Text(
@@ -1159,7 +1159,7 @@ class CampusMapScreen extends StatelessWidget {
                     bottom: 18,
                     right: 18,
                     child: AppCard(
-                      color: Colors.white.withOpacity(0.94),
+                      color: Colors.white.withValues(alpha: 0.94),
                       child: const Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
@@ -1208,7 +1208,7 @@ class MapBuilding extends StatelessWidget {
           color: color,
           borderRadius: BorderRadius.circular(14),
           boxShadow: [
-            BoxShadow(color: color.withOpacity(0.35), blurRadius: 20, offset: const Offset(0, 10)),
+            BoxShadow(color: color.withValues(alpha: 0.35), blurRadius: 20, offset: const Offset(0, 10)),
           ],
         ),
         child: Text(label, textAlign: TextAlign.center, style: const TextStyle(color: Colors.white, fontWeight: FontWeight.w900)),
@@ -1468,7 +1468,7 @@ class DepartmentCard extends StatelessWidget {
             width: double.infinity,
             padding: const EdgeInsets.all(14),
             decoration: BoxDecoration(
-              color: AppColors.blue.withOpacity(0.08),
+              color: AppColors.blue.withValues(alpha: 0.08),
               borderRadius: BorderRadius.circular(16),
             ),
             child: Text(
@@ -2215,7 +2215,7 @@ class _ClubNoticeSubmitMockScreenState extends State<ClubNoticeSubmitMockScreen>
                     Padding(
                       padding: const EdgeInsets.only(bottom: 12),
                       child: DropdownButtonFormField<String>(
-                        value: selectedType,
+                        initialValue: selectedType,
                         items: types
                             .map(
                               (type) => DropdownMenuItem(
@@ -6340,7 +6340,7 @@ class ClubCard extends StatelessWidget {
           Container(
             width: 58,
             height: 58,
-            decoration: BoxDecoration(color: AppColors.blue.withOpacity(0.1), borderRadius: BorderRadius.circular(18)),
+            decoration: BoxDecoration(color: AppColors.blue.withValues(alpha: 0.1), borderRadius: BorderRadius.circular(18)),
             child: const Icon(Icons.flight_takeoff, color: AppColors.blue),
           ),
           const SizedBox(width: 14),
@@ -6358,7 +6358,7 @@ class ClubCard extends StatelessWidget {
           ),
           Container(
             padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
-            decoration: BoxDecoration(color: AppColors.red.withOpacity(0.1), borderRadius: BorderRadius.circular(999)),
+            decoration: BoxDecoration(color: AppColors.red.withValues(alpha: 0.1), borderRadius: BorderRadius.circular(999)),
             child: Text(deadline, style: const TextStyle(color: AppColors.red, fontWeight: FontWeight.w900)),
           ),
         ],
@@ -6436,7 +6436,7 @@ class QRMockScreen extends StatelessWidget {
                       width: double.infinity,
                       height: 260,
                       decoration: BoxDecoration(
-                        color: Colors.white.withOpacity(0.08),
+                        color: Colors.white.withValues(alpha: 0.08),
                         borderRadius: BorderRadius.circular(26),
                         border: Border.all(color: Colors.white24, width: 2),
                       ),
@@ -6855,7 +6855,7 @@ class MissionCompleteScreen extends StatelessWidget {
                     Container(
                       padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 7),
                       decoration: BoxDecoration(
-                        color: AppColors.yellow.withOpacity(0.18),
+                        color: AppColors.yellow.withValues(alpha: 0.18),
                         borderRadius: BorderRadius.circular(999),
                       ),
                       child: Text(
@@ -6890,7 +6890,7 @@ class MissionCompleteScreen extends StatelessWidget {
                       width: double.infinity,
                       padding: const EdgeInsets.all(16),
                       decoration: BoxDecoration(
-                        color: AppColors.blue.withOpacity(0.08),
+                        color: AppColors.blue.withValues(alpha: 0.08),
                         borderRadius: BorderRadius.circular(18),
                       ),
                       child: Text(
