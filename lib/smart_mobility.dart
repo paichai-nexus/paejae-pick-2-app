@@ -21,28 +21,28 @@ class MockMobilityDataSource implements MobilityDataSource {
           building: '정보과학관',
           floor: '4F',
           room: 'C410',
-          name: '컴퓨터공학과 안내공간 (샘플)',
+          name: '컴퓨터공학과 사무실',
           type: IndoorLocationType.departmentOffice,
-          x: 0.76,
-          y: 0.28,
+          x: 0.22,
+          y: 0.68,
         ),
         IndoorLocation(
           building: '정보과학관',
           floor: '4F',
           room: 'C413',
-          name: '김OO 교수연구실 (샘플)',
+          name: '김OO 교수연구실',
           type: IndoorLocationType.professorOffice,
-          x: 0.78,
-          y: 0.67,
+          x: 0.74,
+          y: 0.72,
         ),
         IndoorLocation(
           building: '정보과학관',
           floor: '4F',
           room: 'C401',
-          name: '컴퓨터공학 강의실 (샘플)',
+          name: '컴퓨터공학 강의실',
           type: IndoorLocationType.classroom,
-          x: 0.25,
-          y: 0.31,
+          x: 0.76,
+          y: 0.27,
         ),
         IndoorLocation(
           building: '자연과학관',
@@ -298,9 +298,24 @@ class IndoorMapScreen extends StatefulWidget {
 class _IndoorMapScreenState extends State<IndoorMapScreen> {
   final TextEditingController _searchController = TextEditingController();
   String _query = '';
+  String _searchMode = '건물';
   String _building = '정보과학관';
   String _floor = '4F';
   IndoorLocation? _selected;
+
+  @override
+  void initState() {
+    super.initState();
+    final defaults = widget.dataSource.indoorLocations.where(
+      (location) =>
+          location.building == '정보과학관' &&
+          location.floor == '4F' &&
+          location.room == 'C401',
+    );
+    if (defaults.isNotEmpty) {
+      _selected = defaults.first;
+    }
+  }
 
   List<String> get _buildings => widget.dataSource.indoorLocations
       .map((location) => location.building)
@@ -349,7 +364,7 @@ class _IndoorMapScreenState extends State<IndoorMapScreen> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               const Text(
-                '캠퍼스맵',
+                '3D 실내 길찾기',
                 style: TextStyle(fontSize: 30, fontWeight: FontWeight.w900),
               ),
               const SizedBox(height: 6),
@@ -364,11 +379,50 @@ class _IndoorMapScreenState extends State<IndoorMapScreen> {
               const SizedBox(height: 16),
               TextField(
                 controller: _searchController,
-                onChanged: (value) => setState(() => _query = value),
+                onChanged: (value) => setState(() {
+                  _query = value;
+                  if (value.trim().isNotEmpty) {
+                    _selected = null;
+                  }
+                }),
                 decoration: _inputDecoration(
-                  hint: '예: C413, 컴퓨터공학, 김OO 교수',
+                  hint: '건물·호실·교수명을 검색하세요',
                   icon: Icons.search,
                 ),
+              ),
+              const SizedBox(height: 12),
+              Wrap(
+                spacing: 8,
+                runSpacing: 8,
+                children: ['건물', '호실', '교수']
+                    .map(
+                      (mode) => ChoiceChip(
+                        avatar: Icon(
+                          switch (mode) {
+                            '건물' => Icons.apartment_rounded,
+                            '호실' => Icons.meeting_room_rounded,
+                            _ => Icons.person_search_rounded,
+                          },
+                          size: 17,
+                          color: _searchMode == mode
+                              ? Colors.white
+                              : _PickColors.sub,
+                        ),
+                        label: Text(mode),
+                        selected: _searchMode == mode,
+                        selectedColor: _PickColors.blue,
+                        backgroundColor: Colors.white,
+                        side: const BorderSide(color: _PickColors.line),
+                        labelStyle: TextStyle(
+                          color: _searchMode == mode
+                              ? Colors.white
+                              : _PickColors.sub,
+                          fontWeight: FontWeight.w800,
+                        ),
+                        onSelected: (_) => setState(() => _searchMode = mode),
+                      ),
+                    )
+                    .toList(),
               ),
               const SizedBox(height: 12),
               SizedBox(
@@ -440,7 +494,7 @@ class _IndoorMapScreenState extends State<IndoorMapScreen> {
               _PickCard(
                 padding: const EdgeInsets.all(12),
                 child: SizedBox(
-                  height: 390,
+                  height: 430,
                   child: LayoutBuilder(
                     builder: (context, constraints) {
                       final visible = _visibleMapLocations;
@@ -1366,12 +1420,12 @@ class _RouteResultCard extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      '${location.room} · ${location.name}',
+                      '${location.name} ${location.room}',
                       style: const TextStyle(fontSize: 17, fontWeight: FontWeight.w900),
                     ),
                     const SizedBox(height: 4),
                     Text(
-                      '${location.building} ${location.floor} · 120m · 약 2분',
+                      '${location.building} ${location.floor} · 도보 3분',
                       style: const TextStyle(
                         color: _PickColors.sub,
                         fontWeight: FontWeight.w700,
@@ -1394,7 +1448,10 @@ class _RouteResultCard extends StatelessWidget {
                 );
               },
               icon: const Icon(Icons.navigation),
-              label: const Text('길찾기', style: TextStyle(fontWeight: FontWeight.w900)),
+              label: const Text(
+                '길찾기 시작',
+                style: TextStyle(fontWeight: FontWeight.w900),
+              ),
             ),
           ),
         ],
@@ -1812,53 +1869,226 @@ class _FloorPlanPainter extends CustomPainter {
     final background = Paint()..color = const Color(0xFFEAF4FF);
     canvas.drawRect(Offset.zero & size, background);
 
-    final roomPaint = Paint()
-      ..color = Colors.white
-      ..style = PaintingStyle.fill;
-    final borderPaint = Paint()
-      ..color = const Color(0xFFBFD7F5)
-      ..style = PaintingStyle.stroke
-      ..strokeWidth = 2;
-    final corridorPaint = Paint()
-      ..color = const Color(0xFFD6E8FB)
-      ..strokeWidth = 34
-      ..strokeCap = StrokeCap.round;
+    final floorShadow = Path()
+      ..moveTo(size.width * 0.06, size.height * 0.24)
+      ..lineTo(size.width * 0.84, size.height * 0.08)
+      ..lineTo(size.width * 0.96, size.height * 0.72)
+      ..lineTo(size.width * 0.16, size.height * 0.92)
+      ..close();
+    canvas.drawPath(floorShadow, Paint()..color = const Color(0x332563EB));
+
+    final floor = Path()
+      ..moveTo(size.width * 0.05, size.height * 0.20)
+      ..lineTo(size.width * 0.84, size.height * 0.04)
+      ..lineTo(size.width * 0.95, size.height * 0.68)
+      ..lineTo(size.width * 0.15, size.height * 0.88)
+      ..close();
+    canvas.drawPath(floor, Paint()..color = const Color(0xFFF8FBFF));
 
     final corridor = Path()
-      ..moveTo(size.width * 0.12, size.height * 0.82)
-      ..lineTo(size.width * 0.12, size.height * 0.52)
-      ..lineTo(size.width * 0.52, size.height * 0.52)
-      ..lineTo(size.width * 0.52, size.height * 0.20)
-      ..lineTo(size.width * 0.86, size.height * 0.20);
-    canvas.drawPath(corridor, corridorPaint);
+      ..moveTo(size.width * 0.13, size.height * 0.50)
+      ..lineTo(size.width * 0.86, size.height * 0.34)
+      ..lineTo(size.width * 0.89, size.height * 0.52)
+      ..lineTo(size.width * 0.17, size.height * 0.70)
+      ..close();
+    canvas.drawPath(corridor, Paint()..color = const Color(0xFFDCEBFA));
 
-    final rooms = <Rect>[
-      Rect.fromLTWH(size.width * 0.08, size.height * 0.10, size.width * 0.24, size.height * 0.22),
-      Rect.fromLTWH(size.width * 0.37, size.height * 0.10, size.width * 0.22, size.height * 0.25),
-      Rect.fromLTWH(size.width * 0.65, size.height * 0.10, size.width * 0.25, size.height * 0.25),
-      Rect.fromLTWH(size.width * 0.12, size.height * 0.62, size.width * 0.25, size.height * 0.23),
-      Rect.fromLTWH(size.width * 0.45, size.height * 0.62, size.width * 0.20, size.height * 0.23),
-      Rect.fromLTWH(size.width * 0.70, size.height * 0.60, size.width * 0.22, size.height * 0.25),
-    ];
-    for (final room in rooms) {
-      final rounded = RRect.fromRectAndRadius(room, const Radius.circular(10));
+    final roomPaint = Paint()..color = Colors.white;
+    final roomSidePaint = Paint()..color = const Color(0xFFBFD7F5);
+    final borderPaint = Paint()
+      ..color = const Color(0xFF9CC2EE)
+      ..style = PaintingStyle.stroke
+      ..strokeWidth = 1.6;
+
+    void drawRoom(
+      Rect room,
+      String label, {
+      bool desks = false,
+      IconData? icon,
+    }) {
+      final rounded = RRect.fromRectAndRadius(room, const Radius.circular(9));
+      canvas.drawRRect(rounded.shift(const Offset(0, 9)), roomSidePaint);
       canvas.drawRRect(rounded, roomPaint);
       canvas.drawRRect(rounded, borderPaint);
+
+      if (desks) {
+        final deskPaint = Paint()..color = const Color(0xFFC9DCF3);
+        for (var row = 0; row < 2; row++) {
+          for (var column = 0; column < 3; column++) {
+            final desk = Rect.fromLTWH(
+              room.left + 13 + column * ((room.width - 30) / 3),
+              room.top + 28 + row * 21,
+              14,
+              8,
+            );
+            canvas.drawRRect(
+              RRect.fromRectAndRadius(desk, const Radius.circular(2)),
+              deskPaint,
+            );
+          }
+        }
+      }
+
+      if (icon != null) {
+        _drawIcon(canvas, icon, room.center + const Offset(0, 8));
+      }
+      _drawLabel(canvas, label, Offset(room.center.dx, room.top + 13));
     }
 
+    drawRoom(
+      Rect.fromLTWH(
+        size.width * 0.10,
+        size.height * 0.19,
+        size.width * 0.23,
+        size.height * 0.22,
+      ),
+      'C402',
+      desks: true,
+    );
+    drawRoom(
+      Rect.fromLTWH(
+        size.width * 0.37,
+        size.height * 0.13,
+        size.width * 0.22,
+        size.height * 0.22,
+      ),
+      '교수연구실',
+      icon: Icons.person_rounded,
+    );
+    drawRoom(
+      Rect.fromLTWH(
+        size.width * 0.64,
+        size.height * 0.08,
+        size.width * 0.23,
+        size.height * 0.22,
+      ),
+      'C401',
+      desks: true,
+    );
+    drawRoom(
+      Rect.fromLTWH(
+        size.width * 0.17,
+        size.height * 0.62,
+        size.width * 0.23,
+        size.height * 0.18,
+      ),
+      'C403',
+      desks: true,
+    );
+    drawRoom(
+      Rect.fromLTWH(
+        size.width * 0.45,
+        size.height * 0.56,
+        size.width * 0.18,
+        size.height * 0.18,
+      ),
+      '계단·엘리베이터',
+      icon: Icons.elevator_rounded,
+    );
+    drawRoom(
+      Rect.fromLTWH(
+        size.width * 0.68,
+        size.height * 0.50,
+        size.width * 0.20,
+        size.height * 0.18,
+      ),
+      '화장실',
+      icon: Icons.wc_rounded,
+    );
+
+    final start = Offset(size.width * 0.14, size.height * 0.82);
     if (selected != null) {
-      final routePaint = Paint()
-        ..color = _PickColors.blue
-        ..style = PaintingStyle.stroke
-        ..strokeWidth = 6
-        ..strokeCap = StrokeCap.round;
+      final destination = Offset(
+        size.width * selected!.x,
+        size.height * selected!.y,
+      );
       final route = Path()
-        ..moveTo(size.width * 0.10, size.height * 0.92)
-        ..lineTo(size.width * 0.10, size.height * 0.52)
-        ..lineTo(size.width * selected!.x, size.height * 0.52)
-        ..lineTo(size.width * selected!.x, size.height * selected!.y);
-      canvas.drawPath(route, routePaint);
+        ..moveTo(start.dx, start.dy)
+        ..lineTo(start.dx, size.height * 0.50)
+        ..lineTo(destination.dx, size.height * 0.42)
+        ..lineTo(destination.dx, destination.dy);
+      canvas.drawPath(
+        route,
+        Paint()
+          ..color = Colors.white
+          ..style = PaintingStyle.stroke
+          ..strokeWidth = 11
+          ..strokeCap = StrokeCap.round
+          ..strokeJoin = StrokeJoin.round,
+      );
+      canvas.drawPath(
+        route,
+        Paint()
+          ..color = _PickColors.blue
+          ..style = PaintingStyle.stroke
+          ..strokeWidth = 6
+          ..strokeCap = StrokeCap.round
+          ..strokeJoin = StrokeJoin.round,
+      );
     }
+
+    canvas.drawCircle(start, 10, Paint()..color = Colors.white);
+    canvas.drawCircle(start, 7, Paint()..color = _PickColors.blue);
+    _drawBadge(canvas, '현재 위치', start + const Offset(32, 0));
+  }
+
+  void _drawLabel(Canvas canvas, String label, Offset center) {
+    final painter = TextPainter(
+      text: TextSpan(
+        text: label,
+        style: const TextStyle(
+          color: _PickColors.darkBlue,
+          fontSize: 10,
+          fontWeight: FontWeight.w900,
+        ),
+      ),
+      textDirection: TextDirection.ltr,
+      textAlign: TextAlign.center,
+    )..layout(maxWidth: 82);
+    painter.paint(canvas, center - Offset(painter.width / 2, painter.height / 2));
+  }
+
+  void _drawBadge(Canvas canvas, String label, Offset center) {
+    final painter = TextPainter(
+      text: TextSpan(
+        text: label,
+        style: const TextStyle(
+          color: _PickColors.darkBlue,
+          fontSize: 10,
+          fontWeight: FontWeight.w900,
+        ),
+      ),
+      textDirection: TextDirection.ltr,
+    )..layout();
+    final rect = Rect.fromCenter(
+      center: center,
+      width: painter.width + 16,
+      height: painter.height + 10,
+    );
+    canvas.drawRRect(
+      RRect.fromRectAndRadius(rect, const Radius.circular(999)),
+      Paint()..color = Colors.white,
+    );
+    painter.paint(
+      canvas,
+      Offset(rect.center.dx - painter.width / 2, rect.center.dy - painter.height / 2),
+    );
+  }
+
+  void _drawIcon(Canvas canvas, IconData icon, Offset center) {
+    final painter = TextPainter(
+      text: TextSpan(
+        text: String.fromCharCode(icon.codePoint),
+        style: TextStyle(
+          fontFamily: icon.fontFamily,
+          package: icon.fontPackage,
+          color: _PickColors.blue,
+          fontSize: 20,
+        ),
+      ),
+      textDirection: TextDirection.ltr,
+    )..layout();
+    painter.paint(canvas, center - Offset(painter.width / 2, painter.height / 2));
   }
 
   @override
