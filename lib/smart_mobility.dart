@@ -1896,61 +1896,6 @@ class _RouteResultCard extends StatelessWidget {
   }
 }
 
-class _TrackingStep extends StatelessWidget {
-  const _TrackingStep({
-    required this.label,
-    required this.completed,
-    required this.active,
-    required this.isLast,
-  });
-
-  final String label;
-  final bool completed;
-  final bool active;
-  final bool isLast;
-
-  @override
-  Widget build(BuildContext context) {
-    final color = completed ? _PickColors.green : _PickColors.line;
-    return Row(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        SizedBox(
-          width: 28,
-          child: Column(
-            children: [
-              Icon(
-                active ? Icons.radio_button_checked : Icons.check_circle,
-                color: color,
-                size: 20,
-              ),
-              if (!isLast) Container(width: 2, height: 34, color: color),
-            ],
-          ),
-        ),
-        const SizedBox(width: 8),
-        Expanded(
-          child: Padding(
-            padding: const EdgeInsets.only(top: 1, bottom: 24),
-            child: Text(
-              label,
-              style: TextStyle(
-                color: active ? _PickColors.blue : _PickColors.text,
-                fontWeight: active ? FontWeight.w900 : FontWeight.w700,
-              ),
-            ),
-          ),
-        ),
-        if (active)
-          const Text(
-            '현재',
-            style: TextStyle(color: _PickColors.blue, fontWeight: FontWeight.w900),
-          ),
-      ],
-    );
-  }
-}
-
 class _PickCard extends StatelessWidget {
   const _PickCard({
     required this.child,
