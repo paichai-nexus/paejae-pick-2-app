@@ -20,7 +20,7 @@ void main() {
     await tester.enterText(find.byType(TextField), 'J408');
     await tester.pump();
 
-    expect(find.textContaining('J408'), findsOneWidget);
+    expect(find.text('J408 · 원예산림 연구공간 (샘플)'), findsOneWidget);
   });
 
   testWidgets('indoor map opens with the C401 walking route', (tester) async {
@@ -31,7 +31,9 @@ void main() {
     expect(find.textContaining('컴퓨터공학 강의실 C401'), findsOneWidget);
   });
 
-  testWidgets('campus shuttle supports route and passenger selection', (tester) async {
+  testWidgets('campus shuttle supports route and passenger selection', (
+    tester,
+  ) async {
     await tester.pumpWidget(const MaterialApp(home: ShuttlePickupScreen()));
 
     expect(find.text('교내 순환차량'), findsOneWidget);
