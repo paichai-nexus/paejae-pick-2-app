@@ -6,7 +6,7 @@ It connects cafeteria information, campus exploration, Nasumi collection, code-b
 
 ## Current Version
 
-`v5.1-smart-mobility-ui-v2`
+`v5.2-future-mobility-screens`
 
 ## Project Organization
 
@@ -38,6 +38,24 @@ The first reason to install Paejae Pick is cafeteria information.
 The reason to return is Nasumi collection, campus missions, department tours, and club notices.
 
 ## Implemented Features
+
+### v5.2 Future Mobility Screens
+
+- Adds building, room, department-office, and professor-office search to the
+  3D indoor navigation experience
+- Opens with an Information Science Building C401 walking route and provides
+  building/floor filters plus an isometric floor-plan preview
+- Adds a campus autonomous shuttle route across the main gate, Paichai 21st
+  Century Building, Central Library, and International Exchange Building
+- Uses a Paichai campus-map reference asset so the shuttle and delivery overlays
+  follow the real campus building axis instead of arbitrary mock coordinates
+- Adds pickup/destination selection, passenger count, arrival time, and a
+  reversible reservation state
+- Adds the NEXUS-01 ROS2 delivery-robot status experience with route selection,
+  four-stage tracking, ETA, battery, route map, and operations-center guidance
+- Keeps the app layer separated from live vehicle control; all locations,
+  reservations, and robot statuses remain demonstration data until university
+  approval and API integration
 
 ### v5.1 Smart Mobility UI v2
 

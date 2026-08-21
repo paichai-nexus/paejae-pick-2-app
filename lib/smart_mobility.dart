@@ -21,28 +21,28 @@ class MockMobilityDataSource implements MobilityDataSource {
           building: '정보과학관',
           floor: '4F',
           room: 'C410',
-          name: '컴퓨터공학과 안내공간 (샘플)',
+          name: '컴퓨터공학과 사무실',
           type: IndoorLocationType.departmentOffice,
-          x: 0.76,
-          y: 0.28,
+          x: 0.22,
+          y: 0.68,
         ),
         IndoorLocation(
           building: '정보과학관',
           floor: '4F',
           room: 'C413',
-          name: '김OO 교수연구실 (샘플)',
+          name: '김OO 교수연구실',
           type: IndoorLocationType.professorOffice,
-          x: 0.78,
-          y: 0.67,
+          x: 0.74,
+          y: 0.72,
         ),
         IndoorLocation(
           building: '정보과학관',
           floor: '4F',
           room: 'C401',
-          name: '컴퓨터공학 강의실 (샘플)',
+          name: '컴퓨터공학 강의실',
           type: IndoorLocationType.classroom,
-          x: 0.25,
-          y: 0.31,
+          x: 0.76,
+          y: 0.27,
         ),
         IndoorLocation(
           building: '자연과학관',
@@ -67,18 +67,25 @@ class MockMobilityDataSource implements MobilityDataSource {
   @override
   List<CampusStop> get campusStops => const [
         CampusStop(
-          name: '학생회관 앞',
-          detail: '학생식당 정문 옆',
+          name: '정문',
+          detail: '정문 자율주행 승강장',
           etaMinutes: 4,
-          walkMinutes: 2,
-          distanceMeters: 120,
+          walkMinutes: 1,
+          distanceMeters: 40,
         ),
         CampusStop(
           name: '배재21세기관',
-          detail: '정문 순환차량 승강장',
+          detail: '정문 앞 승강장',
           etaMinutes: 7,
           walkMinutes: 5,
           distanceMeters: 310,
+        ),
+        CampusStop(
+          name: '중앙도서관',
+          detail: '도서관 정문 앞',
+          etaMinutes: 9,
+          walkMinutes: 4,
+          distanceMeters: 380,
         ),
         CampusStop(
           name: '국제교류관',
@@ -93,8 +100,9 @@ class MockMobilityDataSource implements MobilityDataSource {
   List<String> get deliveryDestinations => const [
         '정보과학관 1층 로비',
         '자연과학관 1층 수령존',
-        '도서관 정문 수령존',
+        '중앙도서관 정문 수령존',
         '배재21세기관 1층 로비',
+        '국제교류관 1층',
       ];
 }
 
@@ -230,9 +238,9 @@ class SmartMobilityHubScreen extends StatelessWidget {
                 child: _MobilityFeatureCard(
                   icon: Icons.view_in_ar_outlined,
                   color: _PickColors.blue,
-                  title: '3D 실내지도',
-                  subtitle: '건물·호실·교수명 검색',
-                  badge: 'MVP',
+                  title: '3D 실내 길찾기',
+                  subtitle: '강의실·학과사무실·교수연구실',
+                  badge: '개발 중',
                   onTap: () => Navigator.of(context).push(
                     MaterialPageRoute(builder: (_) => const IndoorMapScreen()),
                   ),
@@ -243,9 +251,9 @@ class SmartMobilityHubScreen extends StatelessWidget {
                 child: _MobilityFeatureCard(
                   icon: Icons.airport_shuttle_outlined,
                   color: _PickColors.green,
-                  title: '자율주행 픽업',
-                  subtitle: '도착시간·좌석·예약',
-                  badge: '시뮬레이션',
+                  title: '교내 순환차량',
+                  subtitle: '위치 확인·픽업 예약',
+                  badge: '개발 예정',
                   onTap: () => Navigator.of(context).push(
                     MaterialPageRoute(builder: (_) => const ShuttlePickupScreen()),
                   ),
@@ -298,9 +306,24 @@ class IndoorMapScreen extends StatefulWidget {
 class _IndoorMapScreenState extends State<IndoorMapScreen> {
   final TextEditingController _searchController = TextEditingController();
   String _query = '';
+  String _searchMode = '건물';
   String _building = '정보과학관';
   String _floor = '4F';
   IndoorLocation? _selected;
+
+  @override
+  void initState() {
+    super.initState();
+    final defaults = widget.dataSource.indoorLocations.where(
+      (location) =>
+          location.building == '정보과학관' &&
+          location.floor == '4F' &&
+          location.room == 'C401',
+    );
+    if (defaults.isNotEmpty) {
+      _selected = defaults.first;
+    }
+  }
 
   List<String> get _buildings => widget.dataSource.indoorLocations
       .map((location) => location.building)
@@ -349,7 +372,7 @@ class _IndoorMapScreenState extends State<IndoorMapScreen> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               const Text(
-                '캠퍼스맵',
+                '3D 실내 길찾기',
                 style: TextStyle(fontSize: 30, fontWeight: FontWeight.w900),
               ),
               const SizedBox(height: 6),
@@ -364,11 +387,50 @@ class _IndoorMapScreenState extends State<IndoorMapScreen> {
               const SizedBox(height: 16),
               TextField(
                 controller: _searchController,
-                onChanged: (value) => setState(() => _query = value),
+                onChanged: (value) => setState(() {
+                  _query = value;
+                  if (value.trim().isNotEmpty) {
+                    _selected = null;
+                  }
+                }),
                 decoration: _inputDecoration(
-                  hint: '예: C413, 컴퓨터공학, 김OO 교수',
+                  hint: '건물·호실·교수명을 검색하세요',
                   icon: Icons.search,
                 ),
+              ),
+              const SizedBox(height: 12),
+              Wrap(
+                spacing: 8,
+                runSpacing: 8,
+                children: ['건물', '호실', '교수']
+                    .map(
+                      (mode) => ChoiceChip(
+                        avatar: Icon(
+                          switch (mode) {
+                            '건물' => Icons.apartment_rounded,
+                            '호실' => Icons.meeting_room_rounded,
+                            _ => Icons.person_search_rounded,
+                          },
+                          size: 17,
+                          color: _searchMode == mode
+                              ? Colors.white
+                              : _PickColors.sub,
+                        ),
+                        label: Text(mode),
+                        selected: _searchMode == mode,
+                        selectedColor: _PickColors.blue,
+                        backgroundColor: Colors.white,
+                        side: const BorderSide(color: _PickColors.line),
+                        labelStyle: TextStyle(
+                          color: _searchMode == mode
+                              ? Colors.white
+                              : _PickColors.sub,
+                          fontWeight: FontWeight.w800,
+                        ),
+                        onSelected: (_) => setState(() => _searchMode = mode),
+                      ),
+                    )
+                    .toList(),
               ),
               const SizedBox(height: 12),
               SizedBox(
@@ -440,7 +502,7 @@ class _IndoorMapScreenState extends State<IndoorMapScreen> {
               _PickCard(
                 padding: const EdgeInsets.all(12),
                 child: SizedBox(
-                  height: 390,
+                  height: 430,
                   child: LayoutBuilder(
                     builder: (context, constraints) {
                       final visible = _visibleMapLocations;
@@ -578,12 +640,15 @@ class ShuttlePickupScreen extends StatefulWidget {
 }
 
 class _ShuttlePickupScreenState extends State<ShuttlePickupScreen> {
-  int _selectedStop = 0;
+  int _pickupStop = 0;
+  int _destinationStop = 3;
+  int _passengers = 1;
   bool _reserved = false;
 
   @override
   Widget build(BuildContext context) {
-    final stop = widget.dataSource.campusStops[_selectedStop];
+    final pickup = widget.dataSource.campusStops[_pickupStop];
+    final destination = widget.dataSource.campusStops[_destinationStop];
     return Scaffold(
       backgroundColor: _PickColors.bg,
       appBar: _appBar(),
@@ -594,46 +659,110 @@ class _ShuttlePickupScreenState extends State<ShuttlePickupScreen> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              const Text(
-                '자율주행 픽업',
-                style: TextStyle(fontSize: 30, fontWeight: FontWeight.w900),
+              Row(
+                children: [
+                  const Expanded(
+                    child: Text(
+                      '교내 순환차량',
+                      style: TextStyle(fontSize: 30, fontWeight: FontWeight.w900),
+                    ),
+                  ),
+                  _smallBadge('개발 예정', _PickColors.blue),
+                ],
               ),
               const SizedBox(height: 6),
-              Text(
-                '가장 가까운 정류장은 ${stop.name}, 도보 ${stop.walkMinutes}분이에요.',
-                style: const TextStyle(
+              const Text(
+                '캠퍼스 안을 순환하는 자율주행 차량을 예약해요.',
+                style: TextStyle(
                   color: _PickColors.sub,
                   fontWeight: FontWeight.w700,
+                  height: 1.45,
                 ),
               ),
               const SizedBox(height: 16),
               _PickCard(
                 padding: EdgeInsets.zero,
                 child: SizedBox(
-                  height: 280,
+                  height: 430,
                   child: ClipRRect(
                     borderRadius: BorderRadius.circular(24),
-                    child: CustomPaint(
-                      painter: const _CampusRoutePainter(),
-                      child: Stack(
-                        children: [
-                          const Positioned(
-                            left: 28,
-                            bottom: 34,
-                            child: _MapMarker(label: '현재 위치', color: _PickColors.blue),
+                    child: Stack(
+                      children: [
+                        Positioned.fill(
+                          child: Image.asset(
+                            'assets/maps/paichai_campus_map.png',
+                            fit: BoxFit.cover,
                           ),
-                          Positioned(
-                            right: 28,
-                            top: 34,
-                            child: _MapMarker(label: stop.name, color: _PickColors.green),
+                        ),
+                        const Positioned.fill(
+                          child: CustomPaint(
+                            painter: _CampusRoutePainter(),
                           ),
-                          const Positioned(
-                            left: 150,
-                            top: 104,
-                            child: _VehiclePod(),
+                        ),
+                        const Align(
+                          alignment: Alignment(0.62, 0.54),
+                          child: _MapMarker(
+                            label: '정문',
+                            color: _PickColors.blue,
                           ),
-                        ],
-                      ),
+                        ),
+                        const Align(
+                          alignment: Alignment(0.66, 0.18),
+                          child: _MapMarker(
+                            label: '21세기관',
+                            color: _PickColors.purple,
+                          ),
+                        ),
+                        const Align(
+                          alignment: Alignment(-0.56, -0.48),
+                          child: _MapMarker(
+                            label: '중앙도서관',
+                            color: _PickColors.orange,
+                          ),
+                        ),
+                        const Align(
+                          alignment: Alignment(0.56, -0.24),
+                          child: _MapMarker(
+                            label: '국제교류관',
+                            color: _PickColors.green,
+                          ),
+                        ),
+                        const Align(
+                          alignment: Alignment(0.02, -0.02),
+                          child: _VehiclePod(size: 64),
+                        ),
+                        Positioned(
+                          left: 12,
+                          top: 12,
+                          child: Container(
+                            padding: const EdgeInsets.symmetric(
+                              horizontal: 12,
+                              vertical: 8,
+                            ),
+                            decoration: BoxDecoration(
+                              color: Colors.white.withOpacity(0.94),
+                              borderRadius: BorderRadius.circular(999),
+                            ),
+                            child: const Row(
+                              children: [
+                                Icon(
+                                  Icons.route_rounded,
+                                  size: 17,
+                                  color: _PickColors.blue,
+                                ),
+                                SizedBox(width: 6),
+                                Text(
+                                  '교내 순환 실증 노선',
+                                  style: TextStyle(
+                                    color: _PickColors.darkBlue,
+                                    fontWeight: FontWeight.w900,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+                      ],
                     ),
                   ),
                 ),
@@ -643,74 +772,135 @@ class _ShuttlePickupScreenState extends State<ShuttlePickupScreen> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Row(
-                      children: [
-                        const _VehiclePod(size: 72),
-                        const SizedBox(width: 14),
-                        Expanded(
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(
-                                '도착 예정 ${stop.etaMinutes}분',
-                                style: const TextStyle(
-                                  fontSize: 21,
-                                  fontWeight: FontWeight.w900,
-                                ),
-                              ),
-                              const SizedBox(height: 4),
-                              const Text(
-                                '탑승 가능 좌석 6 / 8',
-                                style: TextStyle(
-                                  color: _PickColors.sub,
-                                  fontWeight: FontWeight.w700,
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                      ],
+                    const Text(
+                      '이동 경로',
+                      style: TextStyle(fontSize: 18, fontWeight: FontWeight.w900),
                     ),
-                    const SizedBox(height: 14),
-                    LinearProgressIndicator(
-                      value: 0.68,
-                      minHeight: 9,
-                      borderRadius: BorderRadius.circular(999),
+                    const SizedBox(height: 12),
+                    _StopDropdown(
+                      label: '탑승 정류장',
+                      icon: Icons.my_location_rounded,
+                      color: _PickColors.blue,
+                      selectedIndex: _pickupStop,
+                      stops: widget.dataSource.campusStops,
+                      enabled: !_reserved,
+                      onChanged: (value) => setState(() {
+                        _pickupStop = value;
+                        if (_destinationStop == value) {
+                          _destinationStop =
+                              (value + 1) % widget.dataSource.campusStops.length;
+                        }
+                      }),
+                    ),
+                    const Padding(
+                      padding: EdgeInsets.only(left: 20),
+                      child: SizedBox(
+                        height: 22,
+                        child: VerticalDivider(
+                          width: 2,
+                          thickness: 2,
+                          color: _PickColors.line,
+                        ),
+                      ),
+                    ),
+                    _StopDropdown(
+                      label: '도착 정류장',
+                      icon: Icons.flag_rounded,
+                      color: _PickColors.green,
+                      selectedIndex: _destinationStop,
+                      stops: widget.dataSource.campusStops,
+                      enabled: !_reserved,
+                      onChanged: (value) {
+                        if (value == _pickupStop) {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            const SnackBar(content: Text('도착지는 탑승지와 달라야 해요.')),
+                          );
+                          return;
+                        }
+                        setState(() => _destinationStop = value);
+                      },
                     ),
                   ],
                 ),
               ),
               const SizedBox(height: 14),
-              const Text(
-                '정류장 선택',
-                style: TextStyle(fontSize: 18, fontWeight: FontWeight.w900),
-              ),
-              const SizedBox(height: 10),
-              ...widget.dataSource.campusStops.asMap().entries.map(
-                    (entry) => Padding(
-                      padding: const EdgeInsets.only(bottom: 9),
-                      child: RadioListTile<int>(
-                        value: entry.key,
-                        groupValue: _selectedStop,
-                        onChanged: _reserved
-                            ? null
-                            : (value) => setState(() => _selectedStop = value ?? 0),
-                        title: Text(
-                          entry.value.name,
-                          style: const TextStyle(fontWeight: FontWeight.w900),
-                        ),
-                        subtitle: Text(
-                          '${entry.value.detail} · ${entry.value.distanceMeters}m',
-                        ),
-                        tileColor: Colors.white,
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(18),
-                          side: const BorderSide(color: _PickColors.line),
-                        ),
+              _PickCard(
+                child: Row(
+                  children: [
+                    const _VehiclePod(size: 70),
+                    const SizedBox(width: 14),
+                    Expanded(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            '다음 차량 ${pickup.etaMinutes}분 후 도착',
+                            style: const TextStyle(
+                              fontSize: 20,
+                              fontWeight: FontWeight.w900,
+                            ),
+                          ),
+                          const SizedBox(height: 5),
+                          Text(
+                            '${pickup.name} → ${destination.name} · 빈자리 6',
+                            style: const TextStyle(
+                              color: _PickColors.sub,
+                              fontWeight: FontWeight.w700,
+                            ),
+                          ),
+                        ],
                       ),
                     ),
-                  ),
-              const SizedBox(height: 8),
+                  ],
+                ),
+              ),
+              const SizedBox(height: 14),
+              _PickCard(
+                child: Row(
+                  children: [
+                    const Expanded(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            '탑승 인원',
+                            style: TextStyle(fontSize: 18, fontWeight: FontWeight.w900),
+                          ),
+                          SizedBox(height: 4),
+                          Text(
+                            '최대 4명까지 예약할 수 있어요.',
+                            style: TextStyle(
+                              color: _PickColors.sub,
+                              fontWeight: FontWeight.w700,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                    IconButton.filledTonal(
+                      onPressed: !_reserved && _passengers > 1
+                          ? () => setState(() => _passengers -= 1)
+                          : null,
+                      icon: const Icon(Icons.remove),
+                    ),
+                    SizedBox(
+                      width: 42,
+                      child: Text(
+                        '$_passengers',
+                        textAlign: TextAlign.center,
+                        style: const TextStyle(fontSize: 22, fontWeight: FontWeight.w900),
+                      ),
+                    ),
+                    IconButton.filled(
+                      onPressed: !_reserved && _passengers < 4
+                          ? () => setState(() => _passengers += 1)
+                          : null,
+                      icon: const Icon(Icons.add),
+                    ),
+                  ],
+                ),
+              ),
+              const SizedBox(height: 14),
               SizedBox(
                 width: double.infinity,
                 height: 56,
@@ -721,7 +911,7 @@ class _ShuttlePickupScreenState extends State<ShuttlePickupScreen> {
                       SnackBar(
                         content: Text(
                           _reserved
-                              ? '${stop.name} 픽업을 예약했습니다.'
+                              ? '${pickup.name}에서 ${destination.name}까지 $_passengers명 픽업을 예약했습니다.'
                               : '픽업 예약을 취소했습니다.',
                         ),
                       ),
@@ -729,8 +919,18 @@ class _ShuttlePickupScreenState extends State<ShuttlePickupScreen> {
                   },
                   icon: Icon(_reserved ? Icons.close : Icons.event_seat),
                   label: Text(
-                    _reserved ? '예약 취소' : '픽업 예약',
+                    _reserved ? '예약 취소' : '픽업 예약하기',
                     style: const TextStyle(fontWeight: FontWeight.w900),
+                  ),
+                ),
+              ),
+              const SizedBox(height: 12),
+              const Center(
+                child: Text(
+                  '예약 후 3분 이내에 승강장에 도착해주세요.',
+                  style: TextStyle(
+                    color: _PickColors.sub,
+                    fontWeight: FontWeight.w700,
                   ),
                 ),
               ),
@@ -740,6 +940,84 @@ class _ShuttlePickupScreenState extends State<ShuttlePickupScreen> {
           ),
         ),
       ),
+    );
+  }
+}
+
+class _StopDropdown extends StatelessWidget {
+  const _StopDropdown({
+    required this.label,
+    required this.icon,
+    required this.color,
+    required this.selectedIndex,
+    required this.stops,
+    required this.enabled,
+    required this.onChanged,
+  });
+
+  final String label;
+  final IconData icon;
+  final Color color;
+  final int selectedIndex;
+  final List<CampusStop> stops;
+  final bool enabled;
+  final ValueChanged<int> onChanged;
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      children: [
+        Container(
+          width: 42,
+          height: 42,
+          decoration: BoxDecoration(
+            color: color.withOpacity(0.12),
+            shape: BoxShape.circle,
+          ),
+          child: Icon(icon, color: color),
+        ),
+        const SizedBox(width: 12),
+        Expanded(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                label,
+                style: const TextStyle(
+                  color: _PickColors.sub,
+                  fontSize: 12,
+                  fontWeight: FontWeight.w800,
+                ),
+              ),
+              DropdownButtonHideUnderline(
+                child: DropdownButton<int>(
+                  value: selectedIndex,
+                  isExpanded: true,
+                  icon: const Icon(Icons.keyboard_arrow_down_rounded),
+                  items: stops
+                      .asMap()
+                      .entries
+                      .map(
+                        (entry) => DropdownMenuItem<int>(
+                          value: entry.key,
+                          child: Text(
+                            entry.value.name,
+                            style: const TextStyle(fontWeight: FontWeight.w900),
+                          ),
+                        ),
+                      )
+                      .toList(),
+                  onChanged: enabled
+                      ? (value) {
+                          if (value != null) onChanged(value);
+                        }
+                      : null,
+                ),
+              ),
+            ],
+          ),
+        ),
+      ],
     );
   }
 }
@@ -754,26 +1032,19 @@ class DeliveryRobotScreen extends StatefulWidget {
 }
 
 class _DeliveryRobotScreenState extends State<DeliveryRobotScreen> {
-  static const _parcelTypes = [
-    ('일반 택배', Icons.inventory_2_outlined),
-    ('도서', Icons.menu_book_outlined),
-    ('서류 / 문서', Icons.description_outlined),
-    ('기타 물품', Icons.widgets_outlined),
-  ];
   static const _trackingSteps = [
-    '배송 접수 완료',
-    '로봇 출발',
+    '호출 접수',
+    '로봇 배정',
     '배송 중',
-    '도착 예정',
-    '배송 완료',
+    '도착',
   ];
 
-  int _parcelIndex = 0;
-  int _trackingIndex = 0;
-  String? _destination;
+  int _trackingIndex = 2;
+  String _pickup = '정보과학관 1층 로비';
+  String _destination = '국제교류관 1층';
   Timer? _timer;
 
-  bool get _tracking => _destination != null && _trackingIndex > 0;
+  bool get _tracking => _trackingIndex > 0 && _trackingIndex < 3;
 
   @override
   void dispose() {
@@ -782,12 +1053,6 @@ class _DeliveryRobotScreenState extends State<DeliveryRobotScreen> {
   }
 
   void _startDelivery() {
-    if (_destination == null) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('배송지를 먼저 선택해주세요.')),
-      );
-      return;
-    }
     _timer?.cancel();
     setState(() => _trackingIndex = 1);
     _timer = Timer.periodic(const Duration(seconds: 4), (timer) {
@@ -797,6 +1062,25 @@ class _DeliveryRobotScreenState extends State<DeliveryRobotScreen> {
       }
       setState(() => _trackingIndex += 1);
     });
+  }
+
+  void _handlePrimaryAction() {
+    if (_trackingIndex == 0) {
+      _startDelivery();
+      return;
+    }
+    if (_trackingIndex == _trackingSteps.length - 1) {
+      _timer?.cancel();
+      setState(() => _trackingIndex = 0);
+      return;
+    }
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text(
+          'NEXUS-01이 $_pickup에서 $_destination(으)로 이동 중입니다.',
+        ),
+      ),
+    );
   }
 
   @override
@@ -811,107 +1095,272 @@ class _DeliveryRobotScreenState extends State<DeliveryRobotScreen> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              const Text(
-                '자율배송',
-                style: TextStyle(fontSize: 30, fontWeight: FontWeight.w900),
+              Row(
+                children: [
+                  const Expanded(
+                    child: Text(
+                      '자율배송',
+                      style: TextStyle(fontSize: 30, fontWeight: FontWeight.w900),
+                    ),
+                  ),
+                  _smallBadge('ROS2 연동 예정', _PickColors.purple),
+                ],
               ),
               const SizedBox(height: 6),
               const Text(
-                '배송지와 물품을 선택하고 로봇의 운행상태를 확인해요.',
+                '로봇을 호출하고 배송지와 실시간 운행상태를 확인해요.',
                 style: TextStyle(
                   color: _PickColors.sub,
                   fontWeight: FontWeight.w700,
+                  height: 1.45,
                 ),
-              ),
-              const SizedBox(height: 16),
-              DropdownButtonFormField<String>(
-                value: _destination,
-                decoration: _inputDecoration(
-                  hint: '배송지 선택',
-                  icon: Icons.location_on_outlined,
-                ),
-                items: widget.dataSource.deliveryDestinations
-                    .map(
-                      (destination) => DropdownMenuItem(
-                        value: destination,
-                        child: Text(destination),
-                      ),
-                    )
-                    .toList(),
-                onChanged: _tracking
-                    ? null
-                    : (value) => setState(() => _destination = value),
-              ),
-              const SizedBox(height: 18),
-              const Text(
-                '배송 물품 선택',
-                style: TextStyle(fontSize: 18, fontWeight: FontWeight.w900),
-              ),
-              const SizedBox(height: 10),
-              GridView.builder(
-                shrinkWrap: true,
-                physics: const NeverScrollableScrollPhysics(),
-                itemCount: _parcelTypes.length,
-                gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                  crossAxisCount: 2,
-                  childAspectRatio: 1.65,
-                  crossAxisSpacing: 10,
-                  mainAxisSpacing: 10,
-                ),
-                itemBuilder: (context, index) {
-                  final selected = index == _parcelIndex;
-                  return InkWell(
-                    onTap: _tracking ? null : () => setState(() => _parcelIndex = index),
-                    borderRadius: BorderRadius.circular(20),
-                    child: AnimatedContainer(
-                      duration: const Duration(milliseconds: 180),
-                      padding: const EdgeInsets.all(14),
-                      decoration: BoxDecoration(
-                        color: selected ? _PickColors.lightBlue : Colors.white,
-                        borderRadius: BorderRadius.circular(20),
-                        border: Border.all(
-                          color: selected ? _PickColors.blue : _PickColors.line,
-                          width: selected ? 1.6 : 1,
-                        ),
-                      ),
-                      child: Row(
-                        children: [
-                          Icon(_parcelTypes[index].$2, color: _PickColors.blue),
-                          const SizedBox(width: 9),
-                          Expanded(
-                            child: Text(
-                              _parcelTypes[index].$1,
-                              style: const TextStyle(fontWeight: FontWeight.w900),
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                  );
-                },
               ),
               const SizedBox(height: 16),
               _PickCard(
-                child: Row(
+                color: _PickColors.lightBlue,
+                child: Column(
                   children: [
-                    const _DeliveryBot(size: 94),
-                    const SizedBox(width: 14),
+                    Row(
+                      children: [
+                        const _DeliveryBot(size: 112),
+                        const SizedBox(width: 14),
+                        Expanded(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              const Text(
+                                '배송로봇 NEXUS-01',
+                                style: TextStyle(
+                                  color: _PickColors.darkBlue,
+                                  fontSize: 18,
+                                  fontWeight: FontWeight.w900,
+                                ),
+                              ),
+                              const SizedBox(height: 7),
+                              Text(
+                                _trackingSteps[_trackingIndex],
+                                style: const TextStyle(
+                                  color: _PickColors.green,
+                                  fontSize: 22,
+                                  fontWeight: FontWeight.w900,
+                                ),
+                              ),
+                              const SizedBox(height: 8),
+                              const Row(
+                                children: [
+                                  Icon(
+                                    Icons.schedule_rounded,
+                                    size: 17,
+                                    color: _PickColors.sub,
+                                  ),
+                                  SizedBox(width: 5),
+                                  Text(
+                                    '도착 예정 8분',
+                                    style: TextStyle(
+                                      color: _PickColors.sub,
+                                      fontWeight: FontWeight.w800,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                              const SizedBox(height: 6),
+                              const Row(
+                                children: [
+                                  Icon(
+                                    Icons.battery_5_bar_rounded,
+                                    size: 17,
+                                    color: _PickColors.green,
+                                  ),
+                                  SizedBox(width: 5),
+                                  Text(
+                                    '배터리 82%',
+                                    style: TextStyle(
+                                      color: _PickColors.sub,
+                                      fontWeight: FontWeight.w800,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ],
+                          ),
+                        ),
+                      ],
+                    ),
+                    const SizedBox(height: 16),
+                    _DeliveryProgress(
+                      steps: _trackingSteps,
+                      currentIndex: _trackingIndex,
+                    ),
+                  ],
+                ),
+              ),
+              const SizedBox(height: 14),
+              _PickCard(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    const Text(
+                      '배송 경로',
+                      style: TextStyle(fontSize: 18, fontWeight: FontWeight.w900),
+                    ),
+                    const SizedBox(height: 12),
+                    _DeliveryRouteDropdown(
+                      label: '보낼 곳',
+                      icon: Icons.inventory_2_rounded,
+                      color: _PickColors.blue,
+                      value: _pickup,
+                      places: widget.dataSource.deliveryDestinations,
+                      enabled: !_tracking,
+                      onChanged: (value) => setState(() => _pickup = value),
+                    ),
+                    const Padding(
+                      padding: EdgeInsets.only(left: 20),
+                      child: SizedBox(
+                        height: 20,
+                        child: VerticalDivider(
+                          width: 2,
+                          thickness: 2,
+                          color: _PickColors.line,
+                        ),
+                      ),
+                    ),
+                    _DeliveryRouteDropdown(
+                      label: '받을 곳',
+                      icon: Icons.location_on_rounded,
+                      color: _PickColors.green,
+                      value: _destination,
+                      places: widget.dataSource.deliveryDestinations,
+                      enabled: !_tracking,
+                      onChanged: (value) {
+                        if (value == _pickup) {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            const SnackBar(
+                              content: Text('보낼 곳과 받을 곳은 달라야 해요.'),
+                            ),
+                          );
+                          return;
+                        }
+                        setState(() => _destination = value);
+                      },
+                    ),
+                  ],
+                ),
+              ),
+              const SizedBox(height: 14),
+              _PickCard(
+                padding: EdgeInsets.zero,
+                child: SizedBox(
+                  height: 430,
+                  child: ClipRRect(
+                    borderRadius: BorderRadius.circular(22),
+                    child: Stack(
+                      children: [
+                        Positioned.fill(
+                          child: Image.asset(
+                            'assets/maps/paichai_campus_map.png',
+                            fit: BoxFit.cover,
+                          ),
+                        ),
+                        const Positioned.fill(
+                          child: CustomPaint(
+                            painter: _CampusRoutePainter(delivery: true),
+                          ),
+                        ),
+                        const Align(
+                          alignment: Alignment(-0.84, 0.20),
+                          child: _MapMarker(
+                            label: '정보과학관',
+                            color: _PickColors.blue,
+                          ),
+                        ),
+                        const Align(
+                          alignment: Alignment(0.56, -0.22),
+                          child: _MapMarker(
+                            label: '국제교류관',
+                            color: _PickColors.green,
+                          ),
+                        ),
+                        const Align(
+                          alignment: Alignment(-0.06, 0.00),
+                          child: _DeliveryBot(size: 64),
+                        ),
+                        Positioned(
+                          left: 12,
+                          top: 12,
+                          child: Container(
+                            padding: const EdgeInsets.symmetric(
+                              horizontal: 12,
+                              vertical: 8,
+                            ),
+                            decoration: BoxDecoration(
+                              color: Colors.white.withOpacity(0.94),
+                              borderRadius: BorderRadius.circular(999),
+                            ),
+                            child: const Row(
+                              children: [
+                                Icon(
+                                  Icons.sensors_rounded,
+                                  size: 17,
+                                  color: _PickColors.purple,
+                                ),
+                                SizedBox(width: 6),
+                                Text(
+                                  'NEXUS-01 실시간 위치',
+                                  style: TextStyle(
+                                    color: _PickColors.darkBlue,
+                                    fontWeight: FontWeight.w900,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              ),
+              const SizedBox(height: 14),
+              SizedBox(
+                width: double.infinity,
+                height: 56,
+                child: FilledButton.icon(
+                  onPressed: _handlePrimaryAction,
+                  icon: const Icon(Icons.local_shipping_outlined),
+                  label: Text(
+                    switch (_trackingIndex) {
+                      0 => '자율배송 호출하기',
+                      3 => '새 배송 요청',
+                      _ => '배송 상태 확인',
+                    },
+                    style: const TextStyle(fontWeight: FontWeight.w900),
+                  ),
+                ),
+              ),
+              const SizedBox(height: 12),
+              _PickCard(
+                child: const Row(
+                  children: [
+                    CircleAvatar(
+                      backgroundColor: _PickColors.lightBlue,
+                      child: Icon(
+                        Icons.support_agent_rounded,
+                        color: _PickColors.blue,
+                      ),
+                    ),
+                    SizedBox(width: 12),
                     Expanded(
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
-                            _tracking ? '로봇 운행 중' : '로봇 대기 중',
-                            style: TextStyle(
-                              color: _tracking ? _PickColors.green : _PickColors.sub,
-                              fontSize: 20,
-                              fontWeight: FontWeight.w900,
-                            ),
+                            '운영센터',
+                            style: TextStyle(fontWeight: FontWeight.w900),
                           ),
-                          const SizedBox(height: 6),
+                          SizedBox(height: 4),
                           Text(
-                            _tracking ? '도착 예정 8분' : '배송 요청을 대기하고 있어요.',
-                            style: const TextStyle(
+                            '운행 중 문제가 있으면 안전 관제에 연락해주세요.',
+                            style: TextStyle(
                               color: _PickColors.sub,
                               fontWeight: FontWeight.w700,
                             ),
@@ -919,42 +1368,8 @@ class _DeliveryRobotScreenState extends State<DeliveryRobotScreen> {
                         ],
                       ),
                     ),
+                    Icon(Icons.chevron_right_rounded, color: _PickColors.blue),
                   ],
-                ),
-              ),
-              const SizedBox(height: 16),
-              if (_tracking) ...[
-                const Text(
-                  '배송 추적',
-                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.w900),
-                ),
-                const SizedBox(height: 10),
-                _PickCard(
-                  child: Column(
-                    children: List.generate(_trackingSteps.length, (index) {
-                      final completed = index <= _trackingIndex;
-                      final active = index == _trackingIndex;
-                      return _TrackingStep(
-                        label: _trackingSteps[index],
-                        completed: completed,
-                        active: active,
-                        isLast: index == _trackingSteps.length - 1,
-                      );
-                    }),
-                  ),
-                ),
-                const SizedBox(height: 14),
-              ],
-              SizedBox(
-                width: double.infinity,
-                height: 56,
-                child: FilledButton.icon(
-                  onPressed: _tracking ? null : _startDelivery,
-                  icon: const Icon(Icons.local_shipping_outlined),
-                  label: Text(
-                    _tracking ? '배송 진행 중' : '자율배송 요청',
-                    style: const TextStyle(fontWeight: FontWeight.w900),
-                  ),
                 ),
               ),
               const SizedBox(height: 12),
@@ -963,6 +1378,154 @@ class _DeliveryRobotScreenState extends State<DeliveryRobotScreen> {
           ),
         ),
       ),
+    );
+  }
+}
+
+class _DeliveryRouteDropdown extends StatelessWidget {
+  const _DeliveryRouteDropdown({
+    required this.label,
+    required this.icon,
+    required this.color,
+    required this.value,
+    required this.places,
+    required this.enabled,
+    required this.onChanged,
+  });
+
+  final String label;
+  final IconData icon;
+  final Color color;
+  final String value;
+  final List<String> places;
+  final bool enabled;
+  final ValueChanged<String> onChanged;
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      children: [
+        Container(
+          width: 42,
+          height: 42,
+          decoration: BoxDecoration(
+            color: color.withOpacity(0.12),
+            shape: BoxShape.circle,
+          ),
+          child: Icon(icon, color: color),
+        ),
+        const SizedBox(width: 12),
+        Expanded(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                label,
+                style: const TextStyle(
+                  color: _PickColors.sub,
+                  fontSize: 12,
+                  fontWeight: FontWeight.w800,
+                ),
+              ),
+              DropdownButtonHideUnderline(
+                child: DropdownButton<String>(
+                  value: value,
+                  isExpanded: true,
+                  icon: const Icon(Icons.keyboard_arrow_down_rounded),
+                  items: places
+                      .map(
+                        (place) => DropdownMenuItem<String>(
+                          value: place,
+                          child: Text(
+                            place,
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
+                            style: const TextStyle(fontWeight: FontWeight.w900),
+                          ),
+                        ),
+                      )
+                      .toList(),
+                  onChanged: enabled
+                      ? (newValue) {
+                          if (newValue != null) onChanged(newValue);
+                        }
+                      : null,
+                ),
+              ),
+            ],
+          ),
+        ),
+      ],
+    );
+  }
+}
+
+class _DeliveryProgress extends StatelessWidget {
+  const _DeliveryProgress({required this.steps, required this.currentIndex});
+
+  final List<String> steps;
+  final int currentIndex;
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: List.generate(steps.length, (index) {
+        final active = index <= currentIndex;
+        return Expanded(
+          child: Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Expanded(
+                child: Column(
+                  children: [
+                    Container(
+                      width: 28,
+                      height: 28,
+                      decoration: BoxDecoration(
+                        color: active ? _PickColors.blue : Colors.white,
+                        shape: BoxShape.circle,
+                        border: Border.all(
+                          color: active ? _PickColors.blue : _PickColors.line,
+                          width: 2,
+                        ),
+                      ),
+                      child: Icon(
+                        index < currentIndex ? Icons.check : Icons.circle,
+                        color: active ? Colors.white : _PickColors.line,
+                        size: index < currentIndex ? 17 : 9,
+                      ),
+                    ),
+                    const SizedBox(height: 7),
+                    Text(
+                      steps[index],
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                        color: index == currentIndex
+                            ? _PickColors.blue
+                            : _PickColors.sub,
+                        fontSize: 11,
+                        fontWeight: index == currentIndex
+                            ? FontWeight.w900
+                            : FontWeight.w700,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              if (index < steps.length - 1)
+                Container(
+                  width: 12,
+                  height: 2,
+                  margin: const EdgeInsets.only(top: 13),
+                  color: index < currentIndex
+                      ? _PickColors.blue
+                      : _PickColors.line,
+                ),
+            ],
+          ),
+        );
+      }),
     );
   }
 }
@@ -1366,12 +1929,12 @@ class _RouteResultCard extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      '${location.room} · ${location.name}',
+                      '${location.name} ${location.room}',
                       style: const TextStyle(fontSize: 17, fontWeight: FontWeight.w900),
                     ),
                     const SizedBox(height: 4),
                     Text(
-                      '${location.building} ${location.floor} · 120m · 약 2분',
+                      '${location.building} ${location.floor} · 도보 3분',
                       style: const TextStyle(
                         color: _PickColors.sub,
                         fontWeight: FontWeight.w700,
@@ -1394,66 +1957,14 @@ class _RouteResultCard extends StatelessWidget {
                 );
               },
               icon: const Icon(Icons.navigation),
-              label: const Text('길찾기', style: TextStyle(fontWeight: FontWeight.w900)),
+              label: const Text(
+                '길찾기 시작',
+                style: TextStyle(fontWeight: FontWeight.w900),
+              ),
             ),
           ),
         ],
       ),
-    );
-  }
-}
-
-class _TrackingStep extends StatelessWidget {
-  const _TrackingStep({
-    required this.label,
-    required this.completed,
-    required this.active,
-    required this.isLast,
-  });
-
-  final String label;
-  final bool completed;
-  final bool active;
-  final bool isLast;
-
-  @override
-  Widget build(BuildContext context) {
-    final color = completed ? _PickColors.green : _PickColors.line;
-    return Row(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        SizedBox(
-          width: 28,
-          child: Column(
-            children: [
-              Icon(
-                active ? Icons.radio_button_checked : Icons.check_circle,
-                color: color,
-                size: 20,
-              ),
-              if (!isLast) Container(width: 2, height: 34, color: color),
-            ],
-          ),
-        ),
-        const SizedBox(width: 8),
-        Expanded(
-          child: Padding(
-            padding: const EdgeInsets.only(top: 1, bottom: 24),
-            child: Text(
-              label,
-              style: TextStyle(
-                color: active ? _PickColors.blue : _PickColors.text,
-                fontWeight: active ? FontWeight.w900 : FontWeight.w700,
-              ),
-            ),
-          ),
-        ),
-        if (active)
-          const Text(
-            '현재',
-            style: TextStyle(color: _PickColors.blue, fontWeight: FontWeight.w900),
-          ),
-      ],
     );
   }
 }
@@ -1812,53 +2323,226 @@ class _FloorPlanPainter extends CustomPainter {
     final background = Paint()..color = const Color(0xFFEAF4FF);
     canvas.drawRect(Offset.zero & size, background);
 
-    final roomPaint = Paint()
-      ..color = Colors.white
-      ..style = PaintingStyle.fill;
-    final borderPaint = Paint()
-      ..color = const Color(0xFFBFD7F5)
-      ..style = PaintingStyle.stroke
-      ..strokeWidth = 2;
-    final corridorPaint = Paint()
-      ..color = const Color(0xFFD6E8FB)
-      ..strokeWidth = 34
-      ..strokeCap = StrokeCap.round;
+    final floorShadow = Path()
+      ..moveTo(size.width * 0.06, size.height * 0.24)
+      ..lineTo(size.width * 0.84, size.height * 0.08)
+      ..lineTo(size.width * 0.96, size.height * 0.72)
+      ..lineTo(size.width * 0.16, size.height * 0.92)
+      ..close();
+    canvas.drawPath(floorShadow, Paint()..color = const Color(0x332563EB));
+
+    final floor = Path()
+      ..moveTo(size.width * 0.05, size.height * 0.20)
+      ..lineTo(size.width * 0.84, size.height * 0.04)
+      ..lineTo(size.width * 0.95, size.height * 0.68)
+      ..lineTo(size.width * 0.15, size.height * 0.88)
+      ..close();
+    canvas.drawPath(floor, Paint()..color = const Color(0xFFF8FBFF));
 
     final corridor = Path()
-      ..moveTo(size.width * 0.12, size.height * 0.82)
-      ..lineTo(size.width * 0.12, size.height * 0.52)
-      ..lineTo(size.width * 0.52, size.height * 0.52)
-      ..lineTo(size.width * 0.52, size.height * 0.20)
-      ..lineTo(size.width * 0.86, size.height * 0.20);
-    canvas.drawPath(corridor, corridorPaint);
+      ..moveTo(size.width * 0.13, size.height * 0.50)
+      ..lineTo(size.width * 0.86, size.height * 0.34)
+      ..lineTo(size.width * 0.89, size.height * 0.52)
+      ..lineTo(size.width * 0.17, size.height * 0.70)
+      ..close();
+    canvas.drawPath(corridor, Paint()..color = const Color(0xFFDCEBFA));
 
-    final rooms = <Rect>[
-      Rect.fromLTWH(size.width * 0.08, size.height * 0.10, size.width * 0.24, size.height * 0.22),
-      Rect.fromLTWH(size.width * 0.37, size.height * 0.10, size.width * 0.22, size.height * 0.25),
-      Rect.fromLTWH(size.width * 0.65, size.height * 0.10, size.width * 0.25, size.height * 0.25),
-      Rect.fromLTWH(size.width * 0.12, size.height * 0.62, size.width * 0.25, size.height * 0.23),
-      Rect.fromLTWH(size.width * 0.45, size.height * 0.62, size.width * 0.20, size.height * 0.23),
-      Rect.fromLTWH(size.width * 0.70, size.height * 0.60, size.width * 0.22, size.height * 0.25),
-    ];
-    for (final room in rooms) {
-      final rounded = RRect.fromRectAndRadius(room, const Radius.circular(10));
+    final roomPaint = Paint()..color = Colors.white;
+    final roomSidePaint = Paint()..color = const Color(0xFFBFD7F5);
+    final borderPaint = Paint()
+      ..color = const Color(0xFF9CC2EE)
+      ..style = PaintingStyle.stroke
+      ..strokeWidth = 1.6;
+
+    void drawRoom(
+      Rect room,
+      String label, {
+      bool desks = false,
+      IconData? icon,
+    }) {
+      final rounded = RRect.fromRectAndRadius(room, const Radius.circular(9));
+      canvas.drawRRect(rounded.shift(const Offset(0, 9)), roomSidePaint);
       canvas.drawRRect(rounded, roomPaint);
       canvas.drawRRect(rounded, borderPaint);
+
+      if (desks) {
+        final deskPaint = Paint()..color = const Color(0xFFC9DCF3);
+        for (var row = 0; row < 2; row++) {
+          for (var column = 0; column < 3; column++) {
+            final desk = Rect.fromLTWH(
+              room.left + 13 + column * ((room.width - 30) / 3),
+              room.top + 28 + row * 21,
+              14,
+              8,
+            );
+            canvas.drawRRect(
+              RRect.fromRectAndRadius(desk, const Radius.circular(2)),
+              deskPaint,
+            );
+          }
+        }
+      }
+
+      if (icon != null) {
+        _drawIcon(canvas, icon, room.center + const Offset(0, 8));
+      }
+      _drawLabel(canvas, label, Offset(room.center.dx, room.top + 13));
     }
 
+    drawRoom(
+      Rect.fromLTWH(
+        size.width * 0.10,
+        size.height * 0.19,
+        size.width * 0.23,
+        size.height * 0.22,
+      ),
+      'C402',
+      desks: true,
+    );
+    drawRoom(
+      Rect.fromLTWH(
+        size.width * 0.37,
+        size.height * 0.13,
+        size.width * 0.22,
+        size.height * 0.22,
+      ),
+      '교수연구실',
+      icon: Icons.person_rounded,
+    );
+    drawRoom(
+      Rect.fromLTWH(
+        size.width * 0.64,
+        size.height * 0.08,
+        size.width * 0.23,
+        size.height * 0.22,
+      ),
+      'C401',
+      desks: true,
+    );
+    drawRoom(
+      Rect.fromLTWH(
+        size.width * 0.17,
+        size.height * 0.62,
+        size.width * 0.23,
+        size.height * 0.18,
+      ),
+      'C403',
+      desks: true,
+    );
+    drawRoom(
+      Rect.fromLTWH(
+        size.width * 0.45,
+        size.height * 0.56,
+        size.width * 0.18,
+        size.height * 0.18,
+      ),
+      '계단·엘리베이터',
+      icon: Icons.elevator_rounded,
+    );
+    drawRoom(
+      Rect.fromLTWH(
+        size.width * 0.68,
+        size.height * 0.50,
+        size.width * 0.20,
+        size.height * 0.18,
+      ),
+      '화장실',
+      icon: Icons.wc_rounded,
+    );
+
+    final start = Offset(size.width * 0.14, size.height * 0.82);
     if (selected != null) {
-      final routePaint = Paint()
-        ..color = _PickColors.blue
-        ..style = PaintingStyle.stroke
-        ..strokeWidth = 6
-        ..strokeCap = StrokeCap.round;
+      final destination = Offset(
+        size.width * selected!.x,
+        size.height * selected!.y,
+      );
       final route = Path()
-        ..moveTo(size.width * 0.10, size.height * 0.92)
-        ..lineTo(size.width * 0.10, size.height * 0.52)
-        ..lineTo(size.width * selected!.x, size.height * 0.52)
-        ..lineTo(size.width * selected!.x, size.height * selected!.y);
-      canvas.drawPath(route, routePaint);
+        ..moveTo(start.dx, start.dy)
+        ..lineTo(start.dx, size.height * 0.50)
+        ..lineTo(destination.dx, size.height * 0.42)
+        ..lineTo(destination.dx, destination.dy);
+      canvas.drawPath(
+        route,
+        Paint()
+          ..color = Colors.white
+          ..style = PaintingStyle.stroke
+          ..strokeWidth = 11
+          ..strokeCap = StrokeCap.round
+          ..strokeJoin = StrokeJoin.round,
+      );
+      canvas.drawPath(
+        route,
+        Paint()
+          ..color = _PickColors.blue
+          ..style = PaintingStyle.stroke
+          ..strokeWidth = 6
+          ..strokeCap = StrokeCap.round
+          ..strokeJoin = StrokeJoin.round,
+      );
     }
+
+    canvas.drawCircle(start, 10, Paint()..color = Colors.white);
+    canvas.drawCircle(start, 7, Paint()..color = _PickColors.blue);
+    _drawBadge(canvas, '현재 위치', start + const Offset(32, 0));
+  }
+
+  void _drawLabel(Canvas canvas, String label, Offset center) {
+    final painter = TextPainter(
+      text: TextSpan(
+        text: label,
+        style: const TextStyle(
+          color: _PickColors.darkBlue,
+          fontSize: 10,
+          fontWeight: FontWeight.w900,
+        ),
+      ),
+      textDirection: TextDirection.ltr,
+      textAlign: TextAlign.center,
+    )..layout(maxWidth: 82);
+    painter.paint(canvas, center - Offset(painter.width / 2, painter.height / 2));
+  }
+
+  void _drawBadge(Canvas canvas, String label, Offset center) {
+    final painter = TextPainter(
+      text: TextSpan(
+        text: label,
+        style: const TextStyle(
+          color: _PickColors.darkBlue,
+          fontSize: 10,
+          fontWeight: FontWeight.w900,
+        ),
+      ),
+      textDirection: TextDirection.ltr,
+    )..layout();
+    final rect = Rect.fromCenter(
+      center: center,
+      width: painter.width + 16,
+      height: painter.height + 10,
+    );
+    canvas.drawRRect(
+      RRect.fromRectAndRadius(rect, const Radius.circular(999)),
+      Paint()..color = Colors.white,
+    );
+    painter.paint(
+      canvas,
+      Offset(rect.center.dx - painter.width / 2, rect.center.dy - painter.height / 2),
+    );
+  }
+
+  void _drawIcon(Canvas canvas, IconData icon, Offset center) {
+    final painter = TextPainter(
+      text: TextSpan(
+        text: String.fromCharCode(icon.codePoint),
+        style: TextStyle(
+          fontFamily: icon.fontFamily,
+          package: icon.fontPackage,
+          color: _PickColors.blue,
+          fontSize: 20,
+        ),
+      ),
+      textDirection: TextDirection.ltr,
+    )..layout();
+    painter.paint(canvas, center - Offset(painter.width / 2, painter.height / 2));
   }
 
   @override
@@ -1868,46 +2552,81 @@ class _FloorPlanPainter extends CustomPainter {
 }
 
 class _CampusRoutePainter extends CustomPainter {
-  const _CampusRoutePainter();
+  const _CampusRoutePainter({this.delivery = false});
+
+  final bool delivery;
 
   @override
   void paint(Canvas canvas, Size size) {
-    canvas.drawRect(Offset.zero & size, Paint()..color = const Color(0xFFE8F3FF));
-    final buildingPaint = Paint()..color = Colors.white;
-    for (final rect in [
-      Rect.fromLTWH(size.width * 0.08, size.height * 0.10, 86, 58),
-      Rect.fromLTWH(size.width * 0.64, size.height * 0.12, 96, 72),
-      Rect.fromLTWH(size.width * 0.12, size.height * 0.68, 110, 64),
-      Rect.fromLTWH(size.width * 0.66, size.height * 0.66, 92, 56),
-    ]) {
-      canvas.drawRRect(RRect.fromRectAndRadius(rect, const Radius.circular(12)), buildingPaint);
+    canvas.drawRect(
+      Offset.zero & size,
+      Paint()..color = const Color(0x120F2F6E),
+    );
+
+    final route = Path();
+    if (delivery) {
+      route
+        ..moveTo(size.width * 0.08, size.height * 0.60)
+        ..cubicTo(
+          size.width * 0.24,
+          size.height * 0.56,
+          size.width * 0.42,
+          size.height * 0.48,
+          size.width * 0.55,
+          size.height * 0.45,
+        )
+        ..cubicTo(
+          size.width * 0.64,
+          size.height * 0.42,
+          size.width * 0.70,
+          size.height * 0.40,
+          size.width * 0.78,
+          size.height * 0.38,
+        );
+    } else {
+      route
+        ..moveTo(size.width * 0.84, size.height * 0.79)
+        ..lineTo(size.width * 0.84, size.height * 0.60)
+        ..cubicTo(
+          size.width * 0.70,
+          size.height * 0.58,
+          size.width * 0.50,
+          size.height * 0.54,
+          size.width * 0.40,
+          size.height * 0.48,
+        )
+        ..lineTo(size.width * 0.23, size.height * 0.26)
+        ..cubicTo(
+          size.width * 0.40,
+          size.height * 0.30,
+          size.width * 0.62,
+          size.height * 0.31,
+          size.width * 0.78,
+          size.height * 0.38,
+        );
     }
-    final roadPaint = Paint()
-      ..color = Colors.white
+
+    final routeHalo = Paint()
+      ..color = Colors.white.withOpacity(0.92)
       ..style = PaintingStyle.stroke
-      ..strokeWidth = 26
-      ..strokeCap = StrokeCap.round;
-    final route = Path()
-      ..moveTo(size.width * 0.18, size.height * 0.78)
-      ..cubicTo(
-        size.width * 0.25,
-        size.height * 0.50,
-        size.width * 0.58,
-        size.height * 0.56,
-        size.width * 0.78,
-        size.height * 0.24,
-      );
-    canvas.drawPath(route, roadPaint);
+      ..strokeWidth = 11
+      ..strokeCap = StrokeCap.round
+      ..strokeJoin = StrokeJoin.round;
+    canvas.drawPath(route, routeHalo);
+
     final blueRoute = Paint()
-      ..color = _PickColors.blue
+      ..color = delivery ? _PickColors.purple : _PickColors.blue
       ..style = PaintingStyle.stroke
       ..strokeWidth = 5
-      ..strokeCap = StrokeCap.round;
+      ..strokeCap = StrokeCap.round
+      ..strokeJoin = StrokeJoin.round;
     canvas.drawPath(route, blueRoute);
   }
 
   @override
-  bool shouldRepaint(covariant CustomPainter oldDelegate) => false;
+  bool shouldRepaint(covariant _CampusRoutePainter oldDelegate) {
+    return oldDelegate.delivery != delivery;
+  }
 }
 
 class _TigerMascotPainter extends CustomPainter {
