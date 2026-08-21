@@ -67,18 +67,25 @@ class MockMobilityDataSource implements MobilityDataSource {
   @override
   List<CampusStop> get campusStops => const [
         CampusStop(
-          name: '학생회관 앞',
-          detail: '학생식당 정문 옆',
+          name: '정문',
+          detail: '정문 자율주행 승강장',
           etaMinutes: 4,
-          walkMinutes: 2,
-          distanceMeters: 120,
+          walkMinutes: 1,
+          distanceMeters: 40,
         ),
         CampusStop(
           name: '배재21세기관',
-          detail: '정문 순환차량 승강장',
+          detail: '정문 앞 승강장',
           etaMinutes: 7,
           walkMinutes: 5,
           distanceMeters: 310,
+        ),
+        CampusStop(
+          name: '중앙도서관',
+          detail: '도서관 정문 앞',
+          etaMinutes: 9,
+          walkMinutes: 4,
+          distanceMeters: 380,
         ),
         CampusStop(
           name: '국제교류관',
@@ -632,12 +639,15 @@ class ShuttlePickupScreen extends StatefulWidget {
 }
 
 class _ShuttlePickupScreenState extends State<ShuttlePickupScreen> {
-  int _selectedStop = 0;
+  int _pickupStop = 0;
+  int _destinationStop = 3;
+  int _passengers = 1;
   bool _reserved = false;
 
   @override
   Widget build(BuildContext context) {
-    final stop = widget.dataSource.campusStops[_selectedStop];
+    final pickup = widget.dataSource.campusStops[_pickupStop];
+    final destination = widget.dataSource.campusStops[_destinationStop];
     return Scaffold(
       backgroundColor: _PickColors.bg,
       appBar: _appBar(),
@@ -648,16 +658,24 @@ class _ShuttlePickupScreenState extends State<ShuttlePickupScreen> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              const Text(
-                '자율주행 픽업',
-                style: TextStyle(fontSize: 30, fontWeight: FontWeight.w900),
+              Row(
+                children: [
+                  const Expanded(
+                    child: Text(
+                      '교내 순환차량',
+                      style: TextStyle(fontSize: 30, fontWeight: FontWeight.w900),
+                    ),
+                  ),
+                  _smallBadge('개발 예정', _PickColors.blue),
+                ],
               ),
               const SizedBox(height: 6),
-              Text(
-                '가장 가까운 정류장은 ${stop.name}, 도보 ${stop.walkMinutes}분이에요.',
-                style: const TextStyle(
+              const Text(
+                '캠퍼스 안을 순환하는 자율주행 차량을 예약해요.',
+                style: TextStyle(
                   color: _PickColors.sub,
                   fontWeight: FontWeight.w700,
+                  height: 1.45,
                 ),
               ),
               const SizedBox(height: 16),
@@ -672,19 +690,38 @@ class _ShuttlePickupScreenState extends State<ShuttlePickupScreen> {
                       child: Stack(
                         children: [
                           const Positioned(
-                            left: 28,
-                            bottom: 34,
-                            child: _MapMarker(label: '현재 위치', color: _PickColors.blue),
+                            left: 18,
+                            bottom: 26,
+                            child: _MapMarker(label: '정문', color: _PickColors.blue),
                           ),
-                          Positioned(
-                            right: 28,
-                            top: 34,
-                            child: _MapMarker(label: stop.name, color: _PickColors.green),
+                          const Positioned(
+                            left: 91,
+                            bottom: 102,
+                            child: _MapMarker(
+                              label: '21세기관',
+                              color: _PickColors.purple,
+                            ),
+                          ),
+                          const Positioned(
+                            right: 92,
+                            top: 94,
+                            child: _MapMarker(
+                              label: '중앙도서관',
+                              color: _PickColors.orange,
+                            ),
+                          ),
+                          const Positioned(
+                            right: 18,
+                            top: 25,
+                            child: _MapMarker(
+                              label: '국제교류관',
+                              color: _PickColors.green,
+                            ),
                           ),
                           const Positioned(
                             left: 150,
-                            top: 104,
-                            child: _VehiclePod(),
+                            top: 110,
+                            child: _VehiclePod(size: 64),
                           ),
                         ],
                       ),
@@ -697,74 +734,135 @@ class _ShuttlePickupScreenState extends State<ShuttlePickupScreen> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Row(
-                      children: [
-                        const _VehiclePod(size: 72),
-                        const SizedBox(width: 14),
-                        Expanded(
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(
-                                '도착 예정 ${stop.etaMinutes}분',
-                                style: const TextStyle(
-                                  fontSize: 21,
-                                  fontWeight: FontWeight.w900,
-                                ),
-                              ),
-                              const SizedBox(height: 4),
-                              const Text(
-                                '탑승 가능 좌석 6 / 8',
-                                style: TextStyle(
-                                  color: _PickColors.sub,
-                                  fontWeight: FontWeight.w700,
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                      ],
+                    const Text(
+                      '이동 경로',
+                      style: TextStyle(fontSize: 18, fontWeight: FontWeight.w900),
                     ),
-                    const SizedBox(height: 14),
-                    LinearProgressIndicator(
-                      value: 0.68,
-                      minHeight: 9,
-                      borderRadius: BorderRadius.circular(999),
+                    const SizedBox(height: 12),
+                    _StopDropdown(
+                      label: '탑승 정류장',
+                      icon: Icons.my_location_rounded,
+                      color: _PickColors.blue,
+                      selectedIndex: _pickupStop,
+                      stops: widget.dataSource.campusStops,
+                      enabled: !_reserved,
+                      onChanged: (value) => setState(() {
+                        _pickupStop = value;
+                        if (_destinationStop == value) {
+                          _destinationStop =
+                              (value + 1) % widget.dataSource.campusStops.length;
+                        }
+                      }),
+                    ),
+                    const Padding(
+                      padding: EdgeInsets.only(left: 20),
+                      child: SizedBox(
+                        height: 22,
+                        child: VerticalDivider(
+                          width: 2,
+                          thickness: 2,
+                          color: _PickColors.line,
+                        ),
+                      ),
+                    ),
+                    _StopDropdown(
+                      label: '도착 정류장',
+                      icon: Icons.flag_rounded,
+                      color: _PickColors.green,
+                      selectedIndex: _destinationStop,
+                      stops: widget.dataSource.campusStops,
+                      enabled: !_reserved,
+                      onChanged: (value) {
+                        if (value == _pickupStop) {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            const SnackBar(content: Text('도착지는 탑승지와 달라야 해요.')),
+                          );
+                          return;
+                        }
+                        setState(() => _destinationStop = value);
+                      },
                     ),
                   ],
                 ),
               ),
               const SizedBox(height: 14),
-              const Text(
-                '정류장 선택',
-                style: TextStyle(fontSize: 18, fontWeight: FontWeight.w900),
-              ),
-              const SizedBox(height: 10),
-              ...widget.dataSource.campusStops.asMap().entries.map(
-                    (entry) => Padding(
-                      padding: const EdgeInsets.only(bottom: 9),
-                      child: RadioListTile<int>(
-                        value: entry.key,
-                        groupValue: _selectedStop,
-                        onChanged: _reserved
-                            ? null
-                            : (value) => setState(() => _selectedStop = value ?? 0),
-                        title: Text(
-                          entry.value.name,
-                          style: const TextStyle(fontWeight: FontWeight.w900),
-                        ),
-                        subtitle: Text(
-                          '${entry.value.detail} · ${entry.value.distanceMeters}m',
-                        ),
-                        tileColor: Colors.white,
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(18),
-                          side: const BorderSide(color: _PickColors.line),
-                        ),
+              _PickCard(
+                child: Row(
+                  children: [
+                    const _VehiclePod(size: 70),
+                    const SizedBox(width: 14),
+                    Expanded(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            '다음 차량 ${pickup.etaMinutes}분 후 도착',
+                            style: const TextStyle(
+                              fontSize: 20,
+                              fontWeight: FontWeight.w900,
+                            ),
+                          ),
+                          const SizedBox(height: 5),
+                          Text(
+                            '${pickup.name} → ${destination.name} · 빈자리 6',
+                            style: const TextStyle(
+                              color: _PickColors.sub,
+                              fontWeight: FontWeight.w700,
+                            ),
+                          ),
+                        ],
                       ),
                     ),
-                  ),
-              const SizedBox(height: 8),
+                  ],
+                ),
+              ),
+              const SizedBox(height: 14),
+              _PickCard(
+                child: Row(
+                  children: [
+                    const Expanded(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            '탑승 인원',
+                            style: TextStyle(fontSize: 18, fontWeight: FontWeight.w900),
+                          ),
+                          SizedBox(height: 4),
+                          Text(
+                            '최대 4명까지 예약할 수 있어요.',
+                            style: TextStyle(
+                              color: _PickColors.sub,
+                              fontWeight: FontWeight.w700,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                    IconButton.filledTonal(
+                      onPressed: !_reserved && _passengers > 1
+                          ? () => setState(() => _passengers -= 1)
+                          : null,
+                      icon: const Icon(Icons.remove),
+                    ),
+                    SizedBox(
+                      width: 42,
+                      child: Text(
+                        '$_passengers',
+                        textAlign: TextAlign.center,
+                        style: const TextStyle(fontSize: 22, fontWeight: FontWeight.w900),
+                      ),
+                    ),
+                    IconButton.filled(
+                      onPressed: !_reserved && _passengers < 4
+                          ? () => setState(() => _passengers += 1)
+                          : null,
+                      icon: const Icon(Icons.add),
+                    ),
+                  ],
+                ),
+              ),
+              const SizedBox(height: 14),
               SizedBox(
                 width: double.infinity,
                 height: 56,
@@ -775,7 +873,7 @@ class _ShuttlePickupScreenState extends State<ShuttlePickupScreen> {
                       SnackBar(
                         content: Text(
                           _reserved
-                              ? '${stop.name} 픽업을 예약했습니다.'
+                              ? '${pickup.name}에서 ${destination.name}까지 $_passengers명 픽업을 예약했습니다.'
                               : '픽업 예약을 취소했습니다.',
                         ),
                       ),
@@ -783,8 +881,18 @@ class _ShuttlePickupScreenState extends State<ShuttlePickupScreen> {
                   },
                   icon: Icon(_reserved ? Icons.close : Icons.event_seat),
                   label: Text(
-                    _reserved ? '예약 취소' : '픽업 예약',
+                    _reserved ? '예약 취소' : '픽업 예약하기',
                     style: const TextStyle(fontWeight: FontWeight.w900),
+                  ),
+                ),
+              ),
+              const SizedBox(height: 12),
+              const Center(
+                child: Text(
+                  '예약 후 3분 이내에 승강장에 도착해주세요.',
+                  style: TextStyle(
+                    color: _PickColors.sub,
+                    fontWeight: FontWeight.w700,
                   ),
                 ),
               ),
@@ -794,6 +902,84 @@ class _ShuttlePickupScreenState extends State<ShuttlePickupScreen> {
           ),
         ),
       ),
+    );
+  }
+}
+
+class _StopDropdown extends StatelessWidget {
+  const _StopDropdown({
+    required this.label,
+    required this.icon,
+    required this.color,
+    required this.selectedIndex,
+    required this.stops,
+    required this.enabled,
+    required this.onChanged,
+  });
+
+  final String label;
+  final IconData icon;
+  final Color color;
+  final int selectedIndex;
+  final List<CampusStop> stops;
+  final bool enabled;
+  final ValueChanged<int> onChanged;
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      children: [
+        Container(
+          width: 42,
+          height: 42,
+          decoration: BoxDecoration(
+            color: color.withOpacity(0.12),
+            shape: BoxShape.circle,
+          ),
+          child: Icon(icon, color: color),
+        ),
+        const SizedBox(width: 12),
+        Expanded(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                label,
+                style: const TextStyle(
+                  color: _PickColors.sub,
+                  fontSize: 12,
+                  fontWeight: FontWeight.w800,
+                ),
+              ),
+              DropdownButtonHideUnderline(
+                child: DropdownButton<int>(
+                  value: selectedIndex,
+                  isExpanded: true,
+                  icon: const Icon(Icons.keyboard_arrow_down_rounded),
+                  items: stops
+                      .asMap()
+                      .entries
+                      .map(
+                        (entry) => DropdownMenuItem<int>(
+                          value: entry.key,
+                          child: Text(
+                            entry.value.name,
+                            style: const TextStyle(fontWeight: FontWeight.w900),
+                          ),
+                        ),
+                      )
+                      .toList(),
+                  onChanged: enabled
+                      ? (value) {
+                          if (value != null) onChanged(value);
+                        }
+                      : null,
+                ),
+              ),
+            ],
+          ),
+        ),
+      ],
     );
   }
 }

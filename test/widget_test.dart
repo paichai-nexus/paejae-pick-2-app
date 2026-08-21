@@ -31,6 +31,14 @@ void main() {
     expect(find.textContaining('컴퓨터공학 강의실 C401'), findsOneWidget);
   });
 
+  testWidgets('campus shuttle supports route and passenger selection', (tester) async {
+    await tester.pumpWidget(const MaterialApp(home: ShuttlePickupScreen()));
+
+    expect(find.text('교내 순환차량'), findsOneWidget);
+    expect(find.text('픽업 예약하기'), findsOneWidget);
+    expect(find.textContaining('다음 차량 4분 후 도착'), findsOneWidget);
+  });
+
   testWidgets('main navigation opens the smart mobility hub', (tester) async {
     await tester.pumpWidget(const MaterialApp(home: MainShell()));
 
