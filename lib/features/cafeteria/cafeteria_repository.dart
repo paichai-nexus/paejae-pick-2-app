@@ -127,12 +127,12 @@ abstract class CafeteriaRemoteDataSource {
 class HttpCafeteriaRemoteDataSource extends CafeteriaRemoteDataSource {
   HttpCafeteriaRemoteDataSource({
     required this.baseUri,
-    required http.Client client,
+    required this.client,
     this.closeClient = false,
-  }) : _client = client;
+  });
 
   final Uri baseUri;
-  final http.Client _client;
+  final http.Client client;
   final bool closeClient;
 
   @override
@@ -141,7 +141,7 @@ class HttpCafeteriaRemoteDataSource extends CafeteriaRemoteDataSource {
     final uri = Uri.parse('$base/v1/cafeteria/today').replace(
       queryParameters: {'date': _dateKey(date)},
     );
-    final response = await _client.get(
+    final response = await client.get(
       uri,
       headers: const {'Accept': 'application/json'},
     );
@@ -160,7 +160,7 @@ class HttpCafeteriaRemoteDataSource extends CafeteriaRemoteDataSource {
 
   @override
   void close() {
-    if (closeClient) _client.close();
+    if (closeClient) client.close();
   }
 
   static String _dateKey(DateTime date) {
