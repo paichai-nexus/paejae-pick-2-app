@@ -6,7 +6,30 @@ It connects cafeteria information, campus exploration, Nasumi collection, code-b
 
 ## Current Version
 
-`v5.0-smart-mobility-mvp`
+`v5.1-smart-mobility-ui-v2`
+
+## Project Organization
+
+Paejae Pick 2.0 is developed and maintained by the PAICHAI NEXUS
+university student convenience app team.
+
+| Role | Name | Responsibility |
+| --- | --- | --- |
+| 개발팀장 (Development Team Lead) | 이영준 (Lee Young Jun) | Product direction, architecture, core development, smart-mobility integration, and development-team coordination |
+| 유지보수 (Maintenance) | 이서율 (Lee Seo Yul) | QA, bug fixes, release checks, documentation updates, and ongoing operational maintenance |
+
+### Ownership Structure
+
+```text
+PAICHAI NEXUS
+└── Paejae Pick 2.0
+    ├── 개발팀장: 이영준
+    └── 유지보수: 이서율
+```
+
+Project decisions and core development are led by 이영준. Stable releases,
+quality checks, documentation, and post-release maintenance are managed with
+이서율.
 
 ## Core Strategy
 
@@ -15,6 +38,14 @@ The first reason to install Paejae Pick is cafeteria information.
 The reason to return is Nasumi collection, campus missions, department tours, and club notices.
 
 ## Implemented Features
+
+### v5.1 Smart Mobility UI v2
+
+- Aligns the Smart Mobility screens with the Paejae Pick 2.0 visual language
+- Adds the branded header, mascot treatment, blue accents, rounded cards, and refined shadows
+- Redesigns the Smart Mobility hub into a polished student-facing dashboard
+- Refines the campus map with search, building/floor filters, markers, and 3D controls
+- Unifies the autonomous pickup and delivery experiences with the same design system
 
 ### v5.0 Smart Mobility MVP
 
