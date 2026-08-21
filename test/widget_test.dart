@@ -39,6 +39,15 @@ void main() {
     expect(find.textContaining('다음 차량 4분 후 도착'), findsOneWidget);
   });
 
+  testWidgets('delivery screen exposes ROS2 tracking status', (tester) async {
+    await tester.pumpWidget(const MaterialApp(home: DeliveryRobotScreen()));
+
+    expect(find.text('ROS2 연동 예정'), findsOneWidget);
+    expect(find.text('배송로봇 NEXUS-01'), findsOneWidget);
+    expect(find.text('배송 상태 확인'), findsOneWidget);
+    expect(find.text('배터리 82%'), findsOneWidget);
+  });
+
   testWidgets('main navigation opens the smart mobility hub', (tester) async {
     await tester.pumpWidget(const MaterialApp(home: MainShell()));
 

@@ -100,8 +100,9 @@ class MockMobilityDataSource implements MobilityDataSource {
   List<String> get deliveryDestinations => const [
         '정보과학관 1층 로비',
         '자연과학관 1층 수령존',
-        '도서관 정문 수령존',
+        '중앙도서관 정문 수령존',
         '배재21세기관 1층 로비',
+        '국제교류관 1층',
       ];
 }
 
@@ -994,26 +995,19 @@ class DeliveryRobotScreen extends StatefulWidget {
 }
 
 class _DeliveryRobotScreenState extends State<DeliveryRobotScreen> {
-  static const _parcelTypes = [
-    ('일반 택배', Icons.inventory_2_outlined),
-    ('도서', Icons.menu_book_outlined),
-    ('서류 / 문서', Icons.description_outlined),
-    ('기타 물품', Icons.widgets_outlined),
-  ];
   static const _trackingSteps = [
-    '배송 접수 완료',
-    '로봇 출발',
+    '호출 접수',
+    '로봇 배정',
     '배송 중',
-    '도착 예정',
-    '배송 완료',
+    '도착',
   ];
 
-  int _parcelIndex = 0;
-  int _trackingIndex = 0;
-  String? _destination;
+  int _trackingIndex = 2;
+  String _pickup = '정보과학관 1층 로비';
+  String _destination = '국제교류관 1층';
   Timer? _timer;
 
-  bool get _tracking => _destination != null && _trackingIndex > 0;
+  bool get _tracking => _trackingIndex > 0 && _trackingIndex < 3;
 
   @override
   void dispose() {
@@ -1022,12 +1016,6 @@ class _DeliveryRobotScreenState extends State<DeliveryRobotScreen> {
   }
 
   void _startDelivery() {
-    if (_destination == null) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('배송지를 먼저 선택해주세요.')),
-      );
-      return;
-    }
     _timer?.cancel();
     setState(() => _trackingIndex = 1);
     _timer = Timer.periodic(const Duration(seconds: 4), (timer) {
@@ -1037,6 +1025,25 @@ class _DeliveryRobotScreenState extends State<DeliveryRobotScreen> {
       }
       setState(() => _trackingIndex += 1);
     });
+  }
+
+  void _handlePrimaryAction() {
+    if (_trackingIndex == 0) {
+      _startDelivery();
+      return;
+    }
+    if (_trackingIndex == _trackingSteps.length - 1) {
+      _timer?.cancel();
+      setState(() => _trackingIndex = 0);
+      return;
+    }
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text(
+          'NEXUS-01이 $_pickup에서 $_destination(으)로 이동 중입니다.',
+        ),
+      ),
+    );
   }
 
   @override
@@ -1051,107 +1058,236 @@ class _DeliveryRobotScreenState extends State<DeliveryRobotScreen> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              const Text(
-                '자율배송',
-                style: TextStyle(fontSize: 30, fontWeight: FontWeight.w900),
+              Row(
+                children: [
+                  const Expanded(
+                    child: Text(
+                      '자율배송',
+                      style: TextStyle(fontSize: 30, fontWeight: FontWeight.w900),
+                    ),
+                  ),
+                  _smallBadge('ROS2 연동 예정', _PickColors.purple),
+                ],
               ),
               const SizedBox(height: 6),
               const Text(
-                '배송지와 물품을 선택하고 로봇의 운행상태를 확인해요.',
+                '로봇을 호출하고 배송지와 실시간 운행상태를 확인해요.',
                 style: TextStyle(
                   color: _PickColors.sub,
                   fontWeight: FontWeight.w700,
+                  height: 1.45,
                 ),
               ),
               const SizedBox(height: 16),
-              DropdownButtonFormField<String>(
-                value: _destination,
-                decoration: _inputDecoration(
-                  hint: '배송지 선택',
-                  icon: Icons.location_on_outlined,
+              _PickCard(
+                color: _PickColors.lightBlue,
+                child: Column(
+                  children: [
+                    Row(
+                      children: [
+                        const _DeliveryBot(size: 112),
+                        const SizedBox(width: 14),
+                        Expanded(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              const Text(
+                                '배송로봇 NEXUS-01',
+                                style: TextStyle(
+                                  color: _PickColors.darkBlue,
+                                  fontSize: 18,
+                                  fontWeight: FontWeight.w900,
+                                ),
+                              ),
+                              const SizedBox(height: 7),
+                              Text(
+                                _trackingSteps[_trackingIndex],
+                                style: const TextStyle(
+                                  color: _PickColors.green,
+                                  fontSize: 22,
+                                  fontWeight: FontWeight.w900,
+                                ),
+                              ),
+                              const SizedBox(height: 8),
+                              const Row(
+                                children: [
+                                  Icon(
+                                    Icons.schedule_rounded,
+                                    size: 17,
+                                    color: _PickColors.sub,
+                                  ),
+                                  SizedBox(width: 5),
+                                  Text(
+                                    '도착 예정 8분',
+                                    style: TextStyle(
+                                      color: _PickColors.sub,
+                                      fontWeight: FontWeight.w800,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                              const SizedBox(height: 6),
+                              const Row(
+                                children: [
+                                  Icon(
+                                    Icons.battery_5_bar_rounded,
+                                    size: 17,
+                                    color: _PickColors.green,
+                                  ),
+                                  SizedBox(width: 5),
+                                  Text(
+                                    '배터리 82%',
+                                    style: TextStyle(
+                                      color: _PickColors.sub,
+                                      fontWeight: FontWeight.w800,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ],
+                          ),
+                        ),
+                      ],
+                    ),
+                    const SizedBox(height: 16),
+                    _DeliveryProgress(
+                      steps: _trackingSteps,
+                      currentIndex: _trackingIndex,
+                    ),
+                  ],
                 ),
-                items: widget.dataSource.deliveryDestinations
-                    .map(
-                      (destination) => DropdownMenuItem(
-                        value: destination,
-                        child: Text(destination),
-                      ),
-                    )
-                    .toList(),
-                onChanged: _tracking
-                    ? null
-                    : (value) => setState(() => _destination = value),
               ),
-              const SizedBox(height: 18),
-              const Text(
-                '배송 물품 선택',
-                style: TextStyle(fontSize: 18, fontWeight: FontWeight.w900),
-              ),
-              const SizedBox(height: 10),
-              GridView.builder(
-                shrinkWrap: true,
-                physics: const NeverScrollableScrollPhysics(),
-                itemCount: _parcelTypes.length,
-                gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                  crossAxisCount: 2,
-                  childAspectRatio: 1.65,
-                  crossAxisSpacing: 10,
-                  mainAxisSpacing: 10,
-                ),
-                itemBuilder: (context, index) {
-                  final selected = index == _parcelIndex;
-                  return InkWell(
-                    onTap: _tracking ? null : () => setState(() => _parcelIndex = index),
-                    borderRadius: BorderRadius.circular(20),
-                    child: AnimatedContainer(
-                      duration: const Duration(milliseconds: 180),
-                      padding: const EdgeInsets.all(14),
-                      decoration: BoxDecoration(
-                        color: selected ? _PickColors.lightBlue : Colors.white,
-                        borderRadius: BorderRadius.circular(20),
-                        border: Border.all(
-                          color: selected ? _PickColors.blue : _PickColors.line,
-                          width: selected ? 1.6 : 1,
+              const SizedBox(height: 14),
+              _PickCard(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    const Text(
+                      '배송 경로',
+                      style: TextStyle(fontSize: 18, fontWeight: FontWeight.w900),
+                    ),
+                    const SizedBox(height: 12),
+                    _DeliveryRouteDropdown(
+                      label: '보낼 곳',
+                      icon: Icons.inventory_2_rounded,
+                      color: _PickColors.blue,
+                      value: _pickup,
+                      places: widget.dataSource.deliveryDestinations,
+                      enabled: !_tracking,
+                      onChanged: (value) => setState(() => _pickup = value),
+                    ),
+                    const Padding(
+                      padding: EdgeInsets.only(left: 20),
+                      child: SizedBox(
+                        height: 20,
+                        child: VerticalDivider(
+                          width: 2,
+                          thickness: 2,
+                          color: _PickColors.line,
                         ),
                       ),
-                      child: Row(
-                        children: [
-                          Icon(_parcelTypes[index].$2, color: _PickColors.blue),
-                          const SizedBox(width: 9),
-                          Expanded(
-                            child: Text(
-                              _parcelTypes[index].$1,
-                              style: const TextStyle(fontWeight: FontWeight.w900),
+                    ),
+                    _DeliveryRouteDropdown(
+                      label: '받을 곳',
+                      icon: Icons.location_on_rounded,
+                      color: _PickColors.green,
+                      value: _destination,
+                      places: widget.dataSource.deliveryDestinations,
+                      enabled: !_tracking,
+                      onChanged: (value) {
+                        if (value == _pickup) {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            const SnackBar(
+                              content: Text('보낼 곳과 받을 곳은 달라야 해요.'),
                             ),
+                          );
+                          return;
+                        }
+                        setState(() => _destination = value);
+                      },
+                    ),
+                  ],
+                ),
+              ),
+              const SizedBox(height: 14),
+              _PickCard(
+                padding: EdgeInsets.zero,
+                child: SizedBox(
+                  height: 220,
+                  child: ClipRRect(
+                    borderRadius: BorderRadius.circular(22),
+                    child: CustomPaint(
+                      painter: const _CampusRoutePainter(),
+                      child: const Stack(
+                        children: [
+                          Positioned(
+                            left: 22,
+                            bottom: 27,
+                            child: _MapMarker(
+                              label: '정보과학관',
+                              color: _PickColors.blue,
+                            ),
+                          ),
+                          Positioned(
+                            right: 18,
+                            top: 26,
+                            child: _MapMarker(
+                              label: '국제교류관',
+                              color: _PickColors.green,
+                            ),
+                          ),
+                          Positioned(
+                            left: 145,
+                            top: 83,
+                            child: _DeliveryBot(size: 64),
                           ),
                         ],
                       ),
                     ),
-                  );
-                },
+                  ),
+                ),
               ),
-              const SizedBox(height: 16),
+              const SizedBox(height: 14),
+              SizedBox(
+                width: double.infinity,
+                height: 56,
+                child: FilledButton.icon(
+                  onPressed: _handlePrimaryAction,
+                  icon: const Icon(Icons.local_shipping_outlined),
+                  label: Text(
+                    switch (_trackingIndex) {
+                      0 => '자율배송 호출하기',
+                      3 => '새 배송 요청',
+                      _ => '배송 상태 확인',
+                    },
+                    style: const TextStyle(fontWeight: FontWeight.w900),
+                  ),
+                ),
+              ),
+              const SizedBox(height: 12),
               _PickCard(
-                child: Row(
+                child: const Row(
                   children: [
-                    const _DeliveryBot(size: 94),
-                    const SizedBox(width: 14),
+                    CircleAvatar(
+                      backgroundColor: _PickColors.lightBlue,
+                      child: Icon(
+                        Icons.support_agent_rounded,
+                        color: _PickColors.blue,
+                      ),
+                    ),
+                    SizedBox(width: 12),
                     Expanded(
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
-                            _tracking ? '로봇 운행 중' : '로봇 대기 중',
-                            style: TextStyle(
-                              color: _tracking ? _PickColors.green : _PickColors.sub,
-                              fontSize: 20,
-                              fontWeight: FontWeight.w900,
-                            ),
+                            '운영센터',
+                            style: TextStyle(fontWeight: FontWeight.w900),
                           ),
-                          const SizedBox(height: 6),
+                          SizedBox(height: 4),
                           Text(
-                            _tracking ? '도착 예정 8분' : '배송 요청을 대기하고 있어요.',
-                            style: const TextStyle(
+                            '운행 중 문제가 있으면 안전 관제에 연락해주세요.',
+                            style: TextStyle(
                               color: _PickColors.sub,
                               fontWeight: FontWeight.w700,
                             ),
@@ -1159,42 +1295,8 @@ class _DeliveryRobotScreenState extends State<DeliveryRobotScreen> {
                         ],
                       ),
                     ),
+                    Icon(Icons.chevron_right_rounded, color: _PickColors.blue),
                   ],
-                ),
-              ),
-              const SizedBox(height: 16),
-              if (_tracking) ...[
-                const Text(
-                  '배송 추적',
-                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.w900),
-                ),
-                const SizedBox(height: 10),
-                _PickCard(
-                  child: Column(
-                    children: List.generate(_trackingSteps.length, (index) {
-                      final completed = index <= _trackingIndex;
-                      final active = index == _trackingIndex;
-                      return _TrackingStep(
-                        label: _trackingSteps[index],
-                        completed: completed,
-                        active: active,
-                        isLast: index == _trackingSteps.length - 1,
-                      );
-                    }),
-                  ),
-                ),
-                const SizedBox(height: 14),
-              ],
-              SizedBox(
-                width: double.infinity,
-                height: 56,
-                child: FilledButton.icon(
-                  onPressed: _tracking ? null : _startDelivery,
-                  icon: const Icon(Icons.local_shipping_outlined),
-                  label: Text(
-                    _tracking ? '배송 진행 중' : '자율배송 요청',
-                    style: const TextStyle(fontWeight: FontWeight.w900),
-                  ),
                 ),
               ),
               const SizedBox(height: 12),
@@ -1203,6 +1305,154 @@ class _DeliveryRobotScreenState extends State<DeliveryRobotScreen> {
           ),
         ),
       ),
+    );
+  }
+}
+
+class _DeliveryRouteDropdown extends StatelessWidget {
+  const _DeliveryRouteDropdown({
+    required this.label,
+    required this.icon,
+    required this.color,
+    required this.value,
+    required this.places,
+    required this.enabled,
+    required this.onChanged,
+  });
+
+  final String label;
+  final IconData icon;
+  final Color color;
+  final String value;
+  final List<String> places;
+  final bool enabled;
+  final ValueChanged<String> onChanged;
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      children: [
+        Container(
+          width: 42,
+          height: 42,
+          decoration: BoxDecoration(
+            color: color.withOpacity(0.12),
+            shape: BoxShape.circle,
+          ),
+          child: Icon(icon, color: color),
+        ),
+        const SizedBox(width: 12),
+        Expanded(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                label,
+                style: const TextStyle(
+                  color: _PickColors.sub,
+                  fontSize: 12,
+                  fontWeight: FontWeight.w800,
+                ),
+              ),
+              DropdownButtonHideUnderline(
+                child: DropdownButton<String>(
+                  value: value,
+                  isExpanded: true,
+                  icon: const Icon(Icons.keyboard_arrow_down_rounded),
+                  items: places
+                      .map(
+                        (place) => DropdownMenuItem<String>(
+                          value: place,
+                          child: Text(
+                            place,
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
+                            style: const TextStyle(fontWeight: FontWeight.w900),
+                          ),
+                        ),
+                      )
+                      .toList(),
+                  onChanged: enabled
+                      ? (newValue) {
+                          if (newValue != null) onChanged(newValue);
+                        }
+                      : null,
+                ),
+              ),
+            ],
+          ),
+        ),
+      ],
+    );
+  }
+}
+
+class _DeliveryProgress extends StatelessWidget {
+  const _DeliveryProgress({required this.steps, required this.currentIndex});
+
+  final List<String> steps;
+  final int currentIndex;
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: List.generate(steps.length, (index) {
+        final active = index <= currentIndex;
+        return Expanded(
+          child: Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Expanded(
+                child: Column(
+                  children: [
+                    Container(
+                      width: 28,
+                      height: 28,
+                      decoration: BoxDecoration(
+                        color: active ? _PickColors.blue : Colors.white,
+                        shape: BoxShape.circle,
+                        border: Border.all(
+                          color: active ? _PickColors.blue : _PickColors.line,
+                          width: 2,
+                        ),
+                      ),
+                      child: Icon(
+                        index < currentIndex ? Icons.check : Icons.circle,
+                        color: active ? Colors.white : _PickColors.line,
+                        size: index < currentIndex ? 17 : 9,
+                      ),
+                    ),
+                    const SizedBox(height: 7),
+                    Text(
+                      steps[index],
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                        color: index == currentIndex
+                            ? _PickColors.blue
+                            : _PickColors.sub,
+                        fontSize: 11,
+                        fontWeight: index == currentIndex
+                            ? FontWeight.w900
+                            : FontWeight.w700,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              if (index < steps.length - 1)
+                Container(
+                  width: 12,
+                  height: 2,
+                  margin: const EdgeInsets.only(top: 13),
+                  color: index < currentIndex
+                      ? _PickColors.blue
+                      : _PickColors.line,
+                ),
+            ],
+          ),
+        );
+      }),
     );
   }
 }
