@@ -683,49 +683,86 @@ class _ShuttlePickupScreenState extends State<ShuttlePickupScreen> {
               _PickCard(
                 padding: EdgeInsets.zero,
                 child: SizedBox(
-                  height: 280,
+                  height: 430,
                   child: ClipRRect(
                     borderRadius: BorderRadius.circular(24),
-                    child: CustomPaint(
-                      painter: const _CampusRoutePainter(),
-                      child: Stack(
-                        children: [
-                          const Positioned(
-                            left: 18,
-                            bottom: 26,
-                            child: _MapMarker(label: '정문', color: _PickColors.blue),
+                    child: Stack(
+                      children: [
+                        Positioned.fill(
+                          child: Image.asset(
+                            'assets/maps/paichai_campus_map.png',
+                            fit: BoxFit.cover,
                           ),
-                          const Positioned(
-                            left: 91,
-                            bottom: 102,
-                            child: _MapMarker(
-                              label: '21세기관',
-                              color: _PickColors.purple,
+                        ),
+                        const Positioned.fill(
+                          child: CustomPaint(
+                            painter: _CampusRoutePainter(),
+                          ),
+                        ),
+                        const Align(
+                          alignment: Alignment(0.62, 0.54),
+                          child: _MapMarker(
+                            label: '정문',
+                            color: _PickColors.blue,
+                          ),
+                        ),
+                        const Align(
+                          alignment: Alignment(0.66, 0.18),
+                          child: _MapMarker(
+                            label: '21세기관',
+                            color: _PickColors.purple,
+                          ),
+                        ),
+                        const Align(
+                          alignment: Alignment(-0.56, -0.48),
+                          child: _MapMarker(
+                            label: '중앙도서관',
+                            color: _PickColors.orange,
+                          ),
+                        ),
+                        const Align(
+                          alignment: Alignment(0.56, -0.24),
+                          child: _MapMarker(
+                            label: '국제교류관',
+                            color: _PickColors.green,
+                          ),
+                        ),
+                        const Align(
+                          alignment: Alignment(0.02, -0.02),
+                          child: _VehiclePod(size: 64),
+                        ),
+                        Positioned(
+                          left: 12,
+                          top: 12,
+                          child: Container(
+                            padding: const EdgeInsets.symmetric(
+                              horizontal: 12,
+                              vertical: 8,
+                            ),
+                            decoration: BoxDecoration(
+                              color: Colors.white.withOpacity(0.94),
+                              borderRadius: BorderRadius.circular(999),
+                            ),
+                            child: const Row(
+                              children: [
+                                Icon(
+                                  Icons.route_rounded,
+                                  size: 17,
+                                  color: _PickColors.blue,
+                                ),
+                                SizedBox(width: 6),
+                                Text(
+                                  '교내 순환 실증 노선',
+                                  style: TextStyle(
+                                    color: _PickColors.darkBlue,
+                                    fontWeight: FontWeight.w900,
+                                  ),
+                                ),
+                              ],
                             ),
                           ),
-                          const Positioned(
-                            right: 92,
-                            top: 94,
-                            child: _MapMarker(
-                              label: '중앙도서관',
-                              color: _PickColors.orange,
-                            ),
-                          ),
-                          const Positioned(
-                            right: 18,
-                            top: 25,
-                            child: _MapMarker(
-                              label: '국제교류관',
-                              color: _PickColors.green,
-                            ),
-                          ),
-                          const Positioned(
-                            left: 150,
-                            top: 110,
-                            child: _VehiclePod(size: 64),
-                          ),
-                        ],
-                      ),
+                        ),
+                      ],
                     ),
                   ),
                 ),
@@ -1213,36 +1250,72 @@ class _DeliveryRobotScreenState extends State<DeliveryRobotScreen> {
               _PickCard(
                 padding: EdgeInsets.zero,
                 child: SizedBox(
-                  height: 220,
+                  height: 430,
                   child: ClipRRect(
                     borderRadius: BorderRadius.circular(22),
-                    child: CustomPaint(
-                      painter: const _CampusRoutePainter(),
-                      child: const Stack(
-                        children: [
-                          Positioned(
-                            left: 22,
-                            bottom: 27,
-                            child: _MapMarker(
-                              label: '정보과학관',
-                              color: _PickColors.blue,
+                    child: Stack(
+                      children: [
+                        Positioned.fill(
+                          child: Image.asset(
+                            'assets/maps/paichai_campus_map.png',
+                            fit: BoxFit.cover,
+                          ),
+                        ),
+                        const Positioned.fill(
+                          child: CustomPaint(
+                            painter: _CampusRoutePainter(delivery: true),
+                          ),
+                        ),
+                        const Align(
+                          alignment: Alignment(-0.84, 0.20),
+                          child: _MapMarker(
+                            label: '정보과학관',
+                            color: _PickColors.blue,
+                          ),
+                        ),
+                        const Align(
+                          alignment: Alignment(0.56, -0.22),
+                          child: _MapMarker(
+                            label: '국제교류관',
+                            color: _PickColors.green,
+                          ),
+                        ),
+                        const Align(
+                          alignment: Alignment(-0.06, 0.00),
+                          child: _DeliveryBot(size: 64),
+                        ),
+                        Positioned(
+                          left: 12,
+                          top: 12,
+                          child: Container(
+                            padding: const EdgeInsets.symmetric(
+                              horizontal: 12,
+                              vertical: 8,
+                            ),
+                            decoration: BoxDecoration(
+                              color: Colors.white.withOpacity(0.94),
+                              borderRadius: BorderRadius.circular(999),
+                            ),
+                            child: const Row(
+                              children: [
+                                Icon(
+                                  Icons.sensors_rounded,
+                                  size: 17,
+                                  color: _PickColors.purple,
+                                ),
+                                SizedBox(width: 6),
+                                Text(
+                                  'NEXUS-01 실시간 위치',
+                                  style: TextStyle(
+                                    color: _PickColors.darkBlue,
+                                    fontWeight: FontWeight.w900,
+                                  ),
+                                ),
+                              ],
                             ),
                           ),
-                          Positioned(
-                            right: 18,
-                            top: 26,
-                            child: _MapMarker(
-                              label: '국제교류관',
-                              color: _PickColors.green,
-                            ),
-                          ),
-                          Positioned(
-                            left: 145,
-                            top: 83,
-                            child: _DeliveryBot(size: 64),
-                          ),
-                        ],
-                      ),
+                        ),
+                      ],
                     ),
                   ),
                 ),
@@ -2479,46 +2552,81 @@ class _FloorPlanPainter extends CustomPainter {
 }
 
 class _CampusRoutePainter extends CustomPainter {
-  const _CampusRoutePainter();
+  const _CampusRoutePainter({this.delivery = false});
+
+  final bool delivery;
 
   @override
   void paint(Canvas canvas, Size size) {
-    canvas.drawRect(Offset.zero & size, Paint()..color = const Color(0xFFE8F3FF));
-    final buildingPaint = Paint()..color = Colors.white;
-    for (final rect in [
-      Rect.fromLTWH(size.width * 0.08, size.height * 0.10, 86, 58),
-      Rect.fromLTWH(size.width * 0.64, size.height * 0.12, 96, 72),
-      Rect.fromLTWH(size.width * 0.12, size.height * 0.68, 110, 64),
-      Rect.fromLTWH(size.width * 0.66, size.height * 0.66, 92, 56),
-    ]) {
-      canvas.drawRRect(RRect.fromRectAndRadius(rect, const Radius.circular(12)), buildingPaint);
+    canvas.drawRect(
+      Offset.zero & size,
+      Paint()..color = const Color(0x120F2F6E),
+    );
+
+    final route = Path();
+    if (delivery) {
+      route
+        ..moveTo(size.width * 0.08, size.height * 0.60)
+        ..cubicTo(
+          size.width * 0.24,
+          size.height * 0.56,
+          size.width * 0.42,
+          size.height * 0.48,
+          size.width * 0.55,
+          size.height * 0.45,
+        )
+        ..cubicTo(
+          size.width * 0.64,
+          size.height * 0.42,
+          size.width * 0.70,
+          size.height * 0.40,
+          size.width * 0.78,
+          size.height * 0.38,
+        );
+    } else {
+      route
+        ..moveTo(size.width * 0.84, size.height * 0.79)
+        ..lineTo(size.width * 0.84, size.height * 0.60)
+        ..cubicTo(
+          size.width * 0.70,
+          size.height * 0.58,
+          size.width * 0.50,
+          size.height * 0.54,
+          size.width * 0.40,
+          size.height * 0.48,
+        )
+        ..lineTo(size.width * 0.23, size.height * 0.26)
+        ..cubicTo(
+          size.width * 0.40,
+          size.height * 0.30,
+          size.width * 0.62,
+          size.height * 0.31,
+          size.width * 0.78,
+          size.height * 0.38,
+        );
     }
-    final roadPaint = Paint()
-      ..color = Colors.white
+
+    final routeHalo = Paint()
+      ..color = Colors.white.withOpacity(0.92)
       ..style = PaintingStyle.stroke
-      ..strokeWidth = 26
-      ..strokeCap = StrokeCap.round;
-    final route = Path()
-      ..moveTo(size.width * 0.18, size.height * 0.78)
-      ..cubicTo(
-        size.width * 0.25,
-        size.height * 0.50,
-        size.width * 0.58,
-        size.height * 0.56,
-        size.width * 0.78,
-        size.height * 0.24,
-      );
-    canvas.drawPath(route, roadPaint);
+      ..strokeWidth = 11
+      ..strokeCap = StrokeCap.round
+      ..strokeJoin = StrokeJoin.round;
+    canvas.drawPath(route, routeHalo);
+
     final blueRoute = Paint()
-      ..color = _PickColors.blue
+      ..color = delivery ? _PickColors.purple : _PickColors.blue
       ..style = PaintingStyle.stroke
       ..strokeWidth = 5
-      ..strokeCap = StrokeCap.round;
+      ..strokeCap = StrokeCap.round
+      ..strokeJoin = StrokeJoin.round;
     canvas.drawPath(route, blueRoute);
   }
 
   @override
-  bool shouldRepaint(covariant CustomPainter oldDelegate) => false;
+  bool shouldRepaint(covariant _CampusRoutePainter oldDelegate) {
+    return oldDelegate.delivery != delivery;
+  }
 }
 
 class _TigerMascotPainter extends CustomPainter {

@@ -47,6 +47,8 @@ The reason to return is Nasumi collection, campus missions, department tours, an
   building/floor filters plus an isometric floor-plan preview
 - Adds a campus autonomous shuttle route across the main gate, Paichai 21st
   Century Building, Central Library, and International Exchange Building
+- Uses a Paichai campus-map reference asset so the shuttle and delivery overlays
+  follow the real campus building axis instead of arbitrary mock coordinates
 - Adds pickup/destination selection, passenger count, arrival time, and a
   reversible reservation state
 - Adds the NEXUS-01 ROS2 delivery-robot status experience with route selection,
