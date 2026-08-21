@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import 'features/cafeteria/cafeteria_repository.dart';
 import 'smart_mobility.dart';
 
 void main() {
@@ -740,27 +741,58 @@ class CafeteriaMiniCard extends StatelessWidget {
 
 
 class CafeteriaDetailScreen extends StatefulWidget {
-  const CafeteriaDetailScreen({super.key});
+  const CafeteriaDetailScreen({super.key, this.repository});
+
+  final CafeteriaRepository? repository;
 
   @override
   State<CafeteriaDetailScreen> createState() => _CafeteriaDetailScreenState();
 }
 
 class _CafeteriaDetailScreenState extends State<CafeteriaDetailScreen> {
+  late final CafeteriaRepository repository;
+  late CafeteriaMenu menu;
+  CafeteriaMenuResult? menuResult;
   String selectedFeedback = '';
   bool menuCardSaved = false;
-
-  final String menuCardTitle = '돈육폭찹 정식 카드';
+  bool loadingMenu = true;
 
   @override
   void initState() {
     super.initState();
-    loadMenuCardState();
+    repository = widget.repository ?? CafeteriaBootstrap.build();
+    menu = CafeteriaMenu.sample(DateTime.now());
+    loadCafeteriaMenu();
   }
 
-  Future<void> loadMenuCardState() async {
+  @override
+  void dispose() {
+    repository.close();
+    super.dispose();
+  }
+
+  Future<void> loadCafeteriaMenu() async {
+    if (mounted) {
+      setState(() {
+        loadingMenu = true;
+      });
+    }
+
+    final result = await repository.loadToday(DateTime.now());
+    if (!mounted) return;
+
+    setState(() {
+      menu = result.menu;
+      menuResult = result;
+      loadingMenu = false;
+    });
+    await loadMenuCardState(result.menu.cardTitle);
+  }
+
+  Future<void> loadMenuCardState(String menuCardTitle) async {
     final prefs = await SharedPreferences.getInstance();
     final current = prefs.getStringList('collected_cards') ?? [];
+    if (!mounted) return;
     setState(() {
       menuCardSaved = current.contains(menuCardTitle);
     });
@@ -769,21 +801,22 @@ class _CafeteriaDetailScreenState extends State<CafeteriaDetailScreen> {
   Future<void> acquireMenuCard() async {
     final prefs = await SharedPreferences.getInstance();
     final current = prefs.getStringList('collected_cards') ?? [];
+    final menuCardTitle = menu.cardTitle;
 
     if (!current.contains(menuCardTitle)) {
       current.add(menuCardTitle);
       await prefs.setStringList('collected_cards', current);
     }
 
+    if (!mounted) return;
+
     setState(() {
       menuCardSaved = true;
     });
 
-    if (!mounted) return;
-
     ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(
-        content: Text('돈육폭찹 정식 카드를 획득했습니다.'),
+      SnackBar(
+        content: Text('$menuCardTitle를 획득했습니다.'),
       ),
     );
   }
@@ -844,8 +877,17 @@ class _CafeteriaDetailScreenState extends State<CafeteriaDetailScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final status = congestionStatus();
+    final liveResult = menuResult?.isLive ?? false;
+    final status = liveResult
+        ? menu.congestionStatus ?? congestionStatus()
+        : congestionStatus();
     final color = congestionColor(status);
+    final waitLabel = liveResult && menu.estimatedWaitMinutes != null
+        ? '약 ${menu.estimatedWaitMinutes}분'
+        : waitingTime(status);
+    final recommendationLabel = liveResult && menu.recommendation != null
+        ? menu.recommendation!
+        : recommendedTime(status);
 
     return Scaffold(
       backgroundColor: AppColors.bg,
@@ -872,30 +914,83 @@ class _CafeteriaDetailScreenState extends State<CafeteriaDetailScreen> {
               ),
               const SizedBox(height: 20),
               AppCard(
-                color: AppColors.blue,
+                color: liveResult
+                    ? const Color(0xFFECFDF5)
+                    : const Color(0xFFFFFBEB),
                 child: Row(
                   children: [
-                    const Expanded(
+                    Icon(
+                      loadingMenu
+                          ? Icons.sync
+                          : liveResult
+                          ? Icons.cloud_done_outlined
+                          : Icons.science_outlined,
+                      color: liveResult ? AppColors.green : AppColors.orange,
+                    ),
+                    const SizedBox(width: 12),
+                    Expanded(
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
+                            loadingMenu
+                                ? '식당 데이터 확인 중'
+                                : liveResult
+                                ? '실시간 식당 API 연결'
+                                : '안전한 샘플 데이터',
+                            style: const TextStyle(fontWeight: FontWeight.w900),
+                          ),
+                          if (!loadingMenu && !liveResult) ...[
+                            const SizedBox(height: 4),
+                            Text(
+                              menuResult?.fallbackReason ??
+                                  '샘플 메뉴를 표시합니다.',
+                              style: const TextStyle(
+                                color: AppColors.sub,
+                                fontWeight: FontWeight.w700,
+                              ),
+                            ),
+                          ],
+                        ],
+                      ),
+                    ),
+                    IconButton(
+                      tooltip: '식당 데이터 새로고침',
+                      onPressed: loadingMenu ? null : loadCafeteriaMenu,
+                      icon: const Icon(Icons.refresh),
+                    ),
+                  ],
+                ),
+              ),
+              const SizedBox(height: 16),
+              AppCard(
+                color: AppColors.blue,
+                child: Row(
+                  children: [
+                    Expanded(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          const Text(
                             '오늘의 학생식당',
                             style: TextStyle(color: Colors.white70, fontWeight: FontWeight.w800),
                           ),
-                          SizedBox(height: 8),
+                          const SizedBox(height: 8),
                           Text(
-                            '돈육폭찹 정식',
-                            style: TextStyle(
+                            menu.menuName,
+                            style: const TextStyle(
                               color: Colors.white,
                               fontSize: 26,
                               fontWeight: FontWeight.w900,
                             ),
                           ),
-                          SizedBox(height: 6),
+                          const SizedBox(height: 6),
                           Text(
-                            '운영 시간 11:30 ~ 13:30',
-                            style: TextStyle(color: Colors.white70, fontWeight: FontWeight.w700),
+                            '운영 시간 ${menu.opensAt} ~ ${menu.closesAt}',
+                            style: const TextStyle(
+                              color: Colors.white70,
+                              fontWeight: FontWeight.w700,
+                            ),
                           ),
                         ],
                       ),
@@ -933,7 +1028,7 @@ class _CafeteriaDetailScreenState extends State<CafeteriaDetailScreen> {
                         const SizedBox(width: 10),
                         Expanded(
                           child: Text(
-                            '예상 대기 시간: ${waitingTime(status)}',
+                            '예상 대기 시간: $waitLabel',
                             style: const TextStyle(
                               color: AppColors.sub,
                               fontWeight: FontWeight.w800,
@@ -951,7 +1046,7 @@ class _CafeteriaDetailScreenState extends State<CafeteriaDetailScreen> {
                         borderRadius: BorderRadius.circular(18),
                       ),
                       child: Text(
-                        recommendedTime(status),
+                        recommendationLabel,
                         style: const TextStyle(
                           color: AppColors.green,
                           fontWeight: FontWeight.w900,
@@ -971,8 +1066,14 @@ class _CafeteriaDetailScreenState extends State<CafeteriaDetailScreen> {
                       style: TextStyle(fontSize: 18, fontWeight: FontWeight.w900),
                     ),
                     const SizedBox(height: 14),
-                    const ProfileRow(label: '메뉴', value: '돈육폭찹 정식'),
-                    const ProfileRow(label: '예상 가격', value: '학생식당 기준'),
+                    ProfileRow(label: '메뉴', value: menu.menuName),
+                    ProfileRow(
+                      label: '구성',
+                      value: menu.items.isEmpty
+                          ? '구성 확인 필요'
+                          : menu.items.join(' · '),
+                    ),
+                    ProfileRow(label: '예상 가격', value: menu.priceLabel),
                     const ProfileRow(label: '메뉴 카드', value: '획득 가능'),
                     const ProfileRow(label: '식당 나섬이', value: '출현 중'),
                     const SizedBox(height: 12),
@@ -1057,7 +1158,7 @@ class _CafeteriaDetailScreenState extends State<CafeteriaDetailScreen> {
                     SizedBox(width: 12),
                     Expanded(
                       child: Text(
-                        '학생식당은 배재Pick을 매일 열게 만드는 핵심 진입점입니다. 이후 CityBrain API와 연결해 실제 혼잡도와 운영 데이터를 반영할 수 있습니다.',
+                        '식당 API 주소를 설정하면 실시간 메뉴와 혼잡도를 표시하고, 연결 실패 시 자동으로 샘플 데이터로 전환합니다.',
                         style: TextStyle(
                           color: AppColors.text,
                           fontWeight: FontWeight.w700,

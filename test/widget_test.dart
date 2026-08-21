@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:paejae_pick_2_app/main.dart';
+import 'package:paejae_pick_2_app/features/cafeteria/cafeteria_repository.dart';
 import 'package:paejae_pick_2_app/smart_mobility.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 void main() {
   testWidgets('smart mobility hub exposes all three MVP flows', (tester) async {
@@ -58,4 +60,40 @@ void main() {
 
     expect(find.text('스마트 이동'), findsOneWidget);
   });
+
+  testWidgets('cafeteria screen surfaces live API data', (tester) async {
+    SharedPreferences.setMockInitialValues({});
+    final repository = CafeteriaRepository(
+      remote: _StaticCafeteriaDataSource(
+        CafeteriaMenu(
+          date: DateTime(2026, 8, 21),
+          menuName: '제육덮밥',
+          items: const ['제육볶음', '쌀밥', '된장국'],
+          priceLabel: '5,500원',
+          opensAt: '11:30',
+          closesAt: '13:30',
+          congestionStatus: '보통',
+          estimatedWaitMinutes: 6,
+        ),
+      ),
+    );
+
+    await tester.pumpWidget(
+      MaterialApp(home: CafeteriaDetailScreen(repository: repository)),
+    );
+    await tester.pumpAndSettle();
+
+    expect(find.text('실시간 식당 API 연결'), findsOneWidget);
+    expect(find.text('제육덮밥'), findsNWidgets(2));
+    expect(find.text('예상 대기 시간: 약 6분'), findsOneWidget);
+  });
+}
+
+class _StaticCafeteriaDataSource extends CafeteriaRemoteDataSource {
+  _StaticCafeteriaDataSource(this.menu);
+
+  final CafeteriaMenu menu;
+
+  @override
+  Future<CafeteriaMenu> fetchToday(DateTime date) async => menu;
 }
