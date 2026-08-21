@@ -1,0 +1,3 @@
+.dart_tool/
+data/*.json
+!data/*.example.json
