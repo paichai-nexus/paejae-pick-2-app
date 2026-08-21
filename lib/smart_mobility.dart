@@ -156,8 +156,9 @@ class SmartMobilityPreviewCard extends StatelessWidget {
         MaterialPageRoute(
           builder: (_) => Scaffold(
             backgroundColor: _PickColors.bg,
-            appBar: _appBar('스마트 이동'),
-            body: const SmartMobilityHubScreen(),
+            body: const SafeArea(
+              child: SmartMobilityHubScreen(showBackButton: true),
+            ),
           ),
         ),
       ),
@@ -199,7 +200,9 @@ class SmartMobilityPreviewCard extends StatelessWidget {
 }
 
 class SmartMobilityHubScreen extends StatelessWidget {
-  const SmartMobilityHubScreen({super.key});
+  const SmartMobilityHubScreen({super.key, this.showBackButton = false});
+
+  final bool showBackButton;
 
   @override
   Widget build(BuildContext context) {
@@ -208,73 +211,50 @@ class SmartMobilityHubScreen extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
+          _BrandHeader(showBackButton: showBackButton),
+          const SizedBox(height: 24),
           const _FeatureHeader(
             title: '스마트 이동',
-            subtitle: '길찾기, 픽업, 배송을 배재Pick 하나로 연결합니다.',
+            subtitle: '길찾기·픽업·배송을 배재Pick 하나로 연결해요.',
           ),
           const SizedBox(height: 18),
           _PickCard(
             color: _PickColors.blue,
-            child: const Row(
-              children: [
-                Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        'COMING SOON',
-                        style: TextStyle(
-                          color: Colors.white70,
-                          fontWeight: FontWeight.w900,
-                          letterSpacing: 1.2,
-                        ),
-                      ),
-                      SizedBox(height: 8),
-                      Text(
-                        '캠퍼스를 더 가깝게,\n이동을 더 스마트하게',
-                        style: TextStyle(
-                          color: Colors.white,
-                          fontSize: 23,
-                          fontWeight: FontWeight.w900,
-                          height: 1.35,
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-                _MobilityMascot(size: 88),
-              ],
-            ),
+            padding: EdgeInsets.zero,
+            child: const _MobilityHero(),
           ),
           const SizedBox(height: 18),
-          _FeatureEntry(
-            icon: Icons.view_in_ar_outlined,
-            color: _PickColors.blue,
-            title: '3D 실내지도',
-            subtitle: '건물·호실·교수명을 검색하고 실내 경로를 안내받아요.',
-            badge: 'MVP',
-            onTap: () => Navigator.of(context).push(
-              MaterialPageRoute(builder: (_) => const IndoorMapScreen()),
-            ),
+          Row(
+            children: [
+              Expanded(
+                child: _MobilityFeatureCard(
+                  icon: Icons.view_in_ar_outlined,
+                  color: _PickColors.blue,
+                  title: '3D 실내지도',
+                  subtitle: '건물·호실·교수명 검색',
+                  badge: 'MVP',
+                  onTap: () => Navigator.of(context).push(
+                    MaterialPageRoute(builder: (_) => const IndoorMapScreen()),
+                  ),
+                ),
+              ),
+              const SizedBox(width: 12),
+              Expanded(
+                child: _MobilityFeatureCard(
+                  icon: Icons.airport_shuttle_outlined,
+                  color: _PickColors.green,
+                  title: '자율주행 픽업',
+                  subtitle: '도착시간·좌석·예약',
+                  badge: '시뮬레이션',
+                  onTap: () => Navigator.of(context).push(
+                    MaterialPageRoute(builder: (_) => const ShuttlePickupScreen()),
+                  ),
+                ),
+              ),
+            ],
           ),
           const SizedBox(height: 12),
-          _FeatureEntry(
-            icon: Icons.airport_shuttle_outlined,
-            color: _PickColors.green,
-            title: '자율주행 픽업',
-            subtitle: '가장 가까운 정류장과 도착 시간을 보고 좌석을 예약해요.',
-            badge: '시뮬레이션',
-            onTap: () => Navigator.of(context).push(
-              MaterialPageRoute(builder: (_) => const ShuttlePickupScreen()),
-            ),
-          ),
-          const SizedBox(height: 12),
-          _FeatureEntry(
-            icon: Icons.smart_toy_outlined,
-            color: _PickColors.purple,
-            title: '자율배송',
-            subtitle: '배송지와 물품을 선택하고 로봇 운행 상태를 추적해요.',
-            badge: '시뮬레이션',
+          _MobilityWideCard(
             onTap: () => Navigator.of(context).push(
               MaterialPageRoute(builder: (_) => const DeliveryRobotScreen()),
             ),
@@ -289,7 +269,7 @@ class SmartMobilityHubScreen extends StatelessWidget {
                 SizedBox(width: 10),
                 Expanded(
                   child: Text(
-                    '현재는 사용성 검증용 MVP입니다. 실제 호실 데이터, 차량 위치, 예약·배송 API는 학교 및 운영 기관과의 협의 후 연동합니다.',
+                    '현재는 사용성 검증용 MVP입니다. 실제 호실·차량·예약·배송 데이터는 학교 및 운영기관 협의 후 연동합니다.',
                     style: TextStyle(
                       color: _PickColors.sub,
                       fontWeight: FontWeight.w700,
@@ -360,7 +340,7 @@ class _IndoorMapScreenState extends State<IndoorMapScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: _PickColors.bg,
-      appBar: _appBar('3D 실내지도'),
+      appBar: _appBar(),
       body: SafeArea(
         top: false,
         child: SingleChildScrollView(
@@ -369,12 +349,12 @@ class _IndoorMapScreenState extends State<IndoorMapScreen> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               const Text(
-                '건물·호실·교수명 검색',
-                style: TextStyle(fontSize: 24, fontWeight: FontWeight.w900),
+                '캠퍼스맵',
+                style: TextStyle(fontSize: 30, fontWeight: FontWeight.w900),
               ),
               const SizedBox(height: 6),
               const Text(
-                '추후 연동할 공식 공개 자료를 기준으로 위치와 이동 경로만 안내합니다.',
+                '건물·호실·교수명을 검색하고 3D 실내경로를 확인해요.',
                 style: TextStyle(
                   color: _PickColors.sub,
                   fontWeight: FontWeight.w700,
@@ -402,6 +382,15 @@ class _IndoorMapScreenState extends State<IndoorMapScreen> {
                           child: ChoiceChip(
                             label: Text(building),
                             selected: _building == building,
+                            selectedColor: _PickColors.blue,
+                            backgroundColor: Colors.white,
+                            side: const BorderSide(color: _PickColors.line),
+                            labelStyle: TextStyle(
+                              color: _building == building
+                                  ? Colors.white
+                                  : _PickColors.sub,
+                              fontWeight: FontWeight.w800,
+                            ),
                             onSelected: (_) => setState(() {
                               _building = building;
                               _selected = null;
@@ -426,6 +415,15 @@ class _IndoorMapScreenState extends State<IndoorMapScreen> {
                           child: ChoiceChip(
                             label: Text(floor),
                             selected: _floor == floor,
+                            selectedColor: _PickColors.blue,
+                            backgroundColor: Colors.white,
+                            side: const BorderSide(color: _PickColors.line),
+                            labelStyle: TextStyle(
+                              color: _floor == floor
+                                  ? Colors.white
+                                  : _PickColors.sub,
+                              fontWeight: FontWeight.w800,
+                            ),
                             onSelected: (_) => setState(() {
                               _floor = floor;
                               _selected = null;
@@ -442,7 +440,7 @@ class _IndoorMapScreenState extends State<IndoorMapScreen> {
               _PickCard(
                 padding: const EdgeInsets.all(12),
                 child: SizedBox(
-                  height: 330,
+                  height: 390,
                   child: LayoutBuilder(
                     builder: (context, constraints) {
                       final visible = _visibleMapLocations;
@@ -497,7 +495,35 @@ class _IndoorMapScreenState extends State<IndoorMapScreen> {
                           Positioned(
                             left: 12,
                             top: 12,
-                            child: _statusPill('$_building · $_floor'),
+                            child: Container(
+                              padding: const EdgeInsets.symmetric(
+                                horizontal: 12,
+                                vertical: 8,
+                              ),
+                              decoration: BoxDecoration(
+                                color: Colors.white,
+                                borderRadius: BorderRadius.circular(999),
+                                boxShadow: const [
+                                  BoxShadow(
+                                    color: Color(0x160F2F6E),
+                                    blurRadius: 12,
+                                    offset: Offset(0, 5),
+                                  ),
+                                ],
+                              ),
+                              child: Text(
+                                '$_building · $_floor',
+                                style: const TextStyle(
+                                  color: _PickColors.darkBlue,
+                                  fontWeight: FontWeight.w900,
+                                ),
+                              ),
+                            ),
+                          ),
+                          const Positioned(
+                            right: 12,
+                            bottom: 12,
+                            child: _MapControlRail(),
                           ),
                         ],
                       );
@@ -560,7 +586,7 @@ class _ShuttlePickupScreenState extends State<ShuttlePickupScreen> {
     final stop = widget.dataSource.campusStops[_selectedStop];
     return Scaffold(
       backgroundColor: _PickColors.bg,
-      appBar: _appBar('자율주행 픽업'),
+      appBar: _appBar(),
       body: SafeArea(
         top: false,
         child: SingleChildScrollView(
@@ -569,12 +595,12 @@ class _ShuttlePickupScreenState extends State<ShuttlePickupScreen> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               const Text(
-                '가장 가까운 정류장',
-                style: TextStyle(fontSize: 24, fontWeight: FontWeight.w900),
+                '자율주행 픽업',
+                style: TextStyle(fontSize: 30, fontWeight: FontWeight.w900),
               ),
               const SizedBox(height: 6),
               Text(
-                '${stop.name} · 도보 ${stop.walkMinutes}분',
+                '가장 가까운 정류장은 ${stop.name}, 도보 ${stop.walkMinutes}분이에요.',
                 style: const TextStyle(
                   color: _PickColors.sub,
                   fontWeight: FontWeight.w700,
@@ -777,7 +803,7 @@ class _DeliveryRobotScreenState extends State<DeliveryRobotScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: _PickColors.bg,
-      appBar: _appBar('자율배송'),
+      appBar: _appBar(),
       body: SafeArea(
         top: false,
         child: SingleChildScrollView(
@@ -786,12 +812,12 @@ class _DeliveryRobotScreenState extends State<DeliveryRobotScreen> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               const Text(
-                '배송지를 선택하세요',
-                style: TextStyle(fontSize: 24, fontWeight: FontWeight.w900),
+                '자율배송',
+                style: TextStyle(fontSize: 30, fontWeight: FontWeight.w900),
               ),
               const SizedBox(height: 6),
               const Text(
-                '실내 수령존까지 안전하게 배송하는 시뮬레이션입니다.',
+                '배송지와 물품을 선택하고 로봇의 운행상태를 확인해요.',
                 style: TextStyle(
                   color: _PickColors.sub,
                   fontWeight: FontWeight.w700,
@@ -936,6 +962,269 @@ class _DeliveryRobotScreenState extends State<DeliveryRobotScreen> {
             ],
           ),
         ),
+      ),
+    );
+  }
+}
+
+class _BrandHeader extends StatelessWidget {
+  const _BrandHeader({this.showBackButton = false});
+
+  final bool showBackButton;
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      children: [
+        if (showBackButton) ...[
+          IconButton.filledTonal(
+            onPressed: () => Navigator.of(context).pop(),
+            icon: const Icon(Icons.arrow_back_ios_new, size: 18),
+          ),
+          const SizedBox(width: 10),
+        ],
+        Expanded(
+          child: RichText(
+            text: const TextSpan(
+              style: TextStyle(
+                fontSize: 26,
+                fontWeight: FontWeight.w900,
+                letterSpacing: -1.2,
+              ),
+              children: [
+                TextSpan(
+                  text: '배재Pick ',
+                  style: TextStyle(color: _PickColors.darkBlue),
+                ),
+                TextSpan(
+                  text: '2.0',
+                  style: TextStyle(color: _PickColors.blue),
+                ),
+              ],
+            ),
+          ),
+        ),
+        IconButton(
+          onPressed: () => ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(content: Text('새로운 알림이 없어요.')),
+          ),
+          icon: const Icon(Icons.notifications_none_rounded, size: 29),
+        ),
+        const SizedBox(width: 6),
+        const _MobilityMascot(size: 46),
+      ],
+    );
+  }
+}
+
+class _MobilityHero extends StatelessWidget {
+  const _MobilityHero();
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      height: 224,
+      padding: const EdgeInsets.fromLTRB(22, 22, 14, 18),
+      decoration: BoxDecoration(
+        gradient: const LinearGradient(
+          begin: Alignment.topLeft,
+          end: Alignment.bottomRight,
+          colors: [Color(0xFF3488F4), Color(0xFF1164E8)],
+        ),
+        borderRadius: BorderRadius.circular(26),
+      ),
+      child: Stack(
+        children: [
+          Positioned(
+            right: -18,
+            bottom: -36,
+            child: Container(
+              width: 190,
+              height: 190,
+              decoration: BoxDecoration(
+                shape: BoxShape.circle,
+                color: Colors.white.withOpacity(0.10),
+              ),
+            ),
+          ),
+          const Positioned(
+            right: 18,
+            top: 30,
+            child: _MobilityMascot(size: 112),
+          ),
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              const Text(
+                '오늘의 Smart Pick',
+                style: TextStyle(
+                  color: Colors.white70,
+                  fontSize: 15,
+                  fontWeight: FontWeight.w800,
+                ),
+              ),
+              const SizedBox(height: 10),
+              const Text(
+                '캠퍼스를\n더 가깝게!',
+                style: TextStyle(
+                  color: Colors.white,
+                  fontSize: 27,
+                  height: 1.24,
+                  fontWeight: FontWeight.w900,
+                  letterSpacing: -1,
+                ),
+              ),
+              const Spacer(),
+              Container(
+                padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                decoration: BoxDecoration(
+                  color: Colors.white.withOpacity(0.18),
+                  borderRadius: BorderRadius.circular(999),
+                ),
+                child: const Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Icon(Icons.route_rounded, color: Colors.white, size: 18),
+                    SizedBox(width: 7),
+                    Text(
+                      '스마트맵 · 픽업 · 배송',
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontWeight: FontWeight.w900,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class _MobilityFeatureCard extends StatelessWidget {
+  const _MobilityFeatureCard({
+    required this.icon,
+    required this.color,
+    required this.title,
+    required this.subtitle,
+    required this.badge,
+    required this.onTap,
+  });
+
+  final IconData icon;
+  final Color color;
+  final String title;
+  final String subtitle;
+  final String badge;
+  final VoidCallback onTap;
+
+  @override
+  Widget build(BuildContext context) {
+    return _PickCard(
+      onTap: onTap,
+      padding: const EdgeInsets.all(16),
+      child: SizedBox(
+        height: 150,
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Row(
+              children: [
+                Container(
+                  width: 46,
+                  height: 46,
+                  decoration: BoxDecoration(
+                    color: color.withOpacity(0.11),
+                    borderRadius: BorderRadius.circular(15),
+                  ),
+                  child: Icon(icon, color: color, size: 27),
+                ),
+                const Spacer(),
+                _smallBadge(badge, color),
+              ],
+            ),
+            const Spacer(),
+            Text(
+              title,
+              maxLines: 2,
+              style: const TextStyle(
+                color: _PickColors.text,
+                fontSize: 17,
+                fontWeight: FontWeight.w900,
+                height: 1.25,
+              ),
+            ),
+            const SizedBox(height: 6),
+            Text(
+              subtitle,
+              maxLines: 2,
+              style: const TextStyle(
+                color: _PickColors.sub,
+                fontSize: 12,
+                fontWeight: FontWeight.w700,
+                height: 1.35,
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class _MobilityWideCard extends StatelessWidget {
+  const _MobilityWideCard({required this.onTap});
+
+  final VoidCallback onTap;
+
+  @override
+  Widget build(BuildContext context) {
+    return _PickCard(
+      onTap: onTap,
+      child: const Row(
+        children: [
+          _DeliveryBot(size: 86),
+          SizedBox(width: 16),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Row(
+                  children: [
+                    Expanded(
+                      child: Text(
+                        '자율배송',
+                        style: TextStyle(fontSize: 19, fontWeight: FontWeight.w900),
+                      ),
+                    ),
+                    Icon(Icons.chevron_right, color: _PickColors.blue),
+                  ],
+                ),
+                SizedBox(height: 7),
+                Text(
+                  '배송지를 선택하고 로봇 운행상태를 확인해요.',
+                  style: TextStyle(
+                    color: _PickColors.sub,
+                    fontWeight: FontWeight.w700,
+                    height: 1.45,
+                  ),
+                ),
+                SizedBox(height: 9),
+                Text(
+                  'ROS2 연동 예정',
+                  style: TextStyle(
+                    color: _PickColors.purple,
+                    fontSize: 12,
+                    fontWeight: FontWeight.w900,
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ],
       ),
     );
   }
@@ -1189,13 +1478,13 @@ class _PickCard extends StatelessWidget {
       padding: padding,
       decoration: BoxDecoration(
         color: color,
-        borderRadius: BorderRadius.circular(24),
+        borderRadius: BorderRadius.circular(22),
         border: Border.all(color: color == Colors.white ? _PickColors.line : color),
         boxShadow: const [
           BoxShadow(
-            color: Color(0x0D000000),
-            blurRadius: 20,
-            offset: Offset(0, 8),
+            color: Color(0x120F2F6E),
+            blurRadius: 18,
+            offset: Offset(0, 7),
           ),
         ],
       ),
@@ -1204,7 +1493,7 @@ class _PickCard extends StatelessWidget {
     if (onTap == null) return card;
     return InkWell(
       onTap: onTap,
-      borderRadius: BorderRadius.circular(24),
+      borderRadius: BorderRadius.circular(22),
       child: card,
     );
   }
@@ -1218,26 +1507,26 @@ class _FeatureHeader extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Row(
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Expanded(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(title, style: const TextStyle(fontSize: 28, fontWeight: FontWeight.w900)),
-              const SizedBox(height: 5),
-              Text(
-                subtitle,
-                style: const TextStyle(
-                  color: _PickColors.sub,
-                  fontWeight: FontWeight.w700,
-                  height: 1.45,
-                ),
-              ),
-            ],
+        Text(
+          title,
+          style: const TextStyle(
+            fontSize: 30,
+            fontWeight: FontWeight.w900,
+            letterSpacing: -1,
           ),
         ),
-        const _MobilityMascot(size: 58),
+        const SizedBox(height: 6),
+        Text(
+          subtitle,
+          style: const TextStyle(
+            color: _PickColors.sub,
+            fontWeight: FontWeight.w700,
+            height: 1.45,
+          ),
+        ),
       ],
     );
   }
@@ -1250,50 +1539,11 @@ class _MobilityMascot extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
+    return SizedBox(
       width: size,
       height: size,
-      decoration: BoxDecoration(
-        color: _PickColors.orange,
-        shape: BoxShape.circle,
-        border: Border.all(color: Colors.white, width: 4),
-        boxShadow: const [
-          BoxShadow(color: Color(0x33FBBF24), blurRadius: 16, offset: Offset(0, 8)),
-        ],
-      ),
-      child: Stack(
-        alignment: Alignment.center,
-        children: [
-          Positioned(
-            top: size * 0.14,
-            child: Text(
-              'Ⅲ',
-              style: TextStyle(
-                color: const Color(0xFF7C2D12),
-                fontWeight: FontWeight.w900,
-                fontSize: size * 0.20,
-              ),
-            ),
-          ),
-          Positioned(
-            bottom: size * 0.20,
-            child: Container(
-              padding: EdgeInsets.symmetric(horizontal: size * 0.12, vertical: size * 0.04),
-              decoration: BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.circular(999),
-              ),
-              child: Text(
-                'P',
-                style: TextStyle(
-                  color: _PickColors.blue,
-                  fontWeight: FontWeight.w900,
-                  fontSize: size * 0.17,
-                ),
-              ),
-            ),
-          ),
-        ],
+      child: CustomPaint(
+        painter: const _TigerMascotPainter(),
       ),
     );
   }
@@ -1428,6 +1678,70 @@ class _MapMarker extends StatelessWidget {
           child: Text(label, style: const TextStyle(fontSize: 12, fontWeight: FontWeight.w900)),
         ),
         Icon(Icons.location_on, color: color, size: 34),
+      ],
+    );
+  }
+}
+
+class _MapControlRail extends StatelessWidget {
+  const _MapControlRail();
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: [
+        Container(
+          width: 46,
+          height: 46,
+          decoration: const BoxDecoration(
+            color: Colors.white,
+            shape: BoxShape.circle,
+            boxShadow: [
+              BoxShadow(
+                color: Color(0x1A0F2F6E),
+                blurRadius: 12,
+                offset: Offset(0, 5),
+              ),
+            ],
+          ),
+          alignment: Alignment.center,
+          child: const Text(
+            '3D',
+            style: TextStyle(
+              color: _PickColors.blue,
+              fontWeight: FontWeight.w900,
+            ),
+          ),
+        ),
+        const SizedBox(height: 8),
+        Container(
+          decoration: BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.circular(16),
+            boxShadow: const [
+              BoxShadow(
+                color: Color(0x1A0F2F6E),
+                blurRadius: 12,
+                offset: Offset(0, 5),
+              ),
+            ],
+          ),
+          child: const Column(
+            children: [
+              SizedBox(
+                width: 46,
+                height: 42,
+                child: Icon(Icons.add, color: _PickColors.darkBlue),
+              ),
+              Divider(height: 1, color: _PickColors.line),
+              SizedBox(
+                width: 46,
+                height: 42,
+                child: Icon(Icons.remove, color: _PickColors.darkBlue),
+              ),
+            ],
+          ),
+        ),
       ],
     );
   }
@@ -1596,6 +1910,160 @@ class _CampusRoutePainter extends CustomPainter {
   bool shouldRepaint(covariant CustomPainter oldDelegate) => false;
 }
 
+class _TigerMascotPainter extends CustomPainter {
+  const _TigerMascotPainter();
+
+  @override
+  void paint(Canvas canvas, Size size) {
+    final scale = size.shortestSide;
+    final orange = Paint()..color = const Color(0xFFFFA51F);
+    final dark = Paint()..color = const Color(0xFF3A2418);
+    final white = Paint()..color = Colors.white;
+    final navy = Paint()..color = _PickColors.darkBlue;
+    final blue = Paint()..color = _PickColors.blue;
+
+    canvas.drawCircle(
+      Offset(scale * 0.27, scale * 0.24),
+      scale * 0.15,
+      orange,
+    );
+    canvas.drawCircle(
+      Offset(scale * 0.73, scale * 0.24),
+      scale * 0.15,
+      orange,
+    );
+    canvas.drawCircle(
+      Offset(scale * 0.27, scale * 0.24),
+      scale * 0.07,
+      white,
+    );
+    canvas.drawCircle(
+      Offset(scale * 0.73, scale * 0.24),
+      scale * 0.07,
+      white,
+    );
+
+    final faceRect = Rect.fromCenter(
+      center: Offset(scale * 0.5, scale * 0.47),
+      width: scale * 0.72,
+      height: scale * 0.68,
+    );
+    canvas.drawOval(faceRect, orange);
+
+    final jacketRect = RRect.fromRectAndRadius(
+      Rect.fromLTWH(scale * 0.19, scale * 0.68, scale * 0.62, scale * 0.28),
+      Radius.circular(scale * 0.14),
+    );
+    canvas.drawRRect(jacketRect, navy);
+
+    canvas.drawCircle(
+      Offset(scale * 0.37, scale * 0.44),
+      scale * 0.045,
+      dark,
+    );
+    canvas.drawCircle(
+      Offset(scale * 0.63, scale * 0.44),
+      scale * 0.045,
+      dark,
+    );
+    canvas.drawCircle(
+      Offset(scale * 0.5, scale * 0.56),
+      scale * 0.16,
+      white,
+    );
+    canvas.drawOval(
+      Rect.fromCenter(
+        center: Offset(scale * 0.5, scale * 0.52),
+        width: scale * 0.13,
+        height: scale * 0.09,
+      ),
+      dark,
+    );
+
+    final smile = Path()
+      ..moveTo(scale * 0.5, scale * 0.57)
+      ..quadraticBezierTo(
+        scale * 0.44,
+        scale * 0.63,
+        scale * 0.39,
+        scale * 0.58,
+      )
+      ..moveTo(scale * 0.5, scale * 0.57)
+      ..quadraticBezierTo(
+        scale * 0.56,
+        scale * 0.63,
+        scale * 0.61,
+        scale * 0.58,
+      );
+    canvas.drawPath(
+      smile,
+      Paint()
+        ..color = const Color(0xFF3A2418)
+        ..style = PaintingStyle.stroke
+        ..strokeWidth = scale * 0.025
+        ..strokeCap = StrokeCap.round,
+    );
+
+    for (final x in [0.38, 0.50, 0.62]) {
+      canvas.drawRRect(
+        RRect.fromRectAndRadius(
+          Rect.fromLTWH(
+            scale * x - scale * 0.025,
+            scale * 0.16,
+            scale * 0.05,
+            scale * 0.15,
+          ),
+          Radius.circular(scale * 0.02),
+        ),
+        dark,
+      );
+    }
+
+    final stripePaint = Paint()
+      ..color = const Color(0xFF3A2418)
+      ..style = PaintingStyle.stroke
+      ..strokeWidth = scale * 0.035
+      ..strokeCap = StrokeCap.round;
+    canvas.drawLine(
+      Offset(scale * 0.18, scale * 0.42),
+      Offset(scale * 0.29, scale * 0.46),
+      stripePaint,
+    );
+    canvas.drawLine(
+      Offset(scale * 0.82, scale * 0.42),
+      Offset(scale * 0.71, scale * 0.46),
+      stripePaint,
+    );
+
+    canvas.drawCircle(
+      Offset(scale * 0.5, scale * 0.82),
+      scale * 0.095,
+      white,
+    );
+    final textPainter = TextPainter(
+      text: TextSpan(
+        text: 'P',
+        style: TextStyle(
+          color: _PickColors.blue,
+          fontSize: scale * 0.13,
+          fontWeight: FontWeight.w900,
+        ),
+      ),
+      textDirection: TextDirection.ltr,
+    )..layout();
+    textPainter.paint(
+      canvas,
+      Offset(
+        scale * 0.5 - textPainter.width / 2,
+        scale * 0.82 - textPainter.height / 2,
+      ),
+    );
+  }
+
+  @override
+  bool shouldRepaint(covariant CustomPainter oldDelegate) => false;
+}
+
 class _PickColors {
   static const blue = Color(0xFF2563EB);
   static const lightBlue = Color(0xFFEAF4FF);
@@ -1609,10 +2077,32 @@ class _PickColors {
   static const line = Color(0xFFE5E7EB);
 }
 
-PreferredSizeWidget _appBar(String title) {
+PreferredSizeWidget _appBar() {
   return AppBar(
     backgroundColor: _PickColors.bg,
-    title: Text(title, style: const TextStyle(fontWeight: FontWeight.w900)),
+    toolbarHeight: 76,
+    titleSpacing: 4,
+    title: RichText(
+      text: const TextSpan(
+        style: TextStyle(fontSize: 23, fontWeight: FontWeight.w900),
+        children: [
+          TextSpan(
+            text: '배재Pick ',
+            style: TextStyle(color: _PickColors.darkBlue),
+          ),
+          TextSpan(
+            text: '2.0',
+            style: TextStyle(color: _PickColors.blue),
+          ),
+        ],
+      ),
+    ),
+    actions: const [
+      Icon(Icons.notifications_none_rounded, size: 28),
+      SizedBox(width: 10),
+      Center(child: _MobilityMascot(size: 44)),
+      SizedBox(width: 18),
+    ],
     centerTitle: false,
     surfaceTintColor: Colors.transparent,
   );
