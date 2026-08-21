@@ -107,10 +107,7 @@ class SplashScreen extends StatelessWidget {
               const SizedBox(height: 14),
               const Text(
                 'Campus Quest · CityBrain · Nasumi Collection',
-                style: TextStyle(
-                  color: Colors.white54,
-                  fontWeight: FontWeight.w700,
-                ),
+                style: TextStyle(color: Colors.white54, fontWeight: FontWeight.w700),
               ),
             ],
           ),
@@ -142,17 +139,11 @@ class LoginScreen extends StatelessWidget {
                     children: [
                       Text(
                         '배재Pick',
-                        style: TextStyle(
-                          fontSize: 26,
-                          fontWeight: FontWeight.w900,
-                        ),
+                        style: TextStyle(fontSize: 26, fontWeight: FontWeight.w900),
                       ),
                       Text(
                         'Smart Campus Quest',
-                        style: TextStyle(
-                          color: AppColors.sub,
-                          fontWeight: FontWeight.w700,
-                        ),
+                        style: TextStyle(color: AppColors.sub, fontWeight: FontWeight.w700),
                       ),
                     ],
                   ),
@@ -299,10 +290,7 @@ class AppInput extends StatelessWidget {
             hintStyle: const TextStyle(color: AppColors.sub),
             filled: true,
             fillColor: Colors.white,
-            contentPadding: const EdgeInsets.symmetric(
-              horizontal: 18,
-              vertical: 18,
-            ),
+            contentPadding: const EdgeInsets.symmetric(horizontal: 18, vertical: 18),
             border: OutlineInputBorder(
               borderRadius: BorderRadius.circular(20),
               borderSide: const BorderSide(color: Color(0xFFE5E7EB)),
@@ -422,7 +410,11 @@ class Nasumi extends StatelessWidget {
   final double size;
   final String label;
 
-  const Nasumi({super.key, this.size = 72, this.label = 'P'});
+  const Nasumi({
+    super.key,
+    this.size = 72,
+    this.label = 'P',
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -461,10 +453,7 @@ class Nasumi extends StatelessWidget {
           Positioned(
             bottom: size * 0.22,
             child: Container(
-              padding: EdgeInsets.symmetric(
-                horizontal: size * 0.12,
-                vertical: size * 0.04,
-              ),
+              padding: EdgeInsets.symmetric(horizontal: size * 0.12, vertical: size * 0.04),
               decoration: BoxDecoration(
                 color: Colors.white,
                 borderRadius: BorderRadius.circular(size),
@@ -488,10 +477,7 @@ class Nasumi extends StatelessWidget {
     return Container(
       width: size * 0.08,
       height: size * 0.08,
-      decoration: const BoxDecoration(
-        color: Colors.black,
-        shape: BoxShape.circle,
-      ),
+      decoration: const BoxDecoration(color: Colors.black, shape: BoxShape.circle),
     );
   }
 }
@@ -516,30 +502,11 @@ class HomeScreen extends StatelessWidget {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text(
-                        '오늘의 Pick',
-                        style: TextStyle(
-                          color: Colors.white70,
-                          fontWeight: FontWeight.w800,
-                        ),
-                      ),
+                      Text('오늘의 Pick', style: TextStyle(color: Colors.white70, fontWeight: FontWeight.w800)),
                       SizedBox(height: 8),
-                      Text(
-                        '도서관 나섬이 출현 중!',
-                        style: TextStyle(
-                          color: Colors.white,
-                          fontSize: 22,
-                          fontWeight: FontWeight.w900,
-                        ),
-                      ),
+                      Text('도서관 나섬이 출현 중!', style: TextStyle(color: Colors.white, fontSize: 22, fontWeight: FontWeight.w900)),
                       SizedBox(height: 6),
-                      Text(
-                        '도서관 2층 열람실 · 남은 시간 02:13:45',
-                        style: TextStyle(
-                          color: Colors.white70,
-                          fontWeight: FontWeight.w600,
-                        ),
-                      ),
+                      Text('도서관 2층 열람실 · 남은 시간 02:13:45', style: TextStyle(color: Colors.white70, fontWeight: FontWeight.w600)),
                     ],
                   ),
                 ),
@@ -653,70 +620,60 @@ class HomeScreen extends StatelessWidget {
           const SizedBox(height: 24),
           const SectionTitle(title: '캠퍼스 참여 허브', action: '전체 보기'),
           const SizedBox(height: 12),
-          const SizedBox(height: 14),
-          AppCard(
-            color: AppColors.lightBlue,
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                const Text(
-                  '배재 팀링크',
-                  style: TextStyle(
-                    fontSize: 20,
-                    fontWeight: FontWeight.w900,
-                    color: AppColors.darkBlue,
-                  ),
-                ),
-                const SizedBox(height: 8),
-                const Text(
-                  '공모전 공지와 팀원 모집을 역할 중심으로 연결합니다.',
-                  style: TextStyle(
-                    color: AppColors.darkBlue,
-                    fontWeight: FontWeight.w700,
-                    height: 1.45,
-                  ),
-                ),
-                const SizedBox(height: 12),
-                SizedBox(
-                  width: double.infinity,
-                  height: 48,
-                  child: FilledButton.icon(
-                    style: FilledButton.styleFrom(
-                      backgroundColor: AppColors.blue,
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(18),
+              const SizedBox(height: 14),
+              AppCard(
+                color: AppColors.lightBlue,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    const Text(
+                      '배재 팀링크',
+                      style: TextStyle(
+                        fontSize: 20,
+                        fontWeight: FontWeight.w900,
+                        color: AppColors.darkBlue,
                       ),
                     ),
-                    onPressed: () {
-                      Navigator.of(context).push(
-                        MaterialPageRoute(
-                          builder: (_) => const TeamLinkScreen(),
-                        ),
-                      );
-                    },
-                    icon: const Icon(Icons.groups_2_outlined),
-                    label: const Text(
-                      '배재 팀링크 열기',
-                      style: TextStyle(fontWeight: FontWeight.w900),
+                    const SizedBox(height: 8),
+                    const Text(
+                      '공모전 공지와 팀원 모집을 역할 중심으로 연결합니다.',
+                      style: TextStyle(
+                        color: AppColors.darkBlue,
+                        fontWeight: FontWeight.w700,
+                        height: 1.45,
+                      ),
                     ),
-                  ),
+                    const SizedBox(height: 12),
+                    SizedBox(
+                      width: double.infinity,
+                      height: 48,
+                      child: FilledButton.icon(
+                        style: FilledButton.styleFrom(
+                          backgroundColor: AppColors.blue,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(18),
+                          ),
+                        ),
+                        onPressed: () {
+                          Navigator.of(context).push(
+                            MaterialPageRoute(
+                              builder: (_) => const TeamLinkScreen(),
+                            ),
+                          );
+                        },
+                        icon: const Icon(Icons.groups_2_outlined),
+                        label: const Text(
+                          '배재 팀링크 열기',
+                          style: TextStyle(fontWeight: FontWeight.w900),
+                        ),
+                      ),
+                    ),
+                  ],
                 ),
-              ],
-            ),
-          ),
-          const ClubCard(
-            title: '오늘 모집 중인 참여 공고',
-            category: '동아리 · 프로젝트 · 행사 모집',
-            deadline: 'D-3',
-            place: '캠퍼스 참여 허브',
-          ),
+              ),
+          const ClubCard(title: '오늘 모집 중인 참여 공고', category: '동아리 · 프로젝트 · 행사 모집', deadline: 'D-3', place: '캠퍼스 참여 허브'),
           const SizedBox(height: 10),
-          const ClubCard(
-            title: '배재 방송국',
-            category: '방송 · 영상 제작',
-            deadline: 'D-7',
-            place: '방송센터',
-          ),
+          const ClubCard(title: '배재 방송국', category: '방송 · 영상 제작', deadline: 'D-7', place: '방송센터'),
           const SizedBox(height: 24),
           const SectionTitle(title: '도감 완성도'),
           const SizedBox(height: 12),
@@ -724,14 +681,7 @@ class HomeScreen extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                const Text(
-                  '37%',
-                  style: TextStyle(
-                    fontSize: 36,
-                    fontWeight: FontWeight.w900,
-                    color: AppColors.blue,
-                  ),
-                ),
+                const Text('37%', style: TextStyle(fontSize: 36, fontWeight: FontWeight.w900, color: AppColors.blue)),
                 const SizedBox(height: 8),
                 LinearProgressIndicator(
                   value: 0.37,
@@ -741,13 +691,7 @@ class HomeScreen extends StatelessWidget {
                   borderRadius: BorderRadius.circular(999),
                 ),
                 const SizedBox(height: 10),
-                const Text(
-                  '45 / 120 카드 수집 완료',
-                  style: TextStyle(
-                    color: AppColors.sub,
-                    fontWeight: FontWeight.w700,
-                  ),
-                ),
+                const Text('45 / 120 카드 수집 완료', style: TextStyle(color: AppColors.sub, fontWeight: FontWeight.w700)),
               ],
             ),
           ),
@@ -765,7 +709,9 @@ class CafeteriaMiniCard extends StatelessWidget {
     return GestureDetector(
       onTap: () {
         Navigator.of(context).push(
-          MaterialPageRoute(builder: (_) => const CafeteriaDetailScreen()),
+          MaterialPageRoute(
+            builder: (_) => const CafeteriaDetailScreen(),
+          ),
         );
       },
       child: AppCard(
@@ -774,15 +720,9 @@ class CafeteriaMiniCard extends StatelessWidget {
           children: [
             const Text('학생식당', style: TextStyle(fontWeight: FontWeight.w900)),
             const SizedBox(height: 10),
-            const Text(
-              '오늘 메뉴',
-              style: TextStyle(color: AppColors.sub, fontSize: 12),
-            ),
+            const Text('오늘 메뉴', style: TextStyle(color: AppColors.sub, fontSize: 12)),
             const SizedBox(height: 2),
-            const Text(
-              '돈육폭찹 정식',
-              style: TextStyle(fontSize: 18, fontWeight: FontWeight.w900),
-            ),
+            const Text('돈육폭찹 정식', style: TextStyle(fontSize: 18, fontWeight: FontWeight.w900)),
             const SizedBox(height: 10),
             Container(
               padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
@@ -790,13 +730,7 @@ class CafeteriaMiniCard extends StatelessWidget {
                 color: AppColors.green.withValues(alpha: 0.12),
                 borderRadius: BorderRadius.circular(999),
               ),
-              child: const Text(
-                '혼잡도 보통',
-                style: TextStyle(
-                  color: AppColors.green,
-                  fontWeight: FontWeight.w900,
-                ),
-              ),
+              child: const Text('혼잡도 보통', style: TextStyle(color: AppColors.green, fontWeight: FontWeight.w900)),
             ),
           ],
         ),
@@ -804,6 +738,7 @@ class CafeteriaMiniCard extends StatelessWidget {
     );
   }
 }
+
 
 class CafeteriaDetailScreen extends StatefulWidget {
   const CafeteriaDetailScreen({super.key, this.repository});
@@ -879,9 +814,11 @@ class _CafeteriaDetailScreenState extends State<CafeteriaDetailScreen> {
       menuCardSaved = true;
     });
 
-    ScaffoldMessenger.of(
-      context,
-    ).showSnackBar(SnackBar(content: Text('$menuCardTitle를 획득했습니다.')));
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text('$menuCardTitle를 획득했습니다.'),
+      ),
+    );
   }
 
   String congestionStatus() {
@@ -1006,7 +943,8 @@ class _CafeteriaDetailScreenState extends State<CafeteriaDetailScreen> {
                           if (!loadingMenu && !liveResult) ...[
                             const SizedBox(height: 4),
                             Text(
-                              menuResult?.fallbackReason ?? '샘플 메뉴를 표시합니다.',
+                              menuResult?.fallbackReason ??
+                                  '샘플 메뉴를 표시합니다.',
                               style: const TextStyle(
                                 color: AppColors.sub,
                                 fontWeight: FontWeight.w700,
@@ -1035,10 +973,7 @@ class _CafeteriaDetailScreenState extends State<CafeteriaDetailScreen> {
                         children: [
                           const Text(
                             '오늘의 학생식당',
-                            style: TextStyle(
-                              color: Colors.white70,
-                              fontWeight: FontWeight.w800,
-                            ),
+                            style: TextStyle(color: Colors.white70, fontWeight: FontWeight.w800),
                           ),
                           const SizedBox(height: 8),
                           Text(
@@ -1071,19 +1006,13 @@ class _CafeteriaDetailScreenState extends State<CafeteriaDetailScreen> {
                   children: [
                     const Text(
                       '현재 혼잡도',
-                      style: TextStyle(
-                        fontSize: 18,
-                        fontWeight: FontWeight.w900,
-                      ),
+                      style: TextStyle(fontSize: 18, fontWeight: FontWeight.w900),
                     ),
                     const SizedBox(height: 14),
                     Row(
                       children: [
                         Container(
-                          padding: const EdgeInsets.symmetric(
-                            horizontal: 14,
-                            vertical: 8,
-                          ),
+                          padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
                           decoration: BoxDecoration(
                             color: color.withValues(alpha: 0.12),
                             borderRadius: BorderRadius.circular(999),
@@ -1134,10 +1063,7 @@ class _CafeteriaDetailScreenState extends State<CafeteriaDetailScreen> {
                   children: [
                     const Text(
                       '오늘 메뉴 정보',
-                      style: TextStyle(
-                        fontSize: 18,
-                        fontWeight: FontWeight.w900,
-                      ),
+                      style: TextStyle(fontSize: 18, fontWeight: FontWeight.w900),
                     ),
                     const SizedBox(height: 14),
                     ProfileRow(label: '메뉴', value: menu.menuName),
@@ -1156,19 +1082,13 @@ class _CafeteriaDetailScreenState extends State<CafeteriaDetailScreen> {
                       height: 54,
                       child: FilledButton.icon(
                         style: FilledButton.styleFrom(
-                          backgroundColor: menuCardSaved
-                              ? AppColors.green
-                              : AppColors.blue,
+                          backgroundColor: menuCardSaved ? AppColors.green : AppColors.blue,
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(20),
                           ),
                         ),
                         onPressed: menuCardSaved ? null : acquireMenuCard,
-                        icon: Icon(
-                          menuCardSaved
-                              ? Icons.check_circle
-                              : Icons.collections_bookmark,
-                        ),
+                        icon: Icon(menuCardSaved ? Icons.check_circle : Icons.collections_bookmark),
                         label: Text(
                           menuCardSaved ? '메뉴 카드 획득 완료' : '오늘의 메뉴 카드 받기',
                           style: const TextStyle(fontWeight: FontWeight.w900),
@@ -1185,10 +1105,7 @@ class _CafeteriaDetailScreenState extends State<CafeteriaDetailScreen> {
                   children: [
                     const Text(
                       '메뉴 만족도',
-                      style: TextStyle(
-                        fontSize: 18,
-                        fontWeight: FontWeight.w900,
-                      ),
+                      style: TextStyle(fontSize: 18, fontWeight: FontWeight.w900),
                     ),
                     const SizedBox(height: 8),
                     const Text(
@@ -1292,10 +1209,7 @@ class MissionMiniCard extends StatelessWidget {
         children: [
           const Text('오늘의 미션', style: TextStyle(fontWeight: FontWeight.w900)),
           const SizedBox(height: 10),
-          const Text(
-            '배재관 QR 찾기',
-            style: TextStyle(fontSize: 18, fontWeight: FontWeight.w900),
-          ),
+          const Text('배재관 QR 찾기', style: TextStyle(fontSize: 18, fontWeight: FontWeight.w900)),
           const SizedBox(height: 10),
           LinearProgressIndicator(
             value: 0.33,
@@ -1304,10 +1218,7 @@ class MissionMiniCard extends StatelessWidget {
             borderRadius: BorderRadius.circular(999),
           ),
           const SizedBox(height: 8),
-          const Text(
-            '1 / 3 완료',
-            style: TextStyle(color: AppColors.sub, fontWeight: FontWeight.w700),
-          ),
+          const Text('1 / 3 완료', style: TextStyle(color: AppColors.sub, fontWeight: FontWeight.w700)),
         ],
       ),
     );
@@ -1324,10 +1235,7 @@ class CampusMapScreen extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const Header(
-            title: '3D 캠퍼스맵',
-            subtitle: '건물, 미션, 나섬이, 학생식당, 흡연구역을 한눈에 확인하세요.',
-          ),
+          const Header(title: '3D 캠퍼스맵', subtitle: '건물, 미션, 나섬이, 학생식당, 흡연구역을 한눈에 확인하세요.'),
           const SizedBox(height: 16),
           Expanded(
             child: AppCard(
@@ -1342,51 +1250,11 @@ class CampusMapScreen extends StatelessWidget {
                       ),
                     ),
                   ),
-                  const Positioned(
-                    left: 22,
-                    top: 22,
-                    child: MapBuilding(
-                      label: '배재관',
-                      color: AppColors.orange,
-                      width: 120,
-                      height: 90,
-                    ),
-                  ),
-                  const Positioned(
-                    right: 26,
-                    top: 40,
-                    child: MapBuilding(
-                      label: '정보과학관',
-                      color: AppColors.blue,
-                      width: 110,
-                      height: 110,
-                    ),
-                  ),
-                  const Positioned(
-                    left: 64,
-                    bottom: 120,
-                    child: MapBuilding(
-                      label: '학생식당',
-                      color: AppColors.green,
-                      width: 130,
-                      height: 70,
-                    ),
-                  ),
-                  const Positioned(
-                    right: 58,
-                    bottom: 90,
-                    child: MapBuilding(
-                      label: '도서관',
-                      color: AppColors.purple,
-                      width: 125,
-                      height: 85,
-                    ),
-                  ),
-                  const Positioned(
-                    left: 190,
-                    top: 210,
-                    child: Nasumi(size: 58, label: '책'),
-                  ),
+                  const Positioned(left: 22, top: 22, child: MapBuilding(label: '배재관', color: AppColors.orange, width: 120, height: 90)),
+                  const Positioned(right: 26, top: 40, child: MapBuilding(label: '정보과학관', color: AppColors.blue, width: 110, height: 110)),
+                  const Positioned(left: 64, bottom: 120, child: MapBuilding(label: '학생식당', color: AppColors.green, width: 130, height: 70)),
+                  const Positioned(right: 58, bottom: 90, child: MapBuilding(label: '도서관', color: AppColors.purple, width: 125, height: 85)),
+                  const Positioned(left: 190, top: 210, child: Nasumi(size: 58, label: '책')),
                   Positioned(
                     left: 18,
                     bottom: 18,
@@ -1396,29 +1264,11 @@ class CampusMapScreen extends StatelessWidget {
                       child: const Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Text(
-                            '도서관 나섬이',
-                            style: TextStyle(
-                              fontSize: 18,
-                              fontWeight: FontWeight.w900,
-                            ),
-                          ),
+                          Text('도서관 나섬이', style: TextStyle(fontSize: 18, fontWeight: FontWeight.w900)),
                           SizedBox(height: 4),
-                          Text(
-                            'Rare · 도서관 2층 열람실 · 남은 시간 01:42:10',
-                            style: TextStyle(
-                              color: AppColors.sub,
-                              fontWeight: FontWeight.w600,
-                            ),
-                          ),
+                          Text('Rare · 도서관 2층 열람실 · 남은 시간 01:42:10', style: TextStyle(color: AppColors.sub, fontWeight: FontWeight.w600)),
                           SizedBox(height: 12),
-                          Text(
-                            '위치 보기',
-                            style: TextStyle(
-                              color: AppColors.blue,
-                              fontWeight: FontWeight.w900,
-                            ),
-                          ),
+                          Text('위치 보기', style: TextStyle(color: AppColors.blue, fontWeight: FontWeight.w900)),
                         ],
                       ),
                     ),
@@ -1459,21 +1309,10 @@ class MapBuilding extends StatelessWidget {
           color: color,
           borderRadius: BorderRadius.circular(14),
           boxShadow: [
-            BoxShadow(
-              color: color.withValues(alpha: 0.35),
-              blurRadius: 20,
-              offset: const Offset(0, 10),
-            ),
+            BoxShadow(color: color.withValues(alpha: 0.35), blurRadius: 20, offset: const Offset(0, 10)),
           ],
         ),
-        child: Text(
-          label,
-          textAlign: TextAlign.center,
-          style: const TextStyle(
-            color: Colors.white,
-            fontWeight: FontWeight.w900,
-          ),
-        ),
+        child: Text(label, textAlign: TextAlign.center, style: const TextStyle(color: Colors.white, fontWeight: FontWeight.w900)),
       ),
     );
   }
@@ -1522,26 +1361,13 @@ class CollectionScreen extends StatelessWidget {
                         : Container(
                             width: 86,
                             height: 86,
-                            decoration: BoxDecoration(
-                              color: Colors.grey.shade300,
-                              shape: BoxShape.circle,
-                            ),
+                            decoration: BoxDecoration(color: Colors.grey.shade300, shape: BoxShape.circle),
                             child: const Icon(Icons.lock, color: Colors.white),
                           ),
                     const SizedBox(height: 14),
-                    Text(
-                      card[0] as String,
-                      textAlign: TextAlign.center,
-                      style: const TextStyle(fontWeight: FontWeight.w900),
-                    ),
+                    Text(card[0] as String, textAlign: TextAlign.center, style: const TextStyle(fontWeight: FontWeight.w900)),
                     const SizedBox(height: 6),
-                    Text(
-                      card[1] as String,
-                      style: TextStyle(
-                        color: owned ? AppColors.blue : AppColors.sub,
-                        fontWeight: FontWeight.w800,
-                      ),
-                    ),
+                    Text(card[1] as String, style: TextStyle(color: owned ? AppColors.blue : AppColors.sub, fontWeight: FontWeight.w800)),
                   ],
                 ),
               );
@@ -1552,6 +1378,7 @@ class CollectionScreen extends StatelessWidget {
     );
   }
 }
+
 
 class DepartmentNasumiTourScreen extends StatelessWidget {
   const DepartmentNasumiTourScreen({super.key});
@@ -1630,10 +1457,7 @@ class DepartmentNasumiTourScreen extends StatelessWidget {
                         children: [
                           Text(
                             '캠퍼스 공간 학습',
-                            style: TextStyle(
-                              color: Colors.white70,
-                              fontWeight: FontWeight.w800,
-                            ),
+                            style: TextStyle(color: Colors.white70, fontWeight: FontWeight.w800),
                           ),
                           SizedBox(height: 8),
                           Text(
@@ -1648,11 +1472,7 @@ class DepartmentNasumiTourScreen extends StatelessWidget {
                           SizedBox(height: 8),
                           Text(
                             '신입생, 통학생, 기숙사생 모두에게 필요한 캠퍼스 탐험 기능입니다.',
-                            style: TextStyle(
-                              color: Colors.white70,
-                              fontWeight: FontWeight.w700,
-                              height: 1.5,
-                            ),
+                            style: TextStyle(color: Colors.white70, fontWeight: FontWeight.w700, height: 1.5),
                           ),
                         ],
                       ),
@@ -1701,7 +1521,10 @@ class DepartmentNasumiTourScreen extends StatelessWidget {
 class DepartmentCard extends StatelessWidget {
   final Map<String, String> department;
 
-  const DepartmentCard({super.key, required this.department});
+  const DepartmentCard({
+    super.key,
+    required this.department,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -1723,21 +1546,9 @@ class DepartmentCard extends StatelessWidget {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text(
-                      name,
-                      style: const TextStyle(
-                        fontSize: 18,
-                        fontWeight: FontWeight.w900,
-                      ),
-                    ),
+                    Text(name, style: const TextStyle(fontSize: 18, fontWeight: FontWeight.w900)),
                     const SizedBox(height: 4),
-                    Text(
-                      building,
-                      style: const TextStyle(
-                        color: AppColors.sub,
-                        fontWeight: FontWeight.w700,
-                      ),
-                    ),
+                    Text(building, style: const TextStyle(color: AppColors.sub, fontWeight: FontWeight.w700)),
                   ],
                 ),
               ),
@@ -1746,20 +1557,12 @@ class DepartmentCard extends StatelessWidget {
           const SizedBox(height: 14),
           Text(
             desc,
-            style: const TextStyle(
-              color: AppColors.sub,
-              fontWeight: FontWeight.w700,
-              height: 1.5,
-            ),
+            style: const TextStyle(color: AppColors.sub, fontWeight: FontWeight.w700, height: 1.5),
           ),
           const SizedBox(height: 10),
           Text(
             office,
-            style: const TextStyle(
-              color: AppColors.sub,
-              fontWeight: FontWeight.w600,
-              height: 1.5,
-            ),
+            style: const TextStyle(color: AppColors.sub, fontWeight: FontWeight.w600, height: 1.5),
           ),
           const SizedBox(height: 14),
           Container(
@@ -1771,10 +1574,7 @@ class DepartmentCard extends StatelessWidget {
             ),
             child: Text(
               '수집 코드: $code',
-              style: const TextStyle(
-                color: AppColors.blue,
-                fontWeight: FontWeight.w900,
-              ),
+              style: const TextStyle(color: AppColors.blue, fontWeight: FontWeight.w900),
             ),
           ),
           const SizedBox(height: 12),
@@ -1820,8 +1620,7 @@ class ClubScreen extends StatelessWidget {
       'day': '추후 공지',
       'beginner': '가능',
       'skills': '참여 의지, 팀 활동 관심',
-      'intro':
-          '크로우즈는 스포츠 활동과 팀 문화를 중심으로 운영되는 캠퍼스 동아리입니다. 실제 모집 정보는 운영진 확인 후 업데이트가 필요합니다.',
+      'intro': '크로우즈는 스포츠 활동과 팀 문화를 중심으로 운영되는 캠퍼스 동아리입니다. 실제 모집 정보는 운영진 확인 후 업데이트가 필요합니다.',
       'apply': 'Apply link mock',
       'contact': 'Club contact mock',
     },
@@ -2108,10 +1907,7 @@ class ClubScreen extends StatelessWidget {
                   child: OutlinedButton.icon(
                     style: OutlinedButton.styleFrom(
                       foregroundColor: AppColors.darkBlue,
-                      side: const BorderSide(
-                        color: AppColors.darkBlue,
-                        width: 1.2,
-                      ),
+                      side: const BorderSide(color: AppColors.darkBlue, width: 1.2),
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(18),
                       ),
@@ -2171,10 +1967,7 @@ class ClubScreen extends StatelessWidget {
                   child: OutlinedButton.icon(
                     style: OutlinedButton.styleFrom(
                       foregroundColor: AppColors.darkBlue,
-                      side: const BorderSide(
-                        color: AppColors.darkBlue,
-                        width: 1.2,
-                      ),
+                      side: const BorderSide(color: AppColors.darkBlue, width: 1.2),
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(18),
                       ),
@@ -2247,10 +2040,7 @@ class ClubScreen extends StatelessWidget {
                   child: OutlinedButton.icon(
                     style: OutlinedButton.styleFrom(
                       foregroundColor: AppColors.darkBlue,
-                      side: const BorderSide(
-                        color: AppColors.darkBlue,
-                        width: 1.2,
-                      ),
+                      side: const BorderSide(color: AppColors.darkBlue, width: 1.2),
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(18),
                       ),
@@ -2258,8 +2048,7 @@ class ClubScreen extends StatelessWidget {
                     onPressed: () {
                       Navigator.of(context).push(
                         MaterialPageRoute(
-                          builder: (_) =>
-                              const ParticipationStatusGuideScreen(),
+                          builder: (_) => const ParticipationStatusGuideScreen(),
                         ),
                       );
                     },
@@ -2311,10 +2100,7 @@ class ClubScreen extends StatelessWidget {
                   child: OutlinedButton.icon(
                     style: OutlinedButton.styleFrom(
                       foregroundColor: AppColors.darkBlue,
-                      side: const BorderSide(
-                        color: AppColors.darkBlue,
-                        width: 1.2,
-                      ),
+                      side: const BorderSide(color: AppColors.darkBlue, width: 1.2),
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(18),
                       ),
@@ -2322,8 +2108,7 @@ class ClubScreen extends StatelessWidget {
                     onPressed: () {
                       Navigator.of(context).push(
                         MaterialPageRoute(
-                          builder: (_) =>
-                              const ParticipationFilterGuideScreen(),
+                          builder: (_) => const ParticipationFilterGuideScreen(),
                         ),
                       );
                     },
@@ -2356,16 +2141,15 @@ class ClubScreen extends StatelessWidget {
   }
 }
 
+
 class ClubNoticeSubmitMockScreen extends StatefulWidget {
   const ClubNoticeSubmitMockScreen({super.key});
 
   @override
-  State<ClubNoticeSubmitMockScreen> createState() =>
-      _ClubNoticeSubmitMockScreenState();
+  State<ClubNoticeSubmitMockScreen> createState() => _ClubNoticeSubmitMockScreenState();
 }
 
-class _ClubNoticeSubmitMockScreenState
-    extends State<ClubNoticeSubmitMockScreen> {
+class _ClubNoticeSubmitMockScreenState extends State<ClubNoticeSubmitMockScreen> {
   final clubNameController = TextEditingController();
   final titleController = TextEditingController();
   final categoryController = TextEditingController();
@@ -2389,9 +2173,9 @@ class _ClubNoticeSubmitMockScreenState
     final title = titleController.text.trim();
 
     if (clubName.isEmpty || title.isEmpty) {
-      ScaffoldMessenger.of(
-        context,
-      ).showSnackBar(const SnackBar(content: Text('동아리명과 공고 제목은 필수입니다.')));
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('동아리명과 공고 제목은 필수입니다.')),
+      );
       return;
     }
 
@@ -2511,10 +2295,7 @@ class _ClubNoticeSubmitMockScreenState
                   children: [
                     const Text(
                       '등록 요청 정보',
-                      style: TextStyle(
-                        fontSize: 18,
-                        fontWeight: FontWeight.w900,
-                      ),
+                      style: TextStyle(fontSize: 18, fontWeight: FontWeight.w900),
                     ),
                     const SizedBox(height: 12),
                     field(
@@ -2599,10 +2380,7 @@ class _ClubNoticeSubmitMockScreenState
                   children: const [
                     Text(
                       '운영 원칙',
-                      style: TextStyle(
-                        fontSize: 18,
-                        fontWeight: FontWeight.w900,
-                      ),
+                      style: TextStyle(fontSize: 18, fontWeight: FontWeight.w900),
                     ),
                     SizedBox(height: 10),
                     Text(
@@ -2624,10 +2402,14 @@ class _ClubNoticeSubmitMockScreenState
   }
 }
 
+
 class ClubDetailScreen extends StatefulWidget {
   final Map<String, String> club;
 
-  const ClubDetailScreen({super.key, required this.club});
+  const ClubDetailScreen({
+    super.key,
+    required this.club,
+  });
 
   @override
   State<ClubDetailScreen> createState() => _ClubDetailScreenState();
@@ -2671,9 +2453,7 @@ class _ClubDetailScreenState extends State<ClubDetailScreen> {
 
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
-        content: Text(
-          isFavorite ? '$title 관심 동아리에 저장했습니다.' : '$title 관심 동아리에서 제거했습니다.',
-        ),
+        content: Text(isFavorite ? '$title 관심 동아리에 저장했습니다.' : '$title 관심 동아리에서 제거했습니다.'),
       ),
     );
   }
@@ -2705,10 +2485,7 @@ class _ClubDetailScreenState extends State<ClubDetailScreen> {
                         children: [
                           const Text(
                             '모집 중',
-                            style: TextStyle(
-                              color: Colors.white70,
-                              fontWeight: FontWeight.w800,
-                            ),
+                            style: TextStyle(color: Colors.white70, fontWeight: FontWeight.w800),
                           ),
                           const SizedBox(height: 8),
                           Text(
@@ -2722,10 +2499,7 @@ class _ClubDetailScreenState extends State<ClubDetailScreen> {
                           const SizedBox(height: 6),
                           Text(
                             club['category']!,
-                            style: const TextStyle(
-                              color: Colors.white70,
-                              fontWeight: FontWeight.w700,
-                            ),
+                            style: const TextStyle(color: Colors.white70, fontWeight: FontWeight.w700),
                           ),
                         ],
                       ),
@@ -2739,13 +2513,7 @@ class _ClubDetailScreenState extends State<ClubDetailScreen> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    const Text(
-                      '모집 정보',
-                      style: TextStyle(
-                        fontSize: 18,
-                        fontWeight: FontWeight.w900,
-                      ),
-                    ),
+                    const Text('모집 정보', style: TextStyle(fontSize: 18, fontWeight: FontWeight.w900)),
                     const SizedBox(height: 12),
                     ProfileRow(label: '모집 기간', value: club['period']!),
                     ProfileRow(label: '모집 대상', value: club['target']!),
@@ -2761,13 +2529,7 @@ class _ClubDetailScreenState extends State<ClubDetailScreen> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    const Text(
-                      '동아리 소개',
-                      style: TextStyle(
-                        fontSize: 18,
-                        fontWeight: FontWeight.w900,
-                      ),
-                    ),
+                    const Text('동아리 소개', style: TextStyle(fontSize: 18, fontWeight: FontWeight.w900)),
                     const SizedBox(height: 10),
                     Text(
                       club['intro']!,
@@ -2806,17 +2568,13 @@ class _ClubDetailScreenState extends State<ClubDetailScreen> {
                 height: 54,
                 child: FilledButton.icon(
                   style: FilledButton.styleFrom(
-                    backgroundColor: isFavorite
-                        ? AppColors.green
-                        : AppColors.blue,
+                    backgroundColor: isFavorite ? AppColors.green : AppColors.blue,
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(20),
                     ),
                   ),
                   onPressed: toggleFavorite,
-                  icon: Icon(
-                    isFavorite ? Icons.check_circle : Icons.bookmark_add,
-                  ),
+                  icon: Icon(isFavorite ? Icons.check_circle : Icons.bookmark_add),
                   label: Text(
                     isFavorite ? '관심 동아리 저장됨' : '관심 동아리 저장',
                     style: const TextStyle(fontWeight: FontWeight.w900),
@@ -2854,10 +2612,7 @@ class _ClubDetailScreenState extends State<ClubDetailScreen> {
                 child: OutlinedButton.icon(
                   style: OutlinedButton.styleFrom(
                     foregroundColor: AppColors.darkBlue,
-                    side: const BorderSide(
-                      color: AppColors.darkBlue,
-                      width: 1.4,
-                    ),
+                    side: const BorderSide(color: AppColors.darkBlue, width: 1.4),
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(20),
                     ),
@@ -2903,8 +2658,7 @@ class _MyPageScreenState extends State<MyPageScreen> {
     final prefs = await SharedPreferences.getInstance();
     setState(() {
       favoriteClubCount = (prefs.getStringList('favorite_clubs') ?? []).length;
-      collectedCardCount =
-          (prefs.getStringList('collected_cards') ?? []).length;
+      collectedCardCount = (prefs.getStringList('collected_cards') ?? []).length;
     });
   }
 
@@ -2918,9 +2672,11 @@ class _MyPageScreenState extends State<MyPageScreen> {
 
     if (!mounted) return;
 
-    ScaffoldMessenger.of(
-      context,
-    ).showSnackBar(const SnackBar(content: Text('로컬 저장 데이터를 초기화했습니다.')));
+    ScaffoldMessenger.of(context).showSnackBar(
+      const SnackBar(
+        content: Text('로컬 저장 데이터를 초기화했습니다.'),
+      ),
+    );
   }
 
   Future<void> confirmReset() async {
@@ -2959,15 +2715,9 @@ class _MyPageScreenState extends State<MyPageScreen> {
         children: [
           const Nasumi(size: 96, label: 'P'),
           const SizedBox(height: 14),
-          const Text(
-            '영준',
-            style: TextStyle(fontSize: 26, fontWeight: FontWeight.w900),
-          ),
+          const Text('영준', style: TextStyle(fontSize: 26, fontWeight: FontWeight.w900)),
           const SizedBox(height: 4),
-          const Text(
-            '컴퓨터공학과 · 캠퍼스 탐험가',
-            style: TextStyle(color: AppColors.sub, fontWeight: FontWeight.w700),
-          ),
+          const Text('컴퓨터공학과 · 캠퍼스 탐험가', style: TextStyle(color: AppColors.sub, fontWeight: FontWeight.w700)),
           const SizedBox(height: 24),
           AppCard(
             child: Column(
@@ -3013,7 +2763,9 @@ class _MyPageScreenState extends State<MyPageScreen> {
               ),
               onPressed: () {
                 Navigator.of(context).push(
-                  MaterialPageRoute(builder: (_) => const PrivacyGuideScreen()),
+                  MaterialPageRoute(
+                    builder: (_) => const PrivacyGuideScreen(),
+                  ),
                 );
               },
               icon: const Icon(Icons.privacy_tip_outlined),
@@ -3049,18 +2801,41 @@ class _MyPageScreenState extends State<MyPageScreen> {
   }
 }
 
+
+
+
+
+
 class ParticipationFilterGuideScreen extends StatelessWidget {
   const ParticipationFilterGuideScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
     final filters = [
-      {'title': '전체', 'desc': '현재 노출 가능한 모든 참여 공고를 보여줍니다.'},
-      {'title': '동아리 모집', 'desc': '정규 동아리, 프로젝트형 동아리, 학과 소모임 모집 공고입니다.'},
-      {'title': '학과/부서 행사', 'desc': '특강, 설명회, 학과 행사, 체험 부스 공고입니다.'},
-      {'title': '프로젝트 팀원', 'desc': '앱 개발, 연구, 창업, 전공 프로젝트 팀원 모집 공고입니다.'},
-      {'title': '봉사/서포터즈', 'desc': '행사 스태프, 봉사, 홍보단, 서포터즈 모집 공고입니다.'},
-      {'title': '마감 임박', 'desc': '모집 마감이 가까운 공고를 우선 보여줍니다.'},
+      {
+        'title': '전체',
+        'desc': '현재 노출 가능한 모든 참여 공고를 보여줍니다.',
+      },
+      {
+        'title': '동아리 모집',
+        'desc': '정규 동아리, 프로젝트형 동아리, 학과 소모임 모집 공고입니다.',
+      },
+      {
+        'title': '학과/부서 행사',
+        'desc': '특강, 설명회, 학과 행사, 체험 부스 공고입니다.',
+      },
+      {
+        'title': '프로젝트 팀원',
+        'desc': '앱 개발, 연구, 창업, 전공 프로젝트 팀원 모집 공고입니다.',
+      },
+      {
+        'title': '봉사/서포터즈',
+        'desc': '행사 스태프, 봉사, 홍보단, 서포터즈 모집 공고입니다.',
+      },
+      {
+        'title': '마감 임박',
+        'desc': '모집 마감이 가까운 공고를 우선 보여줍니다.',
+      },
     ];
 
     final sortRules = [
@@ -3137,10 +2912,7 @@ class ParticipationFilterGuideScreen extends StatelessWidget {
                   children: [
                     const Text(
                       '필터 유형',
-                      style: TextStyle(
-                        fontSize: 18,
-                        fontWeight: FontWeight.w900,
-                      ),
+                      style: TextStyle(fontSize: 18, fontWeight: FontWeight.w900),
                     ),
                     const SizedBox(height: 12),
                     ...filters.map((filter) {
@@ -3162,10 +2934,7 @@ class ParticipationFilterGuideScreen extends StatelessWidget {
                   children: [
                     const Text(
                       '정렬 / 노출 규칙',
-                      style: TextStyle(
-                        fontSize: 18,
-                        fontWeight: FontWeight.w900,
-                      ),
+                      style: TextStyle(fontSize: 18, fontWeight: FontWeight.w900),
                     ),
                     const SizedBox(height: 12),
                     ...sortRules.map(
@@ -3174,11 +2943,7 @@ class ParticipationFilterGuideScreen extends StatelessWidget {
                         child: Row(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            const Icon(
-                              Icons.check_circle_outline,
-                              size: 19,
-                              color: AppColors.blue,
-                            ),
+                            const Icon(Icons.check_circle_outline, size: 19, color: AppColors.blue),
                             const SizedBox(width: 8),
                             Expanded(
                               child: Text(
@@ -3230,6 +2995,7 @@ class ParticipationFilterGuideScreen extends StatelessWidget {
     );
   }
 }
+
 
 class ParticipationStatusGuideScreen extends StatelessWidget {
   const ParticipationStatusGuideScreen({super.key});
@@ -3391,6 +3157,7 @@ class ParticipationStatusGuideScreen extends StatelessWidget {
     );
   }
 }
+
 
 class ParticipationTypeGuideScreen extends StatelessWidget {
   const ParticipationTypeGuideScreen({super.key});
@@ -3555,6 +3322,9 @@ class ParticipationTypeGuideScreen extends StatelessWidget {
   }
 }
 
+
+
+
 class DepartmentFilterGuideScreen extends StatelessWidget {
   const DepartmentFilterGuideScreen({super.key});
 
@@ -3715,6 +3485,9 @@ class DepartmentFilterGuideScreen extends StatelessWidget {
     );
   }
 }
+
+
+
 
 class TeamLinkScreen extends StatelessWidget {
   const TeamLinkScreen({super.key});
@@ -4040,15 +3813,10 @@ class TeamLinkScreen extends StatelessWidget {
                         Wrap(
                           spacing: 7,
                           runSpacing: 7,
-                          children: roles
-                              .map((role) => Chip(label: Text(role)))
-                              .toList(),
+                          children: roles.map((role) => Chip(label: Text(role))).toList(),
                         ),
                         const SizedBox(height: 10),
-                        ProfileRow(
-                          label: '주관',
-                          value: contest['organizer'] as String,
-                        ),
+                        ProfileRow(label: '주관', value: contest['organizer'] as String),
                       ],
                     ),
                   ),
@@ -4083,9 +3851,7 @@ class TeamLinkScreen extends StatelessWidget {
                             Chip(
                               label: Text(
                                 team['members'] as String,
-                                style: const TextStyle(
-                                  fontWeight: FontWeight.w800,
-                                ),
+                                style: const TextStyle(fontWeight: FontWeight.w800),
                               ),
                             ),
                           ],
@@ -4134,8 +3900,9 @@ class TeamLinkScreen extends StatelessWidget {
                             onPressed: () {
                               Navigator.of(context).push(
                                 MaterialPageRoute(
-                                  builder: (_) =>
-                                      TeamRecruitmentDetailScreen(team: team),
+                                  builder: (_) => TeamRecruitmentDetailScreen(
+                                    team: team,
+                                  ),
                                 ),
                               );
                             },
@@ -4171,10 +3938,14 @@ class TeamLinkScreen extends StatelessWidget {
   }
 }
 
+
 class TeamRecruitmentDetailScreen extends StatelessWidget {
   final Map<String, dynamic> team;
 
-  const TeamRecruitmentDetailScreen({super.key, required this.team});
+  const TeamRecruitmentDetailScreen({
+    super.key,
+    required this.team,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -4246,10 +4017,7 @@ class TeamRecruitmentDetailScreen extends StatelessWidget {
                   children: [
                     const Text(
                       '팀 소개',
-                      style: TextStyle(
-                        fontSize: 20,
-                        fontWeight: FontWeight.w900,
-                      ),
+                      style: TextStyle(fontSize: 20, fontWeight: FontWeight.w900),
                     ),
                     const SizedBox(height: 8),
                     Text(
@@ -4261,10 +4029,7 @@ class TeamRecruitmentDetailScreen extends StatelessWidget {
                       ),
                     ),
                     const SizedBox(height: 14),
-                    ProfileRow(
-                      label: '현재 인원',
-                      value: team['members'] as String,
-                    ),
+                    ProfileRow(label: '현재 인원', value: team['members'] as String),
                     ProfileRow(label: '모집 상태', value: team['status'] as String),
                   ],
                 ),
@@ -4293,9 +4058,7 @@ class TeamRecruitmentDetailScreen extends StatelessWidget {
                               backgroundColor: Colors.white,
                               label: Text(
                                 role,
-                                style: const TextStyle(
-                                  fontWeight: FontWeight.w900,
-                                ),
+                                style: const TextStyle(fontWeight: FontWeight.w900),
                               ),
                             ),
                           )
@@ -4311,10 +4074,7 @@ class TeamRecruitmentDetailScreen extends StatelessWidget {
                   children: const [
                     Text(
                       '지원 전 확인',
-                      style: TextStyle(
-                        fontSize: 20,
-                        fontWeight: FontWeight.w900,
-                      ),
+                      style: TextStyle(fontSize: 20, fontWeight: FontWeight.w900),
                     ),
                     SizedBox(height: 10),
                     _BulletLine(text: '공식 공고와 학생 모집글은 서로 다를 수 있습니다.'),
@@ -4440,10 +4200,7 @@ class CreateTeamRecruitmentMockScreen extends StatelessWidget {
                   children: const [
                     Text(
                       '입력 항목',
-                      style: TextStyle(
-                        fontSize: 20,
-                        fontWeight: FontWeight.w900,
-                      ),
+                      style: TextStyle(fontSize: 20, fontWeight: FontWeight.w900),
                     ),
                     SizedBox(height: 12),
                     ProfileRow(label: '공모전 선택', value: '스마트캠퍼스 아이디어 공모전'),
@@ -4477,9 +4234,7 @@ class CreateTeamRecruitmentMockScreen extends StatelessWidget {
                               backgroundColor: Colors.white,
                               label: Text(
                                 role,
-                                style: const TextStyle(
-                                  fontWeight: FontWeight.w900,
-                                ),
+                                style: const TextStyle(fontWeight: FontWeight.w900),
                               ),
                             ),
                           )
@@ -4495,10 +4250,7 @@ class CreateTeamRecruitmentMockScreen extends StatelessWidget {
                   children: const [
                     Text(
                       '작성 가이드',
-                      style: TextStyle(
-                        fontSize: 20,
-                        fontWeight: FontWeight.w900,
-                      ),
+                      style: TextStyle(fontSize: 20, fontWeight: FontWeight.w900),
                     ),
                     SizedBox(height: 10),
                     _BulletLine(text: '팀이 해결하려는 주제를 먼저 적습니다.'),
@@ -4540,6 +4292,8 @@ class CreateTeamRecruitmentMockScreen extends StatelessWidget {
     );
   }
 }
+
+
 
 class TeamLinkSafetyPolicyScreen extends StatelessWidget {
   const TeamLinkSafetyPolicyScreen({super.key});
@@ -4649,10 +4403,7 @@ class TeamLinkSafetyPolicyScreen extends StatelessWidget {
                   children: [
                     const Text(
                       '신고 사유',
-                      style: TextStyle(
-                        fontSize: 20,
-                        fontWeight: FontWeight.w900,
-                      ),
+                      style: TextStyle(fontSize: 20, fontWeight: FontWeight.w900),
                     ),
                     const SizedBox(height: 10),
                     Wrap(
@@ -4664,9 +4415,7 @@ class TeamLinkSafetyPolicyScreen extends StatelessWidget {
                               backgroundColor: AppColors.lightBlue,
                               label: Text(
                                 reason,
-                                style: const TextStyle(
-                                  fontWeight: FontWeight.w800,
-                                ),
+                                style: const TextStyle(fontWeight: FontWeight.w800),
                               ),
                             ),
                           )
@@ -4682,10 +4431,7 @@ class TeamLinkSafetyPolicyScreen extends StatelessWidget {
                   children: const [
                     Text(
                       '운영 한계',
-                      style: TextStyle(
-                        fontSize: 20,
-                        fontWeight: FontWeight.w900,
-                      ),
+                      style: TextStyle(fontSize: 20, fontWeight: FontWeight.w900),
                     ),
                     SizedBox(height: 10),
                     _BulletLine(text: '앱은 팀원을 연결할 수 있지만 팀 갈등을 모두 해결할 수는 없습니다.'),
@@ -4728,6 +4474,7 @@ class TeamLinkSafetyPolicyScreen extends StatelessWidget {
   }
 }
 
+
 class _TeamLinkStatCard extends StatelessWidget {
   final String title;
   final String value;
@@ -4749,7 +4496,10 @@ class _TeamLinkStatCard extends StatelessWidget {
           const SizedBox(height: 6),
           Text(
             value,
-            style: const TextStyle(fontSize: 22, fontWeight: FontWeight.w900),
+            style: const TextStyle(
+              fontSize: 22,
+              fontWeight: FontWeight.w900,
+            ),
           ),
           const SizedBox(height: 2),
           Text(
@@ -4764,6 +4514,7 @@ class _TeamLinkStatCard extends StatelessWidget {
     );
   }
 }
+
 
 class DepartmentIntroScreen extends StatefulWidget {
   const DepartmentIntroScreen({super.key});
@@ -4783,8 +4534,8 @@ class _DepartmentIntroScreenState extends State<DepartmentIntroScreen> {
       'intro': '여러 전공을 탐색하며 진로 방향을 설계하는 학부입니다.',
       'learn': ['기초교양', '진로탐색', '전공탐색'],
       'career': ['전공 선택 후 관련 진로'],
-      'transfer': '전공 선택 전 다양한 학과 정보를 비교해보는 것이 중요합니다.',
-      'nasumi': '자율전공학부 나섬이',
+      'transfer': '전공 선택 전 다양한 학과 정보를 비교해보는 것이 중요합니다.'
+      ,'nasumi': '자율전공학부 나섬이',
       'mission': 'FREE-NASUMI',
       'status': '확인 필요',
     },
@@ -4797,8 +4548,8 @@ class _DepartmentIntroScreenState extends State<DepartmentIntroScreen> {
       'intro': '유아 교육과 아동 발달을 배우는 학과입니다.',
       'learn': ['유아교육론', '아동발달', '교육실습'],
       'career': ['유치원 교사', '아동교육 분야', '교육기관 종사자'],
-      'transfer': '교직 적성과 아이들과 소통하는 태도가 중요합니다.',
-      'nasumi': '유아교육과 나섬이',
+      'transfer': '교직 적성과 아이들과 소통하는 태도가 중요합니다.'
+      ,'nasumi': '유아교육과 나섬이',
       'mission': 'ECE-NASUMI',
       'status': '확인 필요',
     },
@@ -4811,8 +4562,8 @@ class _DepartmentIntroScreenState extends State<DepartmentIntroScreen> {
       'intro': '국어국문학과 한국어 교육을 함께 탐구하는 학과입니다.',
       'learn': ['국어학', '문학', '한국어교육'],
       'career': ['한국어 교원', '교육 분야', '콘텐츠 분야'],
-      'transfer': '글쓰기와 언어에 대한 관심이 있으면 도움이 됩니다.',
-      'nasumi': '국어국문한국어교육학과 나섬이',
+      'transfer': '글쓰기와 언어에 대한 관심이 있으면 도움이 됩니다.'
+      ,'nasumi': '국어국문한국어교육학과 나섬이',
       'mission': 'KOR-NASUMI',
       'status': '확인 필요',
     },
@@ -4825,8 +4576,8 @@ class _DepartmentIntroScreenState extends State<DepartmentIntroScreen> {
       'intro': '일본어와 일본 사회·문화를 배우는 학과입니다.',
       'learn': ['일본어', '일본문화', '지역학'],
       'career': ['통번역', '무역', '관광', '해외업무'],
-      'transfer': '언어 학습을 꾸준히 할 수 있는지가 중요합니다.',
-      'nasumi': '일본학과 나섬이',
+      'transfer': '언어 학습을 꾸준히 할 수 있는지가 중요합니다.'
+      ,'nasumi': '일본학과 나섬이',
       'mission': 'JPN-NASUMI',
       'status': '확인 필요',
     },
@@ -4839,8 +4590,8 @@ class _DepartmentIntroScreenState extends State<DepartmentIntroScreen> {
       'intro': '경찰·법·공공질서 분야를 배우는 학부입니다.',
       'learn': ['법학기초', '경찰학', '형사법'],
       'career': ['경찰', '공공기관', '법무 관련 직무'],
-      'transfer': '공직 진로를 생각한다면 기초 법학과 시험 준비 흐름을 확인해야 합니다.',
-      'nasumi': '경찰법학부 나섬이',
+      'transfer': '공직 진로를 생각한다면 기초 법학과 시험 준비 흐름을 확인해야 합니다.'
+      ,'nasumi': '경찰법학부 나섬이',
       'mission': 'LAW-NASUMI',
       'status': '확인 필요',
     },
@@ -4853,8 +4604,8 @@ class _DepartmentIntroScreenState extends State<DepartmentIntroScreen> {
       'intro': '공공정책과 행정 운영을 배우는 학과입니다.',
       'learn': ['행정학', '정책학', '조직론'],
       'career': ['공무원', '공공기관', '행정직'],
-      'transfer': '공공 문제에 관심이 있고 문서화 능력이 있으면 도움이 됩니다.',
-      'nasumi': '행정학과 나섬이',
+      'transfer': '공공 문제에 관심이 있고 문서화 능력이 있으면 도움이 됩니다.'
+      ,'nasumi': '행정학과 나섬이',
       'mission': 'ADMIN-NASUMI',
       'status': '확인 필요',
     },
@@ -4867,8 +4618,8 @@ class _DepartmentIntroScreenState extends State<DepartmentIntroScreen> {
       'intro': '사람의 마음과 상담 과정을 배우는 학과입니다.',
       'learn': ['심리학개론', '상담이론', '발달심리'],
       'career': ['상담 분야', '복지기관', '심리 관련 직무'],
-      'transfer': '사람을 이해하려는 태도와 꾸준한 학습이 중요합니다.',
-      'nasumi': '심리상담학과 나섬이',
+      'transfer': '사람을 이해하려는 태도와 꾸준한 학습이 중요합니다.'
+      ,'nasumi': '심리상담학과 나섬이',
       'mission': 'PSY-NASUMI',
       'status': '확인 필요',
     },
@@ -4881,8 +4632,8 @@ class _DepartmentIntroScreenState extends State<DepartmentIntroScreen> {
       'intro': '조직, 마케팅, 회계, 전략 등 비즈니스 운영을 배우는 학과입니다.',
       'learn': ['경영학원론', '마케팅', '회계'],
       'career': ['기획자', '마케터', '운영 담당자', '창업'],
-      'transfer': '발표력, 문서화, 데이터 기반 사고가 도움이 됩니다.',
-      'nasumi': '경영학과 나섬이',
+      'transfer': '발표력, 문서화, 데이터 기반 사고가 도움이 됩니다.'
+      ,'nasumi': '경영학과 나섬이',
       'mission': 'BUSINESS-NASUMI',
       'status': '확인 필요',
     },
@@ -4895,8 +4646,8 @@ class _DepartmentIntroScreenState extends State<DepartmentIntroScreen> {
       'intro': 'IT와 경영 정보를 함께 다루는 학과입니다.',
       'learn': ['경영정보', '데이터분석', 'IT기획'],
       'career': ['IT기획자', '데이터 담당자', '서비스 운영'],
-      'transfer': 'IT와 비즈니스를 함께 이해하려는 태도가 중요합니다.',
-      'nasumi': 'IT경영정보학과 나섬이',
+      'transfer': 'IT와 비즈니스를 함께 이해하려는 태도가 중요합니다.'
+      ,'nasumi': 'IT경영정보학과 나섬이',
       'mission': 'ITM-NASUMI',
       'status': '확인 필요',
     },
@@ -4909,8 +4660,8 @@ class _DepartmentIntroScreenState extends State<DepartmentIntroScreen> {
       'intro': '국제 비즈니스와 글로벌 시장을 배우는 학과입니다.',
       'learn': ['무역', '국제경영', '외국어'],
       'career': ['무역', '해외영업', '국제업무'],
-      'transfer': '외국어와 시장 흐름에 대한 관심이 있으면 좋습니다.',
-      'nasumi': '글로벌비즈니스학과 나섬이',
+      'transfer': '외국어와 시장 흐름에 대한 관심이 있으면 좋습니다.'
+      ,'nasumi': '글로벌비즈니스학과 나섬이',
       'mission': 'GBIZ-NASUMI',
       'status': '확인 필요',
     },
@@ -4923,8 +4674,8 @@ class _DepartmentIntroScreenState extends State<DepartmentIntroScreen> {
       'intro': '관광 산업과 서비스 운영을 배우는 학과입니다.',
       'learn': ['관광학', '서비스경영', '관광마케팅'],
       'career': ['관광업', '서비스 기획', '호텔·여행 분야'],
-      'transfer': '서비스 마인드와 현장 경험이 중요합니다.',
-      'nasumi': '관광경영학과 나섬이',
+      'transfer': '서비스 마인드와 현장 경험이 중요합니다.'
+      ,'nasumi': '관광경영학과 나섬이',
       'mission': 'TOUR-NASUMI',
       'status': '확인 필요',
     },
@@ -4937,8 +4688,8 @@ class _DepartmentIntroScreenState extends State<DepartmentIntroScreen> {
       'intro': '호텔과 항공 서비스 산업의 운영을 배우는 학과입니다.',
       'learn': ['호텔경영', '항공서비스', '서비스실무'],
       'career': ['호텔', '항공사', '서비스 운영'],
-      'transfer': '서비스 태도와 외국어 준비가 도움이 됩니다.',
-      'nasumi': '호텔항공경영학과 나섬이',
+      'transfer': '서비스 태도와 외국어 준비가 도움이 됩니다.'
+      ,'nasumi': '호텔항공경영학과 나섬이',
       'mission': 'HOTEL-NASUMI',
       'status': '확인 필요',
     },
@@ -4951,8 +4702,8 @@ class _DepartmentIntroScreenState extends State<DepartmentIntroScreen> {
       'intro': '항공 서비스와 고객 응대 역량을 배우는 학과입니다.',
       'learn': ['항공서비스', '이미지메이킹', '서비스실무'],
       'career': ['승무원', '항공서비스', '고객응대 직무'],
-      'transfer': '자기관리와 커뮤니케이션 능력이 중요합니다.',
-      'nasumi': '항공서비스학과 나섬이',
+      'transfer': '자기관리와 커뮤니케이션 능력이 중요합니다.'
+      ,'nasumi': '항공서비스학과 나섬이',
       'mission': 'AIR-NASUMI',
       'status': '확인 필요',
     },
@@ -4965,8 +4716,8 @@ class _DepartmentIntroScreenState extends State<DepartmentIntroScreen> {
       'intro': '미디어 콘텐츠 기획과 제작을 배우는 학과입니다.',
       'learn': ['콘텐츠기획', '미디어제작', '영상편집'],
       'career': ['콘텐츠 기획자', '영상 제작자', '미디어 운영자'],
-      'transfer': '기획력과 결과물 포트폴리오가 중요합니다.',
-      'nasumi': '미디어콘텐츠학과 나섬이',
+      'transfer': '기획력과 결과물 포트폴리오가 중요합니다.'
+      ,'nasumi': '미디어콘텐츠학과 나섬이',
       'mission': 'MEDIA_CONTENT-NASUMI',
       'status': '확인 필요',
     },
@@ -4979,8 +4730,8 @@ class _DepartmentIntroScreenState extends State<DepartmentIntroScreen> {
       'intro': '전문성과 책임감을 바탕으로 간호 역량을 기르는 학과입니다.',
       'learn': ['기초간호', '성인간호', '임상실습'],
       'career': ['간호사', '보건의료기관', '공공보건'],
-      'transfer': '학업량과 실습이 있는 만큼 책임감과 체력이 중요합니다.',
-      'nasumi': '간호학과 나섬이',
+      'transfer': '학업량과 실습이 있는 만큼 책임감과 체력이 중요합니다.'
+      ,'nasumi': '간호학과 나섬이',
       'mission': 'NURSING-NASUMI',
       'status': '확인 필요',
     },
@@ -4993,8 +4744,8 @@ class _DepartmentIntroScreenState extends State<DepartmentIntroScreen> {
       'intro': '의류와 패션 산업을 배우는 학과입니다.',
       'learn': ['패션디자인', '의복구성', '소재'],
       'career': ['패션 디자이너', 'MD', '브랜드 운영'],
-      'transfer': '감각과 포트폴리오 관리가 중요합니다.',
-      'nasumi': '의류패션학과 나섬이',
+      'transfer': '감각과 포트폴리오 관리가 중요합니다.'
+      ,'nasumi': '의류패션학과 나섬이',
       'mission': 'FASHION-NASUMI',
       'status': '확인 필요',
     },
@@ -5007,8 +4758,8 @@ class _DepartmentIntroScreenState extends State<DepartmentIntroScreen> {
       'intro': '식품과 영양, 건강 관리 지식을 배우는 학과입니다.',
       'learn': ['영양학', '식품학', '급식관리'],
       'career': ['영양사', '식품회사', '보건 관련 직무'],
-      'transfer': '과학 기초와 식품 안전에 대한 관심이 필요합니다.',
-      'nasumi': '식품영양학과 나섬이',
+      'transfer': '과학 기초와 식품 안전에 대한 관심이 필요합니다.'
+      ,'nasumi': '식품영양학과 나섬이',
       'mission': 'FOOD_NUTRITION-NASUMI',
       'status': '확인 필요',
     },
@@ -5021,8 +4772,8 @@ class _DepartmentIntroScreenState extends State<DepartmentIntroScreen> {
       'intro': '조리 실무와 외식 산업 운영을 배우는 학과입니다.',
       'learn': ['조리실습', '외식경영', '메뉴개발'],
       'career': ['조리사', '외식 창업', '식품 개발'],
-      'transfer': '실습 태도와 현장 경험이 중요합니다.',
-      'nasumi': '외식조리학과 나섬이',
+      'transfer': '실습 태도와 현장 경험이 중요합니다.'
+      ,'nasumi': '외식조리학과 나섬이',
       'mission': 'CULINARY-NASUMI',
       'status': '확인 필요',
     },
@@ -5035,8 +4786,8 @@ class _DepartmentIntroScreenState extends State<DepartmentIntroScreen> {
       'intro': '식물, 원예, 산림 자원과 환경을 배우는 학과입니다.',
       'learn': ['원예학', '산림자원', '환경관리'],
       'career': ['원예 분야', '산림 관련 직무', '환경 분야'],
-      'transfer': '자연과 현장 활동에 대한 관심이 있으면 좋습니다.',
-      'nasumi': '원예산림학과 나섬이',
+      'transfer': '자연과 현장 활동에 대한 관심이 있으면 좋습니다.'
+      ,'nasumi': '원예산림학과 나섬이',
       'mission': 'HORT-NASUMI',
       'status': '확인 필요',
     },
@@ -5049,8 +4800,8 @@ class _DepartmentIntroScreenState extends State<DepartmentIntroScreen> {
       'intro': '보건의료와 복지 서비스를 함께 이해하는 학과입니다.',
       'learn': ['보건학', '복지론', '의료서비스'],
       'career': ['보건복지기관', '의료행정', '복지 서비스'],
-      'transfer': '사람을 돕는 일에 대한 관심이 중요합니다.',
-      'nasumi': '보건의료복지학과 나섬이',
+      'transfer': '사람을 돕는 일에 대한 관심이 중요합니다.'
+      ,'nasumi': '보건의료복지학과 나섬이',
       'mission': 'HEALTH_WELFARE-NASUMI',
       'status': '확인 필요',
     },
@@ -5063,8 +4814,8 @@ class _DepartmentIntroScreenState extends State<DepartmentIntroScreen> {
       'intro': '생명현상과 바이오 기술을 배우는 학과입니다.',
       'learn': ['생물학', '생명공학', '실험기초'],
       'career': ['바이오 연구', '제약·식품 분야', '연구보조'],
-      'transfer': '기초 과학과 실험 태도가 중요합니다.',
-      'nasumi': '생명공학과 나섬이',
+      'transfer': '기초 과학과 실험 태도가 중요합니다.'
+      ,'nasumi': '생명공학과 나섬이',
       'mission': 'BIO-NASUMI',
       'status': '확인 필요',
     },
@@ -5077,8 +4828,8 @@ class _DepartmentIntroScreenState extends State<DepartmentIntroScreen> {
       'intro': '소프트웨어와 시스템을 설계하고 구현하는 학과입니다.',
       'learn': ['프로그래밍', '자료구조', '운영체제', '네트워크'],
       'career': ['소프트웨어 개발자', '백엔드 개발자', '임베디드 개발자'],
-      'transfer': '프로그래밍 기초와 꾸준한 실습 경험이 중요합니다.',
-      'nasumi': '컴퓨터공학과 나섬이',
+      'transfer': '프로그래밍 기초와 꾸준한 실습 경험이 중요합니다.'
+      ,'nasumi': '컴퓨터공학과 나섬이',
       'mission': 'CS-NASUMI',
       'status': '확인 필요',
     },
@@ -5091,8 +4842,8 @@ class _DepartmentIntroScreenState extends State<DepartmentIntroScreen> {
       'intro': '소프트웨어 서비스와 응용 프로그램 개발 역량을 기르는 전공입니다.',
       'learn': ['프로그래밍', '웹/앱 개발', '데이터베이스'],
       'career': ['웹 개발자', '앱 개발자', '서비스 개발자'],
-      'transfer': '간단한 앱/웹 결과물을 만들어보는 것이 좋습니다.',
-      'nasumi': '소프트웨어학 나섬이',
+      'transfer': '간단한 앱/웹 결과물을 만들어보는 것이 좋습니다.'
+      ,'nasumi': '소프트웨어학 나섬이',
       'mission': 'SW-NASUMI',
       'status': '확인 필요',
     },
@@ -5105,8 +4856,8 @@ class _DepartmentIntroScreenState extends State<DepartmentIntroScreen> {
       'intro': '정보 시스템을 안전하게 보호하기 위한 보안 기술을 배우는 전공입니다.',
       'learn': ['네트워크', '운영체제', '웹보안'],
       'career': ['보안 엔지니어', '관제 분석가', '보안 컨설턴트'],
-      'transfer': '리눅스, 네트워크, 프로그래밍 기초가 중요합니다.',
-      'nasumi': '정보보안학 나섬이',
+      'transfer': '리눅스, 네트워크, 프로그래밍 기초가 중요합니다.'
+      ,'nasumi': '정보보안학 나섬이',
       'mission': 'SEC-NASUMI',
       'status': '확인 필요',
     },
@@ -5119,8 +4870,8 @@ class _DepartmentIntroScreenState extends State<DepartmentIntroScreen> {
       'intro': '게임과 인터랙티브 콘텐츠를 설계하고 구현하는 전공입니다.',
       'learn': ['게임프로그래밍', '그래픽스', '게임기획'],
       'career': ['게임 개발자', '게임 기획자', 'XR 개발자'],
-      'transfer': '프로그래밍과 포트폴리오성 결과물이 중요합니다.',
-      'nasumi': '게임공학 나섬이',
+      'transfer': '프로그래밍과 포트폴리오성 결과물이 중요합니다.'
+      ,'nasumi': '게임공학 나섬이',
       'mission': 'GAME-NASUMI',
       'status': '확인 필요',
     },
@@ -5133,8 +4884,8 @@ class _DepartmentIntroScreenState extends State<DepartmentIntroScreen> {
       'intro': '데이터와 인공지능 모델을 이해하고 활용하는 전공입니다.',
       'learn': ['Python', '데이터분석', '머신러닝'],
       'career': ['AI 개발자', '데이터 분석가', 'ML 엔지니어'],
-      'transfer': 'Python과 수학적 사고를 준비하면 좋습니다.',
-      'nasumi': '인공지능 나섬이',
+      'transfer': 'Python과 수학적 사고를 준비하면 좋습니다.'
+      ,'nasumi': '인공지능 나섬이',
       'mission': 'AI-NASUMI',
       'status': '확인 필요',
     },
@@ -5147,8 +4898,8 @@ class _DepartmentIntroScreenState extends State<DepartmentIntroScreen> {
       'intro': '드론, 로봇, 제어 시스템과 피지컬 AI 기술을 다루는 전공입니다.',
       'learn': ['로봇기초', '제어', '센서'],
       'career': ['로봇 개발자', '드론 개발자', '제어 엔지니어'],
-      'transfer': 'C/C++, 수학, 센서/하드웨어 기초가 도움이 됩니다.',
-      'nasumi': '드론로봇공학 나섬이',
+      'transfer': 'C/C++, 수학, 센서/하드웨어 기초가 도움이 됩니다.'
+      ,'nasumi': '드론로봇공학 나섬이',
       'mission': 'DRONE-NASUMI',
       'status': '확인 필요',
     },
@@ -5161,8 +4912,8 @@ class _DepartmentIntroScreenState extends State<DepartmentIntroScreen> {
       'intro': '전자공학과 AI/IoT 기술을 융합해 하드웨어 기반 시스템을 배우는 전공입니다.',
       'learn': ['전자회로', '센서', '마이크로컨트롤러'],
       'career': ['전자 엔지니어', '임베디드 개발자', 'IoT 개발자'],
-      'transfer': '회로 기초와 C언어 이해가 중요합니다.',
-      'nasumi': 'AI융합전자 나섬이',
+      'transfer': '회로 기초와 C언어 이해가 중요합니다.'
+      ,'nasumi': 'AI융합전자 나섬이',
       'mission': 'AIE-NASUMI',
       'status': '확인 필요',
     },
@@ -5175,8 +4926,8 @@ class _DepartmentIntroScreenState extends State<DepartmentIntroScreen> {
       'intro': '전기 에너지와 전력 시스템을 배우는 학과입니다.',
       'learn': ['전기회로', '전력공학', '전기설비'],
       'career': ['전기 엔지니어', '전력 분야', '설비 관리'],
-      'transfer': '수학과 회로 기초를 준비하면 좋습니다.',
-      'nasumi': '전기공학과 나섬이',
+      'transfer': '수학과 회로 기초를 준비하면 좋습니다.'
+      ,'nasumi': '전기공학과 나섬이',
       'mission': 'ELEC-NASUMI',
       'status': '확인 필요',
     },
@@ -5189,8 +4940,8 @@ class _DepartmentIntroScreenState extends State<DepartmentIntroScreen> {
       'intro': '철도와 건설 인프라를 배우는 학과입니다.',
       'learn': ['건설기초', '철도공학', '구조'],
       'career': ['건설 분야', '철도 관련 직무', '토목 엔지니어'],
-      'transfer': '공간 이해와 기초 역학 감각이 도움이 됩니다.',
-      'nasumi': '철도건설공학과 나섬이',
+      'transfer': '공간 이해와 기초 역학 감각이 도움이 됩니다.'
+      ,'nasumi': '철도건설공학과 나섬이',
       'mission': 'RAIL-NASUMI',
       'status': '확인 필요',
     },
@@ -5203,8 +4954,8 @@ class _DepartmentIntroScreenState extends State<DepartmentIntroScreen> {
       'intro': '배터리와 에너지 저장 기술을 배우는 학과입니다.',
       'learn': ['배터리기초', '에너지소재', '전기화학'],
       'career': ['배터리 산업', '에너지 분야', '소재 관련 직무'],
-      'transfer': '화학과 전기 기초를 함께 이해하면 좋습니다.',
-      'nasumi': '스마트배터리학과 나섬이',
+      'transfer': '화학과 전기 기초를 함께 이해하면 좋습니다.'
+      ,'nasumi': '스마트배터리학과 나섬이',
       'mission': 'BATTERY-NASUMI',
       'status': '확인 필요',
     },
@@ -5217,8 +4968,8 @@ class _DepartmentIntroScreenState extends State<DepartmentIntroScreen> {
       'intro': '실내 공간과 건축 디자인을 배우는 학과입니다.',
       'learn': ['공간디자인', '제도', '건축기초'],
       'career': ['인테리어 디자이너', '공간 디자이너', '건축 관련 직무'],
-      'transfer': '도면과 포트폴리오 준비가 중요합니다.',
-      'nasumi': '실내건축학과 나섬이',
+      'transfer': '도면과 포트폴리오 준비가 중요합니다.'
+      ,'nasumi': '실내건축학과 나섬이',
       'mission': 'INTERIOR-NASUMI',
       'status': '확인 필요',
     },
@@ -5231,8 +4982,8 @@ class _DepartmentIntroScreenState extends State<DepartmentIntroScreen> {
       'intro': '도시와 자연 공간의 조경 설계를 배우는 학과입니다.',
       'learn': ['조경설계', '식재', '환경계획'],
       'career': ['조경 설계', '공원·환경 분야', '공공 디자인'],
-      'transfer': '자연과 공간 설계에 대한 관심이 필요합니다.',
-      'nasumi': '조경학과 나섬이',
+      'transfer': '자연과 공간 설계에 대한 관심이 필요합니다.'
+      ,'nasumi': '조경학과 나섬이',
       'mission': 'LANDSCAPE-NASUMI',
       'status': '확인 필요',
     },
@@ -5245,8 +4996,8 @@ class _DepartmentIntroScreenState extends State<DepartmentIntroScreen> {
       'intro': '건축 설계와 공간 구성을 배우는 5년제 학과입니다.',
       'learn': ['건축설계', '구조', '건축사'],
       'career': ['건축가', '건축 설계', '공간 기획'],
-      'transfer': '설계 과제와 포트폴리오 관리가 중요합니다.',
-      'nasumi': '건축학과(5년제) 나섬이',
+      'transfer': '설계 과제와 포트폴리오 관리가 중요합니다.'
+      ,'nasumi': '건축학과(5년제) 나섬이',
       'mission': 'ARCH-NASUMI',
       'status': '확인 필요',
     },
@@ -5259,8 +5010,8 @@ class _DepartmentIntroScreenState extends State<DepartmentIntroScreen> {
       'intro': '운동 재활과 복지 서비스를 배우는 학과입니다.',
       'learn': ['운동처방', '재활기초', '복지론'],
       'career': ['운동재활 분야', '복지기관', '건강관리'],
-      'transfer': '사람의 몸과 회복 과정에 대한 관심이 필요합니다.',
-      'nasumi': '운동재활복지학과 나섬이',
+      'transfer': '사람의 몸과 회복 과정에 대한 관심이 필요합니다.'
+      ,'nasumi': '운동재활복지학과 나섬이',
       'mission': 'REHAB-NASUMI',
       'status': '확인 필요',
     },
@@ -5273,8 +5024,8 @@ class _DepartmentIntroScreenState extends State<DepartmentIntroScreen> {
       'intro': '웹툰과 시각 콘텐츠 제작 역량을 기르는 전공입니다.',
       'learn': ['드로잉', '스토리텔링', '디지털 작업'],
       'career': ['웹툰 작가', '일러스트레이터', '캐릭터 디자이너'],
-      'transfer': '개인 작업물과 꾸준한 포트폴리오가 중요합니다.',
-      'nasumi': '아트앤웹툰 나섬이',
+      'transfer': '개인 작업물과 꾸준한 포트폴리오가 중요합니다.'
+      ,'nasumi': '아트앤웹툰 나섬이',
       'mission': 'WEBTOON-NASUMI',
       'status': '확인 필요',
     },
@@ -5287,8 +5038,8 @@ class _DepartmentIntroScreenState extends State<DepartmentIntroScreen> {
       'intro': '게임과 애니메이션 시각 콘텐츠 제작을 배우는 전공입니다.',
       'learn': ['애니메이션', '3D 그래픽', '캐릭터 디자인'],
       'career': ['애니메이터', '게임 그래픽 디자이너', '3D 아티스트'],
-      'transfer': '그림/그래픽 작업물과 포트폴리오 관리가 중요합니다.',
-      'nasumi': '게임애니메이션 나섬이',
+      'transfer': '그림/그래픽 작업물과 포트폴리오 관리가 중요합니다.'
+      ,'nasumi': '게임애니메이션 나섬이',
       'mission': 'ANIMATION-NASUMI',
       'status': '확인 필요',
     },
@@ -5301,8 +5052,8 @@ class _DepartmentIntroScreenState extends State<DepartmentIntroScreen> {
       'intro': '시각 커뮤니케이션과 디자인 문제 해결을 배우는 전공입니다.',
       'learn': ['시각디자인', '브랜딩', '편집디자인'],
       'career': ['그래픽 디자이너', '브랜드 디자이너', '콘텐츠 디자이너'],
-      'transfer': '디자인 포트폴리오와 툴 활용이 중요합니다.',
-      'nasumi': '커뮤니케이션디자인 나섬이',
+      'transfer': '디자인 포트폴리오와 툴 활용이 중요합니다.'
+      ,'nasumi': '커뮤니케이션디자인 나섬이',
       'mission': 'COMM_DESIGN-NASUMI',
       'status': '확인 필요',
     },
@@ -5315,8 +5066,8 @@ class _DepartmentIntroScreenState extends State<DepartmentIntroScreen> {
       'intro': '제품과 사용 경험 중심의 디자인을 배우는 전공입니다.',
       'learn': ['제품디자인', 'UX기초', '모델링'],
       'career': ['제품 디자이너', 'UX 디자이너', '산업디자인 분야'],
-      'transfer': '관찰력과 조형 감각이 중요합니다.',
-      'nasumi': '산업디자인 나섬이',
+      'transfer': '관찰력과 조형 감각이 중요합니다.'
+      ,'nasumi': '산업디자인 나섬이',
       'mission': 'IND_DESIGN-NASUMI',
       'status': '확인 필요',
     },
@@ -5329,8 +5080,8 @@ class _DepartmentIntroScreenState extends State<DepartmentIntroScreen> {
       'intro': '광고, 사진, 영상 콘텐츠 제작과 시각 커뮤니케이션을 배우는 학과입니다.',
       'learn': ['사진', '영상 제작', '광고 기획'],
       'career': ['영상 제작자', '광고 기획자', '콘텐츠 디자이너'],
-      'transfer': '촬영/편집 결과물과 시각 표현 포트폴리오가 중요합니다.',
-      'nasumi': '광고사진영상학과 나섬이',
+      'transfer': '촬영/편집 결과물과 시각 표현 포트폴리오가 중요합니다.'
+      ,'nasumi': '광고사진영상학과 나섬이',
       'mission': 'PHOTO_VIDEO-NASUMI',
       'status': '확인 필요',
     },
@@ -5343,8 +5094,8 @@ class _DepartmentIntroScreenState extends State<DepartmentIntroScreen> {
       'intro': '뷰티 산업과 실무 케어 기술을 배우는 학과입니다.',
       'learn': ['뷰티케어', '스타일링', '실무실습'],
       'career': ['뷰티 전문가', '스타일리스트', '뷰티 창업'],
-      'transfer': '실습 태도와 서비스 감각이 중요합니다.',
-      'nasumi': '뷰티케어학과 나섬이',
+      'transfer': '실습 태도와 서비스 감각이 중요합니다.'
+      ,'nasumi': '뷰티케어학과 나섬이',
       'mission': 'BEAUTY-NASUMI',
       'status': '확인 필요',
     },
@@ -5357,8 +5108,8 @@ class _DepartmentIntroScreenState extends State<DepartmentIntroScreen> {
       'intro': '실용음악과 공연 역량을 기르는 전공입니다.',
       'learn': ['보컬', '악기', '작곡'],
       'career': ['뮤지션', '공연예술가', '음악 콘텐츠 분야'],
-      'transfer': '꾸준한 연습과 무대 경험이 중요합니다.',
-      'nasumi': '실용음악 나섬이',
+      'transfer': '꾸준한 연습과 무대 경험이 중요합니다.'
+      ,'nasumi': '실용음악 나섬이',
       'mission': 'MUSIC-NASUMI',
       'status': '확인 필요',
     },
@@ -5371,8 +5122,8 @@ class _DepartmentIntroScreenState extends State<DepartmentIntroScreen> {
       'intro': '영화와 영상 제작의 연출·스탭 역할을 배우는 전공입니다.',
       'learn': ['영상연출', '촬영', '편집'],
       'career': ['영상 감독', '촬영·편집 스태프', '콘텐츠 제작자'],
-      'transfer': '팀 작업과 현장 경험이 중요합니다.',
-      'nasumi': '영화영상학-연출 및 스탭 나섬이',
+      'transfer': '팀 작업과 현장 경험이 중요합니다.'
+      ,'nasumi': '영화영상학-연출 및 스탭 나섬이',
       'mission': 'FILM_STAFF-NASUMI',
       'status': '확인 필요',
     },
@@ -5385,8 +5136,8 @@ class _DepartmentIntroScreenState extends State<DepartmentIntroScreen> {
       'intro': '영화와 무대 연기 역량을 기르는 전공입니다.',
       'learn': ['연기', '발성', '무대실습'],
       'career': ['배우', '공연예술가', '영상 콘텐츠 분야'],
-      'transfer': '표현력과 꾸준한 훈련이 중요합니다.',
-      'nasumi': '영화영상학-연기 나섬이',
+      'transfer': '표현력과 꾸준한 훈련이 중요합니다.'
+      ,'nasumi': '영화영상학-연기 나섬이',
       'mission': 'ACTING-NASUMI',
       'status': '확인 필요',
     },
@@ -5399,8 +5150,8 @@ class _DepartmentIntroScreenState extends State<DepartmentIntroScreen> {
       'intro': '스포츠 지도와 건강 재활을 배우는 전공입니다.',
       'learn': ['스포츠지도', '건강관리', '재활기초'],
       'career': ['스포츠 지도자', '건강관리 분야', '재활 관련 직무'],
-      'transfer': '운동 실기와 사람을 지도하는 태도가 중요합니다.',
-      'nasumi': '스포츠지도·건강재활 나섬이',
+      'transfer': '운동 실기와 사람을 지도하는 태도가 중요합니다.'
+      ,'nasumi': '스포츠지도·건강재활 나섬이',
       'mission': 'SPORT_REHAB-NASUMI',
       'status': '확인 필요',
     },
@@ -5413,8 +5164,8 @@ class _DepartmentIntroScreenState extends State<DepartmentIntroScreen> {
       'intro': '스포츠 산업과 마케팅 운영을 배우는 전공입니다.',
       'learn': ['스포츠산업', '마케팅', '이벤트운영'],
       'career': ['스포츠마케터', '구단 운영', '이벤트 기획'],
-      'transfer': '스포츠 산업 이해와 기획력이 중요합니다.',
-      'nasumi': '스포츠마케팅 나섬이',
+      'transfer': '스포츠 산업 이해와 기획력이 중요합니다.'
+      ,'nasumi': '스포츠마케팅 나섬이',
       'mission': 'SPORT_MARKETING-NASUMI',
       'status': '확인 필요',
     },
@@ -5427,8 +5178,8 @@ class _DepartmentIntroScreenState extends State<DepartmentIntroScreen> {
       'intro': '생활과 스타일 분야를 융합적으로 배우는 전공입니다.',
       'learn': ['라이프스타일', '디자인기초', '생활문화'],
       'career': ['라이프스타일 기획', '문화 서비스', '창업'],
-      'transfer': '생활 문제를 관찰하고 기획하는 감각이 중요합니다.',
-      'nasumi': '라이프스타일링 나섬이',
+      'transfer': '생활 문제를 관찰하고 기획하는 감각이 중요합니다.'
+      ,'nasumi': '라이프스타일링 나섬이',
       'mission': 'LIFE_STYLE-NASUMI',
       'status': '확인 필요',
     },
@@ -5441,8 +5192,8 @@ class _DepartmentIntroScreenState extends State<DepartmentIntroScreen> {
       'intro': '사회복지와 상담 기초를 배우는 전공입니다.',
       'learn': ['사회복지론', '상담기초', '복지실무'],
       'career': ['복지기관', '상담 분야', '돌봄 서비스'],
-      'transfer': '사람을 이해하고 돕는 태도가 중요합니다.',
-      'nasumi': '사회복지상담 나섬이',
+      'transfer': '사람을 이해하고 돕는 태도가 중요합니다.'
+      ,'nasumi': '사회복지상담 나섬이',
       'mission': 'WELFARE_COUNSEL-NASUMI',
       'status': '확인 필요',
     },
@@ -5455,8 +5206,8 @@ class _DepartmentIntroScreenState extends State<DepartmentIntroScreen> {
       'intro': '반려동물 및 관련 산업 비즈니스를 배우는 전공입니다.',
       'learn': ['산업기초', '비즈니스', '서비스운영'],
       'career': ['반려산업', '서비스 창업', '운영 관리'],
-      'transfer': '산업 흐름과 고객 이해가 중요합니다.',
-      'nasumi': '혼산업비즈니스 나섬이',
+      'transfer': '산업 흐름과 고객 이해가 중요합니다.'
+      ,'nasumi': '혼산업비즈니스 나섬이',
       'mission': 'PET_BIZ-NASUMI',
       'status': '확인 필요',
     },
@@ -5469,8 +5220,8 @@ class _DepartmentIntroScreenState extends State<DepartmentIntroScreen> {
       'intro': '부동산과 자산관리 기초를 배우는 전공입니다.',
       'learn': ['부동산기초', '자산관리', '재테크'],
       'career': ['부동산 분야', '자산관리', '상담 직무'],
-      'transfer': '시장 변화와 법·제도 이해가 필요합니다.',
-      'nasumi': '부동산재테크 나섬이',
+      'transfer': '시장 변화와 법·제도 이해가 필요합니다.'
+      ,'nasumi': '부동산재테크 나섬이',
       'mission': 'REAL_ESTATE-NASUMI',
       'status': '확인 필요',
     },
@@ -5483,8 +5234,8 @@ class _DepartmentIntroScreenState extends State<DepartmentIntroScreen> {
       'intro': '시니어 건강과 운동 처방, 파크골프를 배우는 전공입니다.',
       'learn': ['운동처방', '건강관리', '파크골프'],
       'career': ['시니어 운동지도', '건강관리', '생활체육'],
-      'transfer': '건강관리와 지도 역량이 중요합니다.',
-      'nasumi': '시니어운동처방·파크골프 나섬이',
+      'transfer': '건강관리와 지도 역량이 중요합니다.'
+      ,'nasumi': '시니어운동처방·파크골프 나섬이',
       'mission': 'SENIOR_SPORT-NASUMI',
       'status': '확인 필요',
     },
@@ -5497,8 +5248,8 @@ class _DepartmentIntroScreenState extends State<DepartmentIntroScreen> {
       'intro': '인문과 예술을 융합적으로 탐구하는 전공입니다.',
       'learn': ['인문학', '예술기초', '문화이해'],
       'career': ['문화기획', '교육·교양 분야', '창작 활동'],
-      'transfer': '읽기, 표현, 문화 이해에 관심이 있으면 좋습니다.',
-      'nasumi': '인문예술학 나섬이',
+      'transfer': '읽기, 표현, 문화 이해에 관심이 있으면 좋습니다.'
+      ,'nasumi': '인문예술학 나섬이',
       'mission': 'HUMAN_ART-NASUMI',
       'status': '확인 필요',
     },
@@ -5524,15 +5275,10 @@ class _DepartmentIntroScreenState extends State<DepartmentIntroScreen> {
       final college = (department['college'] as String).toLowerCase();
       final building = (department['building'] as String).toLowerCase();
       final code = (department['code'] as String).toLowerCase();
-      final keywords = (department['keywords'] as List<String>)
-          .join(' ')
-          .toLowerCase();
-      final career = (department['career'] as List<String>)
-          .join(' ')
-          .toLowerCase();
+      final keywords = (department['keywords'] as List<String>).join(' ').toLowerCase();
+      final career = (department['career'] as List<String>).join(' ').toLowerCase();
 
-      final matchesQuery =
-          q.isEmpty ||
+      final matchesQuery = q.isEmpty ||
           name.contains(q) ||
           college.contains(q) ||
           building.contains(q) ||
@@ -5540,8 +5286,7 @@ class _DepartmentIntroScreenState extends State<DepartmentIntroScreen> {
           keywords.contains(q) ||
           career.contains(q);
 
-      final matchesGroup =
-          _selectedGroup == '전체' ||
+      final matchesGroup = _selectedGroup == '전체' ||
           college.contains(_selectedGroup.toLowerCase()) ||
           _groupOf(college) == _selectedGroup;
 
@@ -5755,9 +5500,7 @@ class _DepartmentIntroScreenState extends State<DepartmentIntroScreen> {
                               Chip(
                                 label: Text(
                                   department['status'] as String,
-                                  style: const TextStyle(
-                                    fontWeight: FontWeight.w800,
-                                  ),
+                                  style: const TextStyle(fontWeight: FontWeight.w800),
                                 ),
                               ),
                             ],
@@ -5780,18 +5523,9 @@ class _DepartmentIntroScreenState extends State<DepartmentIntroScreen> {
                                 .toList(),
                           ),
                           const SizedBox(height: 12),
-                          ProfileRow(
-                            label: '계열/학부',
-                            value: department['college'] as String,
-                          ),
-                          ProfileRow(
-                            label: '주요 건물',
-                            value: department['building'] as String,
-                          ),
-                          ProfileRow(
-                            label: '건물 코드',
-                            value: department['code'] as String,
-                          ),
+                          ProfileRow(label: '계열/학부', value: department['college'] as String),
+                          ProfileRow(label: '주요 건물', value: department['building'] as String),
+                          ProfileRow(label: '건물 코드', value: department['code'] as String),
                           const SizedBox(height: 10),
                           SizedBox(
                             width: double.infinity,
@@ -5835,7 +5569,10 @@ class _DepartmentIntroScreenState extends State<DepartmentIntroScreen> {
 class DepartmentDetailScreen extends StatelessWidget {
   final Map<String, dynamic> department;
 
-  const DepartmentDetailScreen({super.key, required this.department});
+  const DepartmentDetailScreen({
+    super.key,
+    required this.department,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -5928,10 +5665,7 @@ class DepartmentDetailScreen extends StatelessWidget {
                   children: [
                     const Text(
                       '배우는 내용',
-                      style: TextStyle(
-                        fontSize: 18,
-                        fontWeight: FontWeight.w900,
-                      ),
+                      style: TextStyle(fontSize: 18, fontWeight: FontWeight.w900),
                     ),
                     const SizedBox(height: 10),
                     ...learn.map((item) => _BulletLine(text: item)),
@@ -5945,10 +5679,7 @@ class DepartmentDetailScreen extends StatelessWidget {
                   children: [
                     const Text(
                       '진로 방향',
-                      style: TextStyle(
-                        fontSize: 18,
-                        fontWeight: FontWeight.w900,
-                      ),
+                      style: TextStyle(fontSize: 18, fontWeight: FontWeight.w900),
                     ),
                     const SizedBox(height: 10),
                     ...career.map((item) => _BulletLine(text: item)),
@@ -5962,10 +5693,7 @@ class DepartmentDetailScreen extends StatelessWidget {
                   children: [
                     const Text(
                       '입학/전과 참고 메모',
-                      style: TextStyle(
-                        fontSize: 18,
-                        fontWeight: FontWeight.w900,
-                      ),
+                      style: TextStyle(fontSize: 18, fontWeight: FontWeight.w900),
                     ),
                     const SizedBox(height: 10),
                     Text(
@@ -6025,7 +5753,9 @@ class DepartmentDetailScreen extends StatelessWidget {
 class _BulletLine extends StatelessWidget {
   final String text;
 
-  const _BulletLine({required this.text});
+  const _BulletLine({
+    required this.text,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -6050,6 +5780,7 @@ class _BulletLine extends StatelessWidget {
     );
   }
 }
+
 
 class AppStatusRoadmapScreen extends StatelessWidget {
   const AppStatusRoadmapScreen({super.key});
@@ -6184,16 +5915,10 @@ class AppStatusRoadmapScreen extends StatelessWidget {
                   children: [
                     const Text(
                       '현재 구현된 것',
-                      style: TextStyle(
-                        fontSize: 18,
-                        fontWeight: FontWeight.w900,
-                      ),
+                      style: TextStyle(fontSize: 18, fontWeight: FontWeight.w900),
                     ),
                     const SizedBox(height: 12),
-                    ...done.map(
-                      (item) =>
-                          _StatusLine(icon: Icons.check_circle, text: item),
-                    ),
+                    ...done.map((item) => _StatusLine(icon: Icons.check_circle, text: item)),
                   ],
                 ),
               ),
@@ -6204,10 +5929,7 @@ class AppStatusRoadmapScreen extends StatelessWidget {
                   children: [
                     const Text(
                       '아직 구현되지 않은 것',
-                      style: TextStyle(
-                        fontSize: 18,
-                        fontWeight: FontWeight.w900,
-                      ),
+                      style: TextStyle(fontSize: 18, fontWeight: FontWeight.w900),
                     ),
                     const SizedBox(height: 10),
                     const Text(
@@ -6219,10 +5941,7 @@ class AppStatusRoadmapScreen extends StatelessWidget {
                       ),
                     ),
                     const SizedBox(height: 12),
-                    ...notYet.map(
-                      (item) =>
-                          _StatusLine(icon: Icons.pending_outlined, text: item),
-                    ),
+                    ...notYet.map((item) => _StatusLine(icon: Icons.pending_outlined, text: item)),
                   ],
                 ),
               ),
@@ -6264,7 +5983,10 @@ class AppStatusRoadmapScreen extends StatelessWidget {
 }
 
 class _StatusLine extends StatelessWidget {
-  const _StatusLine({required this.icon, required this.text});
+  const _StatusLine({
+    required this.icon,
+    required this.text,
+  });
 
   final IconData icon;
   final String text;
@@ -6293,6 +6015,7 @@ class _StatusLine extends StatelessWidget {
     );
   }
 }
+
 
 class TesterFeedbackScreen extends StatelessWidget {
   const TesterFeedbackScreen({super.key});
@@ -6399,10 +6122,7 @@ class TesterFeedbackScreen extends StatelessWidget {
                   children: const [
                     Text(
                       '테스트 기준',
-                      style: TextStyle(
-                        fontSize: 18,
-                        fontWeight: FontWeight.w900,
-                      ),
+                      style: TextStyle(fontSize: 18, fontWeight: FontWeight.w900),
                     ),
                     SizedBox(height: 10),
                     Text(
@@ -6439,10 +6159,7 @@ class TesterFeedbackScreen extends StatelessWidget {
                             child: Row(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                const Text(
-                                  '• ',
-                                  style: TextStyle(fontWeight: FontWeight.w900),
-                                ),
+                                const Text('• ', style: TextStyle(fontWeight: FontWeight.w900)),
                                 Expanded(
                                   child: Text(
                                     item,
@@ -6496,6 +6213,7 @@ class TesterFeedbackScreen extends StatelessWidget {
   }
 }
 
+
 class PrivacyGuideScreen extends StatelessWidget {
   const PrivacyGuideScreen({super.key});
 
@@ -6529,10 +6247,7 @@ class PrivacyGuideScreen extends StatelessWidget {
                         children: [
                           Text(
                             '최소 수집 원칙',
-                            style: TextStyle(
-                              color: Colors.white70,
-                              fontWeight: FontWeight.w800,
-                            ),
+                            style: TextStyle(color: Colors.white70, fontWeight: FontWeight.w800),
                           ),
                           SizedBox(height: 8),
                           Text(
@@ -6616,7 +6331,11 @@ class PrivacySection extends StatelessWidget {
   final String title;
   final List<String> items;
 
-  const PrivacySection({super.key, required this.title, required this.items});
+  const PrivacySection({
+    super.key,
+    required this.title,
+    required this.items,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -6624,10 +6343,7 @@ class PrivacySection extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(
-            title,
-            style: const TextStyle(fontSize: 18, fontWeight: FontWeight.w900),
-          ),
+          Text(title, style: const TextStyle(fontSize: 18, fontWeight: FontWeight.w900)),
           const SizedBox(height: 12),
           ...items.map((item) {
             return Padding(
@@ -6635,13 +6351,7 @@ class PrivacySection extends StatelessWidget {
               child: Row(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  const Text(
-                    '• ',
-                    style: TextStyle(
-                      color: AppColors.blue,
-                      fontWeight: FontWeight.w900,
-                    ),
-                  ),
+                  const Text('• ', style: TextStyle(color: AppColors.blue, fontWeight: FontWeight.w900)),
                   Expanded(
                     child: Text(
                       item,
@@ -6678,21 +6388,9 @@ class Header extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text(
-                title,
-                style: const TextStyle(
-                  fontSize: 24,
-                  fontWeight: FontWeight.w900,
-                ),
-              ),
+              Text(title, style: const TextStyle(fontSize: 24, fontWeight: FontWeight.w900)),
               const SizedBox(height: 2),
-              Text(
-                subtitle,
-                style: const TextStyle(
-                  color: AppColors.sub,
-                  fontWeight: FontWeight.w600,
-                ),
-              ),
+              Text(subtitle, style: const TextStyle(color: AppColors.sub, fontWeight: FontWeight.w600)),
             ],
           ),
         ),
@@ -6712,19 +6410,8 @@ class SectionTitle extends StatelessWidget {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
-        Text(
-          title,
-          style: const TextStyle(fontSize: 20, fontWeight: FontWeight.w900),
-        ),
-        if (action != null)
-          Text(
-            action!,
-            style: const TextStyle(
-              fontSize: 13,
-              color: AppColors.blue,
-              fontWeight: FontWeight.w800,
-            ),
-          ),
+        Text(title, style: const TextStyle(fontSize: 20, fontWeight: FontWeight.w900)),
+        if (action != null) Text(action!, style: const TextStyle(fontSize: 13, color: AppColors.blue, fontWeight: FontWeight.w800)),
       ],
     );
   }
@@ -6754,10 +6441,7 @@ class ClubCard extends StatelessWidget {
           Container(
             width: 58,
             height: 58,
-            decoration: BoxDecoration(
-              color: AppColors.blue.withValues(alpha: 0.1),
-              borderRadius: BorderRadius.circular(18),
-            ),
+            decoration: BoxDecoration(color: AppColors.blue.withValues(alpha: 0.1), borderRadius: BorderRadius.circular(18)),
             child: const Icon(Icons.flight_takeoff, color: AppColors.blue),
           ),
           const SizedBox(width: 14),
@@ -6765,42 +6449,18 @@ class ClubCard extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(
-                  title,
-                  style: const TextStyle(
-                    fontSize: 18,
-                    fontWeight: FontWeight.w900,
-                  ),
-                ),
+                Text(title, style: const TextStyle(fontSize: 18, fontWeight: FontWeight.w900)),
                 const SizedBox(height: 4),
-                Text(
-                  category,
-                  style: const TextStyle(
-                    color: AppColors.sub,
-                    fontWeight: FontWeight.w600,
-                  ),
-                ),
+                Text(category, style: const TextStyle(color: AppColors.sub, fontWeight: FontWeight.w600)),
                 const SizedBox(height: 6),
-                Text(
-                  '활동 장소: $place',
-                  style: const TextStyle(fontSize: 12, color: AppColors.sub),
-                ),
+                Text('활동 장소: $place', style: const TextStyle(fontSize: 12, color: AppColors.sub)),
               ],
             ),
           ),
           Container(
             padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
-            decoration: BoxDecoration(
-              color: AppColors.red.withValues(alpha: 0.1),
-              borderRadius: BorderRadius.circular(999),
-            ),
-            child: Text(
-              deadline,
-              style: const TextStyle(
-                color: AppColors.red,
-                fontWeight: FontWeight.w900,
-              ),
-            ),
+            decoration: BoxDecoration(color: AppColors.red.withValues(alpha: 0.1), borderRadius: BorderRadius.circular(999)),
+            child: Text(deadline, style: const TextStyle(color: AppColors.red, fontWeight: FontWeight.w900)),
           ),
         ],
       ),
@@ -6813,7 +6473,9 @@ class ClubCard extends StatelessWidget {
     return GestureDetector(
       onTap: () {
         Navigator.of(context).push(
-          MaterialPageRoute(builder: (_) => ClubDetailScreen(club: club!)),
+          MaterialPageRoute(
+            builder: (_) => ClubDetailScreen(club: club!),
+          ),
         );
       },
       child: card,
@@ -6834,19 +6496,15 @@ class ProfileRow extends StatelessWidget {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          Text(
-            label,
-            style: const TextStyle(
-              color: AppColors.sub,
-              fontWeight: FontWeight.w700,
-            ),
-          ),
+          Text(label, style: const TextStyle(color: AppColors.sub, fontWeight: FontWeight.w700)),
           Text(value, style: const TextStyle(fontWeight: FontWeight.w900)),
         ],
       ),
     );
   }
 }
+
+
 
 class QRMockScreen extends StatelessWidget {
   const QRMockScreen({super.key});
@@ -6894,11 +6552,7 @@ class QRMockScreen extends StatelessWidget {
                               borderRadius: BorderRadius.circular(22),
                             ),
                           ),
-                          const Icon(
-                            Icons.qr_code_scanner,
-                            color: Colors.white,
-                            size: 84,
-                          ),
+                          const Icon(Icons.qr_code_scanner, color: Colors.white, size: 84),
                         ],
                       ),
                     ),
@@ -6932,10 +6586,7 @@ class QRMockScreen extends StatelessWidget {
                   children: [
                     const Text(
                       '왜 아직 mock인가요?',
-                      style: TextStyle(
-                        fontSize: 18,
-                        fontWeight: FontWeight.w900,
-                      ),
+                      style: TextStyle(fontSize: 18, fontWeight: FontWeight.w900),
                     ),
                     const SizedBox(height: 10),
                     const Text(
@@ -7115,7 +6766,10 @@ class _MissionCodeScreenState extends State<MissionCodeScreen> {
                 icon: const Icon(Icons.arrow_back),
               ),
               const SizedBox(height: 8),
-              const Header(title: '미션 코드', subtitle: '건물·식당·동아리 미션 코드를 입력하세요.'),
+              const Header(
+                title: '미션 코드',
+                subtitle: '건물·식당·동아리 미션 코드를 입력하세요.',
+              ),
               const SizedBox(height: 18),
               AppCard(
                 color: AppColors.blue,
@@ -7127,10 +6781,7 @@ class _MissionCodeScreenState extends State<MissionCodeScreen> {
                         children: [
                           Text(
                             '코드 기반 미션',
-                            style: TextStyle(
-                              color: Colors.white70,
-                              fontWeight: FontWeight.w800,
-                            ),
+                            style: TextStyle(color: Colors.white70, fontWeight: FontWeight.w800),
                           ),
                           SizedBox(height: 8),
                           Text(
@@ -7154,13 +6805,7 @@ class _MissionCodeScreenState extends State<MissionCodeScreen> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    const Text(
-                      '미션 코드 입력',
-                      style: TextStyle(
-                        fontSize: 18,
-                        fontWeight: FontWeight.w900,
-                      ),
-                    ),
+                    const Text('미션 코드 입력', style: TextStyle(fontSize: 18, fontWeight: FontWeight.w900)),
                     const SizedBox(height: 12),
                     TextField(
                       controller: controller,
@@ -7202,10 +6847,7 @@ class _MissionCodeScreenState extends State<MissionCodeScreen> {
                       child: OutlinedButton.icon(
                         style: OutlinedButton.styleFrom(
                           foregroundColor: AppColors.darkBlue,
-                          side: const BorderSide(
-                            color: AppColors.darkBlue,
-                            width: 1.4,
-                          ),
+                          side: const BorderSide(color: AppColors.darkBlue, width: 1.4),
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(18),
                           ),
@@ -7232,13 +6874,7 @@ class _MissionCodeScreenState extends State<MissionCodeScreen> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    const Text(
-                      '빠른 테스트 코드',
-                      style: TextStyle(
-                        fontSize: 18,
-                        fontWeight: FontWeight.w900,
-                      ),
-                    ),
+                    const Text('빠른 테스트 코드', style: TextStyle(fontSize: 18, fontWeight: FontWeight.w900)),
                     const SizedBox(height: 10),
                     const Text(
                       '내부 테스트에서는 아래 코드를 눌러 바로 입력할 수 있습니다.',
@@ -7318,10 +6954,7 @@ class MissionCompleteScreen extends StatelessWidget {
                 child: Column(
                   children: [
                     Container(
-                      padding: const EdgeInsets.symmetric(
-                        horizontal: 12,
-                        vertical: 7,
-                      ),
+                      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 7),
                       decoration: BoxDecoration(
                         color: AppColors.yellow.withValues(alpha: 0.18),
                         borderRadius: BorderRadius.circular(999),

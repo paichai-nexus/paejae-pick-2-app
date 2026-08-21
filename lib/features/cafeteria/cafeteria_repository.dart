@@ -49,8 +49,12 @@ class CafeteriaMenu {
       priceLabel: _optionalString(json['price_label']) ?? '가격 확인 필요',
       opensAt: _optionalString(operation['opens_at']) ?? '11:30',
       closesAt: _optionalString(operation['closes_at']) ?? '13:30',
-      congestionStatus: _congestionLabel(_optionalString(congestion['status'])),
-      estimatedWaitMinutes: _intValue(congestion['estimated_wait_minutes']),
+      congestionStatus: _congestionLabel(
+        _optionalString(congestion['status']),
+      ),
+      estimatedWaitMinutes: _intValue(
+        congestion['estimated_wait_minutes'],
+      ),
       recommendation: _optionalString(congestion['recommendation']),
     );
   }
@@ -134,9 +138,9 @@ class HttpCafeteriaRemoteDataSource extends CafeteriaRemoteDataSource {
   @override
   Future<CafeteriaMenu> fetchToday(DateTime date) async {
     final base = baseUri.toString().replaceFirst(RegExp(r'/$'), '');
-    final uri = Uri.parse(
-      '$base/v1/cafeteria/today',
-    ).replace(queryParameters: {'date': _dateKey(date)});
+    final uri = Uri.parse('$base/v1/cafeteria/today').replace(
+      queryParameters: {'date': _dateKey(date)},
+    );
     final response = await _client.get(
       uri,
       headers: const {'Accept': 'application/json'},
@@ -188,7 +192,10 @@ class CafeteriaMenuResult {
 }
 
 class CafeteriaRepository {
-  CafeteriaRepository({this.remote, this.timeout = const Duration(seconds: 5)});
+  CafeteriaRepository({
+    this.remote,
+    this.timeout = const Duration(seconds: 5),
+  });
 
   final CafeteriaRemoteDataSource? remote;
   final Duration timeout;
@@ -221,7 +228,9 @@ class CafeteriaRepository {
 class CafeteriaBootstrap {
   const CafeteriaBootstrap._();
 
-  static const apiBaseUrl = String.fromEnvironment('PAEJAE_PICK_API_BASE_URL');
+  static const apiBaseUrl = String.fromEnvironment(
+    'PAEJAE_PICK_API_BASE_URL',
+  );
 
   static CafeteriaRepository build({http.Client? client}) {
     if (apiBaseUrl.trim().isEmpty) return CafeteriaRepository();
