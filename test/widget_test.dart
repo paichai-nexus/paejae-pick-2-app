@@ -9,8 +9,8 @@ void main() {
       const MaterialApp(home: Scaffold(body: SmartMobilityHubScreen())),
     );
 
-    expect(find.text('3D 실내지도'), findsOneWidget);
-    expect(find.text('자율주행 픽업'), findsOneWidget);
+    expect(find.text('3D 실내 길찾기'), findsOneWidget);
+    expect(find.text('교내 순환차량'), findsOneWidget);
     expect(find.text('자율배송'), findsOneWidget);
   });
 

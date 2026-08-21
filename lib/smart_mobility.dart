@@ -238,9 +238,9 @@ class SmartMobilityHubScreen extends StatelessWidget {
                 child: _MobilityFeatureCard(
                   icon: Icons.view_in_ar_outlined,
                   color: _PickColors.blue,
-                  title: '3D 실내지도',
-                  subtitle: '건물·호실·교수명 검색',
-                  badge: 'MVP',
+                  title: '3D 실내 길찾기',
+                  subtitle: '강의실·학과사무실·교수연구실',
+                  badge: '개발 중',
                   onTap: () => Navigator.of(context).push(
                     MaterialPageRoute(builder: (_) => const IndoorMapScreen()),
                   ),
@@ -251,9 +251,9 @@ class SmartMobilityHubScreen extends StatelessWidget {
                 child: _MobilityFeatureCard(
                   icon: Icons.airport_shuttle_outlined,
                   color: _PickColors.green,
-                  title: '자율주행 픽업',
-                  subtitle: '도착시간·좌석·예약',
-                  badge: '시뮬레이션',
+                  title: '교내 순환차량',
+                  subtitle: '위치 확인·픽업 예약',
+                  badge: '개발 예정',
                   onTap: () => Navigator.of(context).push(
                     MaterialPageRoute(builder: (_) => const ShuttlePickupScreen()),
                   ),
