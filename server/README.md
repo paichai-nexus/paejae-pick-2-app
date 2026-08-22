@@ -23,6 +23,21 @@ Do not put the administrator key in the Flutter app, source control, screenshots
 or chat messages. Only the server process and authorized operators should know
 it.
 
+## Open the operator console
+
+After starting the server, open:
+
+```text
+http://localhost:8080/admin
+```
+
+The console can load an existing menu, preview changes, and update the menu and
+congestion state. The administrator key stays in the password field only for
+the current page session; the console does not write it to browser storage.
+
+Use HTTPS for every non-local deployment. This console is an internal MVP, not
+a replacement for university identity, audit-log, or role-based access systems.
+
 ## Register a menu
 
 ```bash

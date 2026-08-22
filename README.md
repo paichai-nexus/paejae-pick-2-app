@@ -6,7 +6,7 @@ It connects cafeteria information, campus exploration, Nasumi collection, code-b
 
 ## Current Version
 
-`v5.4-cafeteria-admin-api`
+`v5.5-cafeteria-operator-console`
 
 ## Project Organization
 
@@ -38,6 +38,16 @@ The first reason to install Paejae Pick is cafeteria information.
 The reason to return is Nasumi collection, campus missions, department tours, and club notices.
 
 ## Implemented Features
+
+### v5.5 Cafeteria Operator Console
+
+- Adds a responsive `/admin` console to the cafeteria API server
+- Loads existing dated menus and previews operator changes before saving
+- Supports menu, price, hours, congestion, wait-time, and recommendation input
+- Keeps the administrator key outside the Flutter app and browser storage
+- Adds no-cache, anti-framing, MIME-sniffing, referrer, and same-origin CSP
+  response protections
+- Adds route, asset, security-header, and credential-leak regression tests
 
 ### v5.4 Cafeteria Administrator API
 

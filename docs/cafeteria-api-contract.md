@@ -64,6 +64,26 @@ The file-backed store is intended for internal validation and a single server
 instance. A university-operated deployment should replace it with an approved
 database, secret manager, access logs, backups, and an operator identity system.
 
+## Internal operator console
+
+The API server exposes `/admin` as a responsive internal operator console. It
+supports:
+
+- selecting an operation date
+- loading an existing dated menu
+- editing the menu name, items, price, and operation hours
+- changing congestion and estimated wait time
+- previewing the student-facing summary before saving
+
+The console and its assets are served from the API origin. The administrator
+key is entered for each page session and is not stored in local storage,
+session storage, cookies, source code, or the Flutter app. Console responses
+disable caching and framing and apply a same-origin Content Security Policy.
+
+This remains an internal validation tool. Production operation requires HTTPS,
+individual operator accounts, least-privilege roles, access revocation, and
+auditable change history.
+
 ## Safety boundary
 
 - The API base URL is configuration, not a secret.
