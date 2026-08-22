@@ -1,0 +1,17 @@
+{
+  "2026-08-21": {
+    "date": "2026-08-21",
+    "menu_name": "제육덮밥",
+    "items": ["제육볶음", "쌀밥", "된장국"],
+    "price_label": "5,500원",
+    "operation": {
+      "opens_at": "11:30",
+      "closes_at": "13:30"
+    },
+    "congestion": {
+      "status": "normal",
+      "estimated_wait_minutes": 6,
+      "recommendation": "지금 방문 가능"
+    }
+  }
+}

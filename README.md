@@ -6,7 +6,7 @@ It connects cafeteria information, campus exploration, Nasumi collection, code-b
 
 ## Current Version
 
-`v5.2-future-mobility-screens`
+`v5.4-cafeteria-admin-api`
 
 ## Project Organization
 
@@ -38,6 +38,29 @@ The first reason to install Paejae Pick is cafeteria information.
 The reason to return is Nasumi collection, campus missions, department tours, and club notices.
 
 ## Implemented Features
+
+### v5.4 Cafeteria Administrator API
+
+- Adds a Dart/Shelf API server for registering and reading dated cafeteria menus
+- Protects menu updates with a server-only administrator key
+- Validates dates, operation hours, menu fields, congestion values, wait times,
+  and request size
+- Persists internal-test data to a JSON file with serialized writes
+- Adds API, authorization, validation, persistence, and payload-limit tests
+- Runs Flutter and cafeteria API analysis/tests in the required GitHub Actions
+  quality gate
+
+### v5.3 Cafeteria Live Data Foundation
+
+- Adds a typed cafeteria menu model and repository boundary
+- Adds a configurable HTTP data source through `PAEJAE_PICK_API_BASE_URL`
+- Displays live menu, hours, price, congestion, and wait-time values when the
+  API is available
+- Falls back to clearly labeled sample data when configuration or connectivity
+  is unavailable
+- Adds JSON-contract, HTTP-request, fallback, and widget integration tests
+- Documents the first production API contract in
+  `docs/cafeteria-api-contract.md`
 
 ### v5.2 Future Mobility Screens
 
