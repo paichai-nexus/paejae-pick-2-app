@@ -27,6 +27,45 @@ void main() {
       expect(await _jsonBody(response), containsPair('status', 'ok'));
     });
 
+    test('serves the administrator console with hardened headers', () async {
+      final response = await handler(
+        Request('GET', Uri.parse('http://localhost/admin')),
+      );
+      final body = await response.readAsString();
+
+      expect(response.statusCode, 200);
+      expect(response.mimeType, 'text/html');
+      expect(response.headers['cache-control'], 'no-store');
+      expect(response.headers['x-frame-options'], 'DENY');
+      expect(
+        response.headers['content-security-policy'],
+        contains("default-src 'self'"),
+      );
+      expect(body, contains('학생식당 운영 콘솔'));
+      expect(body, isNot(contains(adminKey)));
+    });
+
+    test('serves console assets from the same origin', () async {
+      final cssResponse = await handler(
+        Request(
+          'GET',
+          Uri.parse('http://localhost/admin/assets/console.css'),
+        ),
+      );
+      final scriptResponse = await handler(
+        Request(
+          'GET',
+          Uri.parse('http://localhost/admin/assets/console.js'),
+        ),
+      );
+
+      expect(cssResponse.statusCode, 200);
+      expect(cssResponse.mimeType, 'text/css');
+      expect(scriptResponse.statusCode, 200);
+      expect(scriptResponse.mimeType, 'text/javascript');
+      expect(await scriptResponse.readAsString(), contains('x-admin-key'));
+    });
+
     test('requires a date when reading a menu', () async {
       final response = await handler(
         Request(

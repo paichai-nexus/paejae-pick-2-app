@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:shelf/shelf.dart';
 import 'package:shelf_router/shelf_router.dart';
 
+import 'admin_console.dart';
 import 'cafeteria_store.dart';
 
 class CafeteriaApi {
@@ -28,11 +29,33 @@ class CafeteriaApi {
 
   Handler get handler {
     final router = Router()
+      ..get('/admin', _adminConsole)
+      ..get('/admin/assets/console.css', _adminConsoleCss)
+      ..get('/admin/assets/console.js', _adminConsoleJavaScript)
       ..get('/health', _health)
       ..get('/v1/cafeteria/today', _getToday)
       ..put('/v1/admin/cafeteria/<date>', _putMenu);
 
     return _cors(router.call);
+  }
+
+  Response _adminConsole(Request request) {
+    return _consoleResponse(
+      adminConsoleHtml,
+      'text/html; charset=utf-8',
+      contentSecurityPolicy: true,
+    );
+  }
+
+  Response _adminConsoleCss(Request request) {
+    return _consoleResponse(adminConsoleCss, 'text/css; charset=utf-8');
+  }
+
+  Response _adminConsoleJavaScript(Request request) {
+    return _consoleResponse(
+      adminConsoleJavaScript,
+      'text/javascript; charset=utf-8',
+    );
   }
 
   Response _health(Request request) {
@@ -118,6 +141,28 @@ class CafeteriaApi {
       return response.change(headers: {...response.headers, ...corsHeaders});
     };
   }
+}
+
+Response _consoleResponse(
+  String body,
+  String contentType, {
+  bool contentSecurityPolicy = false,
+}) {
+  return Response.ok(
+    body,
+    headers: {
+      'content-type': contentType,
+      'cache-control': 'no-store',
+      'x-content-type-options': 'nosniff',
+      'x-frame-options': 'DENY',
+      'referrer-policy': 'no-referrer',
+      if (contentSecurityPolicy)
+        'content-security-policy':
+            "default-src 'self'; script-src 'self'; style-src 'self'; "
+            "img-src 'self' data:; connect-src 'self'; frame-ancestors 'none'; "
+            "base-uri 'none'; form-action 'self'",
+    },
+  );
 }
 
 Response _jsonResponse(
