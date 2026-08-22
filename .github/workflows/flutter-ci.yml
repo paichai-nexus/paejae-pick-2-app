@@ -41,8 +41,20 @@ jobs:
       - name: Install dependencies
         run: flutter pub get
 
+      - name: Install cafeteria API dependencies
+        working-directory: server
+        run: dart pub get
+
       - name: Analyze
         run: flutter analyze --no-pub
 
+      - name: Analyze cafeteria API
+        working-directory: server
+        run: dart analyze --fatal-infos
+
       - name: Run tests
         run: flutter test --no-pub
+
+      - name: Test cafeteria API
+        working-directory: server
+        run: dart test
