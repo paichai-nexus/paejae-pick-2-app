@@ -173,10 +173,7 @@ Response _jsonResponse(
   return Response(
     statusCode,
     body: jsonEncode(body),
-    headers: {
-      'content-type': 'application/json; charset=utf-8',
-      ...headers,
-    },
+    headers: {'content-type': 'application/json; charset=utf-8', ...headers},
   );
 }
 

@@ -24,21 +24,15 @@ class CafeteriaRecord {
   final int? estimatedWaitMinutes;
   final String? recommendation;
 
-  factory CafeteriaRecord.fromInput(
-    String date,
-    Map<String, dynamic> input,
-  ) {
+  factory CafeteriaRecord.fromInput(String date, Map<String, dynamic> input) {
     validateDateKey(date);
     final operation = _mapValue(input['operation']);
     final congestion = _mapValue(input['congestion']);
 
     final menuName = _requiredString(input, 'menu_name', maxLength: 100);
     final items = _stringList(input['items'], maxItems: 20, maxLength: 100);
-    final priceLabel = _optionalString(
-          input['price_label'],
-          maxLength: 50,
-        ) ??
-        '가격 확인 필요';
+    final priceLabel =
+        _optionalString(input['price_label'], maxLength: 50) ?? '가격 확인 필요';
     final opensAt = _timeValue(operation['opens_at'], fallback: '11:30');
     final closesAt = _timeValue(operation['closes_at'], fallback: '13:30');
     final status = _congestionValue(congestion['status']);
@@ -95,10 +89,7 @@ class CafeteriaRecord {
     return value;
   }
 
-  static String? _optionalString(
-    Object? value, {
-    required int maxLength,
-  }) {
+  static String? _optionalString(Object? value, {required int maxLength}) {
     if (value == null) return null;
     if (value is! String) {
       throw const CafeteriaValidationException('Expected a string value');
@@ -127,9 +118,7 @@ class CafeteriaRecord {
     }
 
     return value
-        .map(
-          (item) => _optionalString(item, maxLength: maxLength),
-        )
+        .map((item) => _optionalString(item, maxLength: maxLength))
         .whereType<String>()
         .toList(growable: false);
   }
@@ -160,9 +149,7 @@ class CafeteriaRecord {
       '준비 중',
     };
     if (!supported.contains(status.toLowerCase())) {
-      throw const CafeteriaValidationException(
-        'Unsupported congestion status',
-      );
+      throw const CafeteriaValidationException('Unsupported congestion status');
     }
     return status;
   }
@@ -239,9 +226,9 @@ class FileCafeteriaStore implements CafeteriaStore {
 
   Future<void> _persist() async {
     await file.parent.create(recursive: true);
-    final encoded = const JsonEncoder.withIndent('  ').convert(
-      _records.map((date, record) => MapEntry(date, record.toJson())),
-    );
+    final encoded = const JsonEncoder.withIndent(
+      '  ',
+    ).convert(_records.map((date, record) => MapEntry(date, record.toJson())));
     final temporary = File('${file.path}.tmp');
     await temporary.writeAsString('$encoded\n', flush: true);
     try {
