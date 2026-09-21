@@ -1,5 +1,20 @@
 # Paejae Pick 2.0
 
+<!-- NEXUS_PROJECT_META_START -->
+
+## Project Management
+
+| Field | Value |
+| --- | --- |
+| Status | 🟢 Active |
+| Project Lead | 이영준 |
+| Team / Support | 유지보수: 이서율 |
+| Next Milestone | 실제 학교 데이터·API 연동 조건 및 다음 기능 우선순위 정리 |
+| Registry | [NEXUS Project Registry](https://github.com/paichai-nexus/nexus-project-registry) |
+
+<!-- NEXUS_PROJECT_META_END -->
+
+
 Paejae Pick 2.0 is a Flutter-based smart campus MVP app concept for Paichai University students.
 
 It connects cafeteria information, campus exploration, Nasumi collection, code-based missions, department tours, club notices, and future CityBrain operation data.
